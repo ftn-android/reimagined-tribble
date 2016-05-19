@@ -26,6 +26,11 @@
             android:theme="@style/AppTheme.Dark"
             />
 
+        <activity
+            android:name=".activities.SignupActivity"
+            android:theme="@style/AppTheme.Dark"
+            />
+
 
     </application>
 
