@@ -108,3 +108,7 @@ crashlytics.properties
 crashlytics-build.properties
 fabric.properties
 .idea
+
+#PROJECT SPECIFIC IGNORABLE FILES
+google_maps_api.xml
+
