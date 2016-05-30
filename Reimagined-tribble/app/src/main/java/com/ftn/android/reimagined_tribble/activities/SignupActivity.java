@@ -14,6 +14,7 @@ import com.ftn.android.reimagined_tribble.R;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import butterknife.OnClick;
 
 /**
  * Created by szberko
@@ -34,20 +35,16 @@ public class SignupActivity extends AppCompatActivity {
         setContentView(R.layout.signup);
         ButterKnife.bind(this);
 
-        _signupButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                signup();
-            }
-        });
+    }
 
-        _loginLink.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                // Finish the registration screen and return to the Login activity
-                finish();
-            }
-        });
+    @OnClick(R.id.btn_signup)
+    void signUpButton(){
+        signup();
+    }
+
+    @OnClick(R.id.link_login)
+    void loginButton(){
+        finish();
     }
 
     public void signup() {
