@@ -56,7 +56,9 @@
             android:layout_marginBottom="24dp"
             android:layout_marginTop="24dp"
             android:padding="12dp"
-            android:text="Login" />
+            android:text="Login"
+            android:onClick="clickLoginButton"
+            />
 
         <TextView
             android:id="@+id/link_signup"
@@ -65,7 +67,9 @@
             android:layout_marginBottom="24dp"
             android:gravity="center"
             android:text="No account yet? Create one"
-            android:textSize="16dip" />
+            android:textSize="16dip"
+            android:onClick="clickSignUpLink"
+            />
 
     </LinearLayout>
 </ScrollView>
