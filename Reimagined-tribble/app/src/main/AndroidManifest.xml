@@ -41,9 +41,6 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".activities.MainActivity"
-            android:theme="@style/AppTheme.Dark" />
-        <activity
             android:name=".activities.LoginActivity"
             android:theme="@style/AppTheme.Dark" />
         <activity

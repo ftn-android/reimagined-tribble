@@ -31,7 +31,7 @@ public class LoginActivity extends Activity {
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.login);
+        setContentView(R.layout.activity_login);
         ButterKnife.bind(this);
 
 
@@ -103,7 +103,7 @@ public class LoginActivity extends Activity {
         if (requestCode == REQUEST_SIGNUP) {
             if (resultCode == RESULT_OK) {
 
-                // TODO: Implement successful signup logic here
+                // TODO: Implement successful activity_signup logic here
                 // By default we just finish the Activity and log them in automatically
                 this.finish();
             }
