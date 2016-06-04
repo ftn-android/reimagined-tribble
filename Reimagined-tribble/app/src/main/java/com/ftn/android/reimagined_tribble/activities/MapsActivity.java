@@ -1,24 +1,28 @@
 package com.ftn.android.reimagined_tribble.activities;
 
+import android.content.Context;
 import android.content.pm.PackageManager;
+import android.location.Criteria;
+import android.location.Location;
+import android.location.LocationManager;
 import android.os.Bundle;
 import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AppCompatActivity;
-import android.widget.EditText;
 
 import com.ftn.android.reimagined_tribble.R;
+import com.google.android.gms.maps.CameraUpdate;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
-import com.google.android.gms.maps.MapFragment;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
+import com.google.android.gms.maps.model.CameraPosition;
 import com.google.android.gms.maps.model.LatLng;
-import com.google.android.gms.maps.model.MarkerOptions;
-
-import butterknife.BindView;
-import butterknife.ButterKnife;
 
 public class MapsActivity extends AppCompatActivity implements OnMapReadyCallback {
+
+    private final long LOCATION_REFRESH_TIME = 1000;
+    private final float LOCATION_REFRESH_DISTANCE = 1;
+
 
     private GoogleMap googleMap;
 
@@ -27,34 +31,15 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_maps);
 
-        if (googleMap == null) {
-            googleMap = ((MapFragment) getFragmentManager().
-                    findFragmentById(R.id.map)).getMap();
-        }
+//        if (googleMap == null) {
+//            googleMap = ((MapFragment) getFragmentManager().
+//                    findFragmentById(R.id.map)).getMap();
+//        }
 
-        // Place dot on current location
-        if (ActivityCompat.checkSelfPermission(this, android.Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, android.Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-            // TODO: Consider calling
-            //    ActivityCompat#requestPermissions
-            // here to request the missing permissions, and then overriding
-            //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
-            //                                          int[] grantResults)
-            // to handle the case where the user grants the permission. See the documentation
-            // for ActivityCompat#requestPermissions for more details.
-            return;
-        }
+        SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
+                .findFragmentById(R.id.map);
+        mapFragment.getMapAsync(this);
 
-        googleMap.setMapType(GoogleMap.MAP_TYPE_HYBRID);
-
-        googleMap.setMyLocationEnabled(true);
-        // Turns traffic layer on
-        googleMap.setTrafficEnabled(true);
-        // Enables indoor maps
-        googleMap.setIndoorEnabled(true);
-        // Turns on 3D buildings
-        googleMap.setBuildingsEnabled(true);
-        // Show Zoom buttons
-        googleMap.getUiSettings().setZoomControlsEnabled(true);
     }
 
 
@@ -72,8 +57,39 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
         this.googleMap = googleMap;
 
         // Add a marker in Sydney and move the camera
-        LatLng sydney = new LatLng(-34, 151);
-        this.googleMap.addMarker(new MarkerOptions().position(sydney).title("Marker in Sydney"));
-        this.googleMap.moveCamera(CameraUpdateFactory.newLatLng(sydney));
+//        LatLng sydney = new LatLng(-34, 151);
+//        this.googleMap.addMarker(new MarkerOptions().position(sydney).title("Marker in Sydney"));
+//        this.googleMap.moveCamera(CameraUpdateFactory.newLatLng(sydney));
+
+        googleMap.setMapType(GoogleMap.MAP_TYPE_NORMAL);
+
+        // Place dot on current location
+        if (ActivityCompat.checkSelfPermission(this, android.Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, android.Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+            // TODO: Consider calling
+            //    ActivityCompat#requestPermissions
+            // here to request the missing permissions, and then overriding
+            //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
+            //                                          int[] grantResults)
+            // to handle the case where the user grants the permission. See the documentation
+            // for ActivityCompat#requestPermissions for more details.
+            return;
+        }
+
+        googleMap.setMyLocationEnabled(true);
+        // Show Zoom buttons
+        googleMap.getUiSettings().setZoomControlsEnabled(true);
+
+        LocationManager locMan = (LocationManager)this.getSystemService(Context.LOCATION_SERVICE);
+        Criteria crit = new Criteria();
+        Location loc = locMan.getLastKnownLocation(locMan.getBestProvider(crit, false));
+
+        CameraPosition camPos = new CameraPosition.Builder()
+                .target(new LatLng(loc.getLatitude(), loc.getLongitude()))
+                .zoom(12.8f)
+                .build();
+
+        CameraUpdate camUpdate = CameraUpdateFactory.newCameraPosition(camPos);
+        googleMap.moveCamera(camUpdate);
     }
+
 }
