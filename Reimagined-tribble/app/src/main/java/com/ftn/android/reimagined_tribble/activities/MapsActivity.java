@@ -8,6 +8,7 @@ import android.location.LocationManager;
 import android.os.Bundle;
 import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AppCompatActivity;
+import android.view.Menu;
 
 import com.ftn.android.reimagined_tribble.R;
 import com.google.android.gms.maps.CameraUpdate;
@@ -20,10 +21,6 @@ import com.google.android.gms.maps.model.LatLng;
 
 public class MapsActivity extends AppCompatActivity implements OnMapReadyCallback {
 
-    private final long LOCATION_REFRESH_TIME = 1000;
-    private final float LOCATION_REFRESH_DISTANCE = 1;
-
-
     private GoogleMap googleMap;
 
     @Override
@@ -31,17 +28,17 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_maps);
 
-//        if (googleMap == null) {
-//            googleMap = ((MapFragment) getFragmentManager().
-//                    findFragmentById(R.id.map)).getMap();
-//        }
-
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
                 .findFragmentById(R.id.map);
         mapFragment.getMapAsync(this);
 
     }
 
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.main, menu);
+        return true;
+    }
 
     /**
      * Manipulates the map once available.
