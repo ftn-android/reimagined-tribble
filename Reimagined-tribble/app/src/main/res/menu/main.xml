@@ -52,8 +52,38 @@
 
     <item
         android:id="@+id/call_the_police"
-        android:icon="@drawable/ic_refresh"
-        android:title="@string/menu_item_refresh"
+        android:icon="@drawable/ic_call"
+        android:title="@string/menu_item_call_the_police"
+        app:showAsAction="ifRoom" />
+
+    <item
+        android:id="@+id/call_the_ambulance"
+        android:icon="@drawable/ic_call"
+        android:title="@string/menu_item_call_the_ambulance"
+        app:showAsAction="ifRoom" />
+
+    <item
+        android:id="@+id/call_the_firefighters"
+        android:icon="@drawable/ic_call"
+        android:title="@string/menu_item_call_the_firefighters"
+        app:showAsAction="ifRoom" />
+
+    <item
+        android:id="@+id/settings"
+        android:icon="@drawable/ic_menu"
+        android:title="@string/menu_item_settings"
+        app:showAsAction="ifRoom" />
+
+    <item
+        android:id="@+id/about"
+        android:icon="@drawable/ic_about"
+        android:title="@string/menu_item_about"
+        app:showAsAction="ifRoom" />
+
+    <item
+        android:id="@+id/exit"
+        android:icon="@drawable/ic_exit"
+        android:title="@string/menu_item_exit"
         app:showAsAction="ifRoom" />
 
 </menu>
