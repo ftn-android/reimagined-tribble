@@ -29,4 +29,8 @@
     <string name="pref_summary_auto_download_pictures">Download pictures automatically</string>
     <string name="pref_summary_purge_data_on_phone">Deletes all downloaded files</string>
     <string name="pref_title_purge_data_on_phone">Purge data on phone</string>
+    <string name="add_new_gas_station_from_map">Add new gas station</string>
+    <string name="add_new_incident_from_map">Add new incident</string>
+    <string name="add_new_dialog_title">Add new</string>
+
 </resources>
