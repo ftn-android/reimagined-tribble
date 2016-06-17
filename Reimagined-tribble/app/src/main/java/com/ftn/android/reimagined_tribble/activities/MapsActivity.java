@@ -1,5 +1,6 @@
 package com.ftn.android.reimagined_tribble.activities;
 
+import android.Manifest;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
@@ -7,6 +8,7 @@ import android.graphics.Color;
 import android.location.Criteria;
 import android.location.Location;
 import android.location.LocationManager;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AppCompatActivity;
@@ -19,6 +21,7 @@ import com.afollestad.materialdialogs.MaterialDialog;
 import com.afollestad.materialdialogs.simplelist.MaterialSimpleListAdapter;
 import com.afollestad.materialdialogs.simplelist.MaterialSimpleListItem;
 import com.ftn.android.reimagined_tribble.R;
+import com.google.android.gms.location.LocationListener;
 import com.google.android.gms.maps.CameraUpdate;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
@@ -29,9 +32,10 @@ import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 
-public class MapsActivity extends AppCompatActivity implements OnMapReadyCallback, GoogleMap.OnMapClickListener, GoogleMap.OnInfoWindowClickListener {
+public class MapsActivity extends AppCompatActivity implements OnMapReadyCallback, GoogleMap.OnMapClickListener, GoogleMap.OnInfoWindowClickListener, LocationListener {
 
     GoogleMap googleMap;
+    Location loc;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -43,6 +47,7 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
         mapFragment.getMapAsync(this);
 
     }
+
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -86,7 +91,7 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
         // Show Zoom buttons
         googleMap.getUiSettings().setZoomControlsEnabled(true);
 
-        LocationManager locMan = (LocationManager)this.getSystemService(Context.LOCATION_SERVICE);
+        LocationManager locMan = (LocationManager) this.getSystemService(Context.LOCATION_SERVICE);
         Criteria crit = new Criteria();
         Location loc = locMan.getLastKnownLocation(locMan.getBestProvider(crit, false));
 
@@ -100,6 +105,15 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
 
         googleMap.setOnMapClickListener(this);
 
+    }
+
+
+    @Override
+    public void onLocationChanged(Location location) {
+        //The last known location can be null. Because of this we need to get the latest location before we call onMapReady method
+        //Really stupid solution
+        location.getLatitude();
+        location.getLongitude();
     }
 
     @Override
@@ -130,13 +144,36 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId()){
+        switch (item.getItemId()) {
             case R.id.settings:
                 launchSettingsActivity();
+                return true;
+            case R.id.call_the_police:
+                launchPhoneActivity(getResources().getString(R.string.police_phone_number));
+                return true;
+            case R.id.call_the_firefighters:
+                launchPhoneActivity(getResources().getString(R.string.firefighters_phone_number));
+                return true;
+            case R.id.call_the_ambulance:
+                launchPhoneActivity(getResources().getString(R.string.ambulance_phone_number));
                 return true;
             default:
                 return super.onOptionsItemSelected(item);
         }
+    }
+
+    private void launchPhoneActivity(String url){
+        Intent intent = new Intent(Intent.ACTION_CALL, Uri.parse(url));
+        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.CALL_PHONE) != PackageManager.PERMISSION_GRANTED) {
+            // TODO: Consider calling
+            //    ActivityCompat#requestPermissions
+            // here to request the missing permissions, and then overriding
+            //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
+            //                                          int[] grantResults)
+            // to handle the case where the user grants the permission. See the documentation
+            // for ActivityCompat#requestPermissions for more details.
+        }
+        startActivity(intent);
     }
 
     private void launchSettingsActivity(){

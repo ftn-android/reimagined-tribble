@@ -32,5 +32,8 @@
     <string name="add_new_gas_station_from_map">Add new gas station</string>
     <string name="add_new_incident_from_map">Add new incident</string>
     <string name="add_new_dialog_title">Add new</string>
+    <string name="ambulance_phone_number">tel:111</string>
+    <string name="firefighters_phone_number">222</string>
+    <string name="police_phone_number">333</string>
 
 </resources>
