@@ -157,12 +157,20 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
             case R.id.call_the_ambulance:
                 launchPhoneActivity(getResources().getString(R.string.ambulance_phone_number));
                 return true;
+            case R.id.about:
+                launchAboutActivity();
+                return true;
             case R.id.exit:
                 exitFromApp();
                 return true;
             default:
                 return super.onOptionsItemSelected(item);
         }
+    }
+
+    private void launchAboutActivity(){
+        Intent intent = new Intent(getApplicationContext(), AboutActivity.class);
+        startActivity(intent);
     }
 
     private void exitFromApp(){

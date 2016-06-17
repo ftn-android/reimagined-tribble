@@ -35,5 +35,9 @@
     <string name="ambulance_phone_number">tel:111</string>
     <string name="firefighters_phone_number">222</string>
     <string name="police_phone_number">333</string>
+    <string name="about_application_title">Reimagined-tribble</string>
+    <string name="about_introducement">Get informed about incidents and gas stations all over the world</string>
+    <string name="about_university">Faculty of Technical Science</string>
+    <string name="about_location">Novi Sad</string>
 
 </resources>

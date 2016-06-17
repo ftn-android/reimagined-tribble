@@ -50,8 +50,9 @@
             android:theme="@style/SignUpActivity" />
         <activity
             android:name=".activities.SettingsActivity"
-            android:label="@string/title_activity_settings"
             android:theme="@style/SettingsTheme"/>
+        <activity android:name=".activities.AboutActivity"
+            android:theme="@style/AboutActivity"/>
 
         <!--
              The API key for Google Maps-based APIs is defined as a string resource.

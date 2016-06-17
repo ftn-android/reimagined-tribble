@@ -70,6 +70,9 @@
     <style name="SignUpDialog" parent="AppTheme.Dialog">
     </style>
 
+    <style name="AboutActivity" parent="AppTheme.NoActionBar">
+    </style>
+
 
 
 
