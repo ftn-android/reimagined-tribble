@@ -1,27 +1,21 @@
 <resources>
 
     <!-- Base application theme. -->
-    <style name="AppTheme" parent="Theme.AppCompat.Light.DarkActionBar">
+    <style name="AppTheme.ActionBar" parent="Theme.AppCompat.Light.DarkActionBar">
+        <item name="colorPrimary">@color/primary</item>
+        <item name="colorPrimaryDark">@color/primary_dark</item>
+        <item name="colorAccent">@color/accent</item>
+
+        <item name="colorControlNormal">@color/iron</item>
+        <item name="colorControlActivated">@color/white</item>
+        <item name="colorControlHighlight">@color/white</item>
+        <item name="android:textColorHint">@color/iron</item>
+
+        <item name="colorButtonNormal">@color/primary_darker</item>
+        <item name="android:colorButtonNormal">@color/primary_darker</item>
     </style>
 
-    <style name="MapActivity" parent="Theme.AppCompat.DayNight.DarkActionBar">
-        <item name="actionBarStyle">@style/App.ActionBar</item>
-    </style>
-
-    <style name="SettingsTheme" parent="Theme.AppCompat.DayNight.DarkActionBar">
-        <item name="actionBarStyle">@style/App.ActionBar</item>
-    </style>
-
-    <style name="App.ActionBar" parent="@style/Widget.AppCompat.Light.ActionBar.Solid.Inverse">
-        <item name="background">@color/primary</item>
-    </style>
-
-
-    <style name="AppTheme.Dark.Splash" parent="Theme.AppCompat.NoActionBar">
-        <item name="android:windowBackground">@drawable/splash_background</item>
-    </style>
-
-    <style name="AppTheme.Dark" parent="Theme.AppCompat.NoActionBar">
+    <style name="AppTheme.NoActionBar" parent="Theme.AppCompat.NoActionBar">
         <item name="colorPrimary">@color/primary</item>
         <item name="colorPrimaryDark">@color/primary_dark</item>
         <item name="colorAccent">@color/accent</item>
@@ -37,10 +31,51 @@
         <item name="android:colorButtonNormal">@color/primary_darker</item>
     </style>
 
-    <style name="AppTheme.Dark.Dialog" parent="Theme.AppCompat.Dialog">
-        <item name="colorAccent">@color/white</item>
+    <style name="App.ActionBar" parent="@style/Widget.AppCompat.Light.ActionBar.Solid.Inverse">
+        <item name="background">@color/primary</item>
+    </style>
+
+    <style name="AppTheme.Dialog" parent="Theme.AppCompat.Dialog">
+        <item name="colorPrimary">@color/primary</item>
+        <item name="colorPrimaryDark">@color/primary_dark</item>
+        <item name="colorAccent">@color/accent</item>
         <item name="android:textColorPrimary">@color/iron</item>
         <item name="android:background">@color/primary</item>
     </style>
+
+
+    <!-- Base application theme. -->
+
+    <style name="AppTheme.Dark.Splash" parent="AppTheme.NoActionBar">
+        <item name="colorPrimary">@color/accent</item>
+        <item name="colorPrimaryDark">@color/accent</item>
+        <item name="colorAccent">@color/accent</item>
+        <item name="android:windowBackground">@drawable/splash_background</item>
+    </style>
+
+    <style name="MapActivity" parent="AppTheme.ActionBar">
+        <!--<item name="actionBarStyle">@style/App.ActionBar</item>-->
+    </style>
+
+    <style name="SettingsTheme" parent="AppTheme.ActionBar">
+        <!--<item name="actionBarStyle">@style/App.ActionBar</item>-->
+    </style>
+
+    <style name="LoginActivity" parent="AppTheme.NoActionBar">
+    </style>
+
+    <style name="SignUpActivity" parent="AppTheme.NoActionBar">
+    </style>
+
+    <style name="SignUpDialog" parent="AppTheme.Dialog">
+    </style>
+
+
+
+
+
+
+
+
 
 </resources>
