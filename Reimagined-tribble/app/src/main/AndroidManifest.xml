@@ -50,6 +50,7 @@
             android:theme="@style/SignUpActivity" />
         <activity
             android:name=".activities.SettingsActivity"
+            android:label="@string/settings_name"
             android:theme="@style/SettingsTheme"/>
         <activity android:name=".activities.AboutActivity"
             android:theme="@style/AboutActivity"/>
