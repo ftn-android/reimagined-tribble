@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <SwitchPreference
+        android:key="pref_start_gps_with_app"
+        android:title="@string/pref_title_start_gps_with_app"
+        android:summary="@string/pref_summary_start_gps_with_app"
+        android:defaultValue="true"
+        />
+
+    <SwitchPreference
+        android:key="pref_keep_data_on_phone"
+        android:title="@string/pref_title_keep_data_on_phone"
+        android:summary="@string/pref_summary_keep_data_on_phone"
+        android:defaultValue="true"
+        />
+
+    <Preference
+        android:key="pref_purge_data_on_phone"
+        android:title="@string/pref_title_purge_data_on_phone"
+        android:summary="@string/pref_summary_purge_data_on_phone"
+        />
+
+    <SwitchPreference
+        android:key="pref_auto-sync"
+        android:title="@string/pref_title_auto_sync"
+        android:summary="@string/pref_summary_auto_sync"
+        android:defaultValue="true"
+        />
+
+    <SwitchPreference
+        android:key="pref_auto-download_pictures"
+        android:title="@string/pref_summary_auto_download_pictures"
+        android:defaultValue="true"
+        />
+
+
+</PreferenceScreen>
