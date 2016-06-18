@@ -39,5 +39,6 @@
     <string name="about_introducement">Get informed about incidents and gas stations all over the world</string>
     <string name="about_university">Faculty of Technical Science</string>
     <string name="about_location">Novi Sad</string>
+    <string name="settings_name">Settings</string>
 
 </resources>

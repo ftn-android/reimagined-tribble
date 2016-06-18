@@ -59,6 +59,10 @@
 
     <style name="SettingsTheme" parent="AppTheme.ActionBar">
         <!--<item name="actionBarStyle">@style/App.ActionBar</item>-->
+        <item name="colorControlNormal">@color/primary</item>
+        <item name="colorControlActivated">@color/primary</item>
+        <item name="colorControlHighlight">@color/primary</item>
+        <item name="android:textColorHint">@color/primary</item>
     </style>
 
     <style name="LoginActivity" parent="AppTheme.NoActionBar">
