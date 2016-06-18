@@ -226,12 +226,12 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
         final MaterialSimpleListAdapter adapter = new MaterialSimpleListAdapter(this);
         adapter.add(new MaterialSimpleListItem.Builder(this)
                 .content(R.string.add_new_gas_station_from_map)
-                .icon(R.drawable.ic_gas_station_add_new_from_map)
+                .icon(R.drawable.ic_gas_station_dialog_add_new)
                 .backgroundColor(Color.WHITE)
                 .build());
         adapter.add(new MaterialSimpleListItem.Builder(this)
                 .content(R.string.add_new_incident_from_map)
-                .icon(R.drawable.ic_incident_add_new_from_map)
+                .icon(R.drawable.ic_incident_dialog_add_new)
                 .backgroundColor(Color.WHITE)
                 .build());
 
