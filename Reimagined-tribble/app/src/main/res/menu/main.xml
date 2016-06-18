@@ -3,27 +3,6 @@
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <item
-        android:id="@+id/add_new"
-        android:icon="@drawable/ic_add_new"
-        android:title="@string/menu_item_add_new"
-        app:showAsAction="always">
-        <menu>
-            <item
-                android:id="@+id/add_new_incident"
-                android:icon="@drawable/ic_incident_show_hide"
-                android:title="@string/menu_item_add_new_incident"
-                app:showAsAction="ifRoom" />
-
-            <item
-                android:id="@+id/add_new_gas_station"
-                android:icon="@drawable/ic_gas_station_show_hide"
-                android:title="@string/menu_item_add_new_gas_station"
-                app:showAsAction="ifRoom" />
-        </menu>
-
-    </item>
-
-    <item
         android:id="@+id/show_hide"
         android:icon="@drawable/ic_show_hide"
         android:title="@string/menu_item_show_hide"
