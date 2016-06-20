@@ -9,12 +9,9 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
+
 import com.ftn.android.reimagined_tribble.R;
 import com.ftn.android.reimagined_tribble.dao.UserDao;
-import com.ftn.android.reimagined_tribble.model.User;
-
-
-import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -89,15 +86,15 @@ public class LoginActivity extends AppCompatActivity {
         String password = _passwordText.getText().toString();
 
         // TODO: Implement your own authentication logic here.
-        List<User> users = userDatabase.getAllUsers();
-
-        for(User user: users){
-            if((user.getUserName().equals(email)) && (user.getPassword().equals(password)){
-                startActivity(new Intent(getApplicationContext(), MapsActivity.class));
-                this.finish();
-                return;
-            }
-        }
+//        List<User> users = userDatabase.getAllUsers();
+//
+//        for(User user: users){
+//            if((user.getUserName().equals(email)) && (user.getPassword().equals(password)){
+//                startActivity(new Intent(getApplicationContext(), MapsActivity.class));
+//                this.finish();
+//                return;
+//            }
+//        }
 
 
 
