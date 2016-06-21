@@ -1,9 +1,11 @@
 package com.ftn.android.reimagined_tribble.model;
 
+import com.orm.SugarRecord;
+
 /**
  * Created by FilipF on 14.6.2016.
  */
-public class Location {
+public class Location extends SugarRecord {
 
     private String address;
     private String city;

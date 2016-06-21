@@ -1,12 +1,14 @@
 package com.ftn.android.reimagined_tribble.model;
 
+import com.orm.SugarRecord;
+
 import java.util.Date;
 import java.util.List;
 
 /**
  * Created by FilipF on 14.6.2016.
  */
-public class Incident {
+public class Incident extends SugarRecord {
 
     private String name;
     private String description;

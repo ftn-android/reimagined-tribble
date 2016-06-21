@@ -10,8 +10,11 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.facebook.stetho.Stetho;
 import com.ftn.android.reimagined_tribble.R;
 import com.ftn.android.reimagined_tribble.dao.UserDao;
+import com.ftn.android.reimagined_tribble.model.Location;
+import com.ftn.android.reimagined_tribble.model.User;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -35,6 +38,7 @@ public class LoginActivity extends AppCompatActivity {
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
+        Stetho.initializeWithDefaults(this);
         ButterKnife.bind(this);
 
 
@@ -88,13 +92,10 @@ public class LoginActivity extends AppCompatActivity {
         // TODO: Implement your own authentication logic here.
 //        List<User> users = userDatabase.getAllUsers();
 //
-//        for(User user: users){
-//            if((user.getUserName().equals(email)) && (user.getPassword().equals(password)){
-//                startActivity(new Intent(getApplicationContext(), MapsActivity.class));
-//                this.finish();
-//                return;
-//            }
-//        }
+        User user = new User("username","password",new Location("","",""),"email");
+        user.save();
+
+        User user1 = User.findById(User.class,1);
 
 
 
