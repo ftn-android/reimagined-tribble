@@ -8,7 +8,6 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.facebook.stetho.Stetho;
 import com.ftn.android.reimagined_tribble.R;
 import com.ftn.android.reimagined_tribble.dao.UserDao;
 import com.ftn.android.reimagined_tribble.model.Location;
@@ -87,8 +86,6 @@ public class LoginActivity extends AppCompatActivity {
 //                }, 3000);
 
         MapsActivity_.intent(this).start();
-//        startActivity(new Intent(getApplicationContext(), MapsActivity.class));
-//        this.finish();
     }
 
     @Override
