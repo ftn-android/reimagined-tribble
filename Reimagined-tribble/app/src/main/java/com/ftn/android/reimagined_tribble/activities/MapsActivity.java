@@ -17,6 +17,7 @@ import com.afollestad.materialdialogs.MaterialDialog;
 import com.afollestad.materialdialogs.simplelist.MaterialSimpleListAdapter;
 import com.afollestad.materialdialogs.simplelist.MaterialSimpleListItem;
 import com.ftn.android.reimagined_tribble.R;
+import com.ftn.android.reimagined_tribble.adapters.AddInfoWindowAdapter;
 import com.google.android.gms.maps.CameraUpdate;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
@@ -168,35 +169,11 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
         // Placing a marker on the touched position
 //        googleMap.addMarker(markerOptions);
 
-        googleMap.setInfoWindowAdapter(new AddNewInfoWindowAdapter());
+        googleMap.setInfoWindowAdapter(new AddInfoWindowAdapter(getLayoutInflater()));
         googleMap.setOnInfoWindowClickListener(this);
 
         Marker marker = googleMap.addMarker(markerOptions);
         marker.showInfoWindow();
-
-
-    }
-
-
-
-    class AddNewInfoWindowAdapter implements GoogleMap.InfoWindowAdapter {
-
-        private final View mWindow;
-
-        public AddNewInfoWindowAdapter() {
-            mWindow = getLayoutInflater().inflate(R.layout.map_info_window, null);
-        }
-
-        @Override
-        public View getInfoWindow(Marker marker) {
-            return mWindow;
-        }
-
-        @Override
-        public View getInfoContents(Marker marker) {
-            return null;
-        }
-
     }
 
     @Override
