@@ -7,10 +7,10 @@ import com.orm.SugarRecord;
  */
 public class User extends SugarRecord{
 
-    private String userName;
     private String password;
     private String email;
     private Location location;
+    private String userName;
 
     public User() {
 
@@ -27,7 +27,7 @@ public class User extends SugarRecord{
         return userName;
     }
 
-    public void setUserName(String userName) {
+    public void setUserName(String username) {
         this.userName = userName;
     }
 
@@ -58,7 +58,7 @@ public class User extends SugarRecord{
     @Override
     public String toString() {
         return "User{" +
-                "userName='" + userName + '\'' +
+                "username='" + userName + '\'' +
                 ", password='" + password + '\'' +
                 ", email='" + email + '\'' +
                 ", location=" + location +

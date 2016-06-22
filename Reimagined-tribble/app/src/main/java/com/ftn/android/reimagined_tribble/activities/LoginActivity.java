@@ -12,10 +12,14 @@ import com.ftn.android.reimagined_tribble.R;
 import com.ftn.android.reimagined_tribble.dao.UserDao;
 import com.ftn.android.reimagined_tribble.model.Location;
 import com.ftn.android.reimagined_tribble.model.User;
+import com.google.common.collect.Iterables;
 
 import org.androidannotations.annotations.Click;
 import org.androidannotations.annotations.EActivity;
 import org.androidannotations.annotations.ViewById;
+
+import java.util.Iterator;
+import java.util.Map;
 
 /**
  * Created by szberko
@@ -25,7 +29,6 @@ public class LoginActivity extends AppCompatActivity {
     private static final String TAG = "LoginActivity";
     private static final int REQUEST_SIGNUP = 0;
 
-    private UserDao userDatabase;
 
     @ViewById(R.id.input_email) EditText _emailText;
     @ViewById(R.id.input_password) EditText _passwordText;
@@ -54,6 +57,14 @@ public class LoginActivity extends AppCompatActivity {
 //            return;
 //        }
 
+        User user = new User();
+        user.setUserName("admin");
+        user.setPassword("admin");
+        user.setEmail("admin");
+        user.save();
+
+
+
         _loginButton.setEnabled(false);
 
 //        final ProgressDialog progressDialog = new ProgressDialog(LoginActivity.this,
@@ -68,10 +79,12 @@ public class LoginActivity extends AppCompatActivity {
         // TODO: Implement your own authentication logic here.
 //        List<User> users = userDatabase.getAllUsers();
 //
-        User user = new User("username","password",new Location("","",""),"email");
-        user.save();
+        if(User.find(User.class, "email = ? and password =?", email, password).size()!=0){
+            MapsActivity_.intent(this).start();
+        }
 
-        User user1 = User.findById(User.class,1);
+
+
 
 
 
@@ -85,7 +98,7 @@ public class LoginActivity extends AppCompatActivity {
 //                    }
 //                }, 3000);
 
-        MapsActivity_.intent(this).start();
+    //    MapsActivity_.intent(this).start();
     }
 
     @Override
