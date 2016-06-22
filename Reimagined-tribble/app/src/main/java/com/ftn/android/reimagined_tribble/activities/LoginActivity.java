@@ -8,8 +8,11 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.facebook.stetho.Stetho;
 import com.ftn.android.reimagined_tribble.R;
 import com.ftn.android.reimagined_tribble.dao.UserDao;
+import com.ftn.android.reimagined_tribble.model.Location;
+import com.ftn.android.reimagined_tribble.model.User;
 
 import org.androidannotations.annotations.Click;
 import org.androidannotations.annotations.EActivity;
@@ -66,13 +69,10 @@ public class LoginActivity extends AppCompatActivity {
         // TODO: Implement your own authentication logic here.
 //        List<User> users = userDatabase.getAllUsers();
 //
-//        for(User user: users){
-//            if((user.getUserName().equals(email)) && (user.getPassword().equals(password)){
-//                startActivity(new Intent(getApplicationContext(), MapsActivity.class));
-//                this.finish();
-//                return;
-//            }
-//        }
+        User user = new User("username","password",new Location("","",""),"email");
+        user.save();
+
+        User user1 = User.findById(User.class,1);
 
 
 
