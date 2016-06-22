@@ -24,12 +24,12 @@
         android:required="true" />
 
     <application
+        android:name="com.orm.SugarApp"
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
         android:supportsRtl="true"
-        android:theme="@style/AppTheme.ActionBar"
-        android:name="com.orm.SugarApp">
+        android:theme="@style/AppTheme.ActionBar">
         <meta-data
             android:name="com.google.android.gms.version"
             android:value="@integer/google_play_services_version" />
@@ -52,9 +52,10 @@
         <activity
             android:name=".activities.SettingsActivity_"
             android:label="@string/settings_name"
-            android:theme="@style/SettingsTheme"/>
-        <activity android:name=".activities.AboutActivity_"
-            android:theme="@style/AboutActivity"/>
+            android:theme="@style/SettingsTheme" />
+        <activity
+            android:name=".activities.AboutActivity_"
+            android:theme="@style/AboutActivity" />
 
         <!--
              The API key for Google Maps-based APIs is defined as a string resource.
@@ -70,7 +71,13 @@
             android:label="@string/title_activity_maps"
             android:theme="@style/MapActivity" />
 
-        <activity android:name=".activities.PhoneActivity_"/>
+        <activity android:name=".activities.AddNewGasStationActivity_" />
+
+        <activity
+            android:name=".activities.AddIncidentActivity_"
+            android:label="@string/title_activity_add_incident"
+            android:theme="@style/AppTheme.ActionBar.NoActionBar"></activity>
+
         <!--
              The API key for Google Maps-based APIs is defined as a string resource.
              (See the file "res/values/google_maps_api.xml").
@@ -82,11 +89,19 @@
         <meta-data
             android:name="com.google.android.geo.API_KEY"
             android:value="@string/google_maps_key" />
+        <meta-data
+            android:name="DATABASE"
+            android:value="reimagined_tribble.db" />
+        <meta-data
+            android:name="VERSION"
+            android:value="2" />
+        <meta-data
+            android:name="QUERY_LOG"
+            android:value="true" />
+        <meta-data
+            android:name="DOMAIN_PACKAGE_NAME"
+            android:value="com.ftn.android.reimagined_tribble.model" />
 
-        <meta-data android:name="DATABASE" android:value="reimagined_tribble.db" />
-        <meta-data android:name="VERSION" android:value="2" />
-        <meta-data android:name="QUERY_LOG" android:value="true" />
-        <meta-data android:name="DOMAIN_PACKAGE_NAME" android:value="com.ftn.android.reimagined_tribble.model" />
 
     </application>
 
