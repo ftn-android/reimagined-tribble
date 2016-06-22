@@ -32,4 +32,6 @@ dependencies {
     compile 'com.github.clans:fab:1.6.4'
     compile 'com.afollestad.material-dialogs:core:0.8.6.0'
     compile 'com.afollestad.material-dialogs:commons:0.8.6.0'
+    apt "org.androidannotations:androidannotations:4.0.0"
+    compile "org.androidannotations:androidannotations-api:4.0.0"
 }
