@@ -52,10 +52,9 @@ public class LoginActivity extends AppCompatActivity {
         Log.d(TAG, "Login");
 
         //TODO TEMPORARY THE VALIDATION IS DISABLE, DUE TO EASIER TESTING
-//        if (!validate()) {
-//            onLoginFailed();
-//            return;
-//        }
+        if (!validate()) {
+            return;
+        }
 
         User user = new User();
         user.setUserName("admin");
@@ -80,7 +79,11 @@ public class LoginActivity extends AppCompatActivity {
 //        List<User> users = userDatabase.getAllUsers();
 //
         if(User.find(User.class, "email = ? and password =?", email, password).size()!=0){
+            onLoginSuccess();
             MapsActivity_.intent(this).start();
+        }
+        else {
+            onLoginFailed();
         }
 
 
@@ -108,6 +111,7 @@ public class LoginActivity extends AppCompatActivity {
 
                 // TODO: Implement successful activity_signup logic here
                 // By default we just finish the Activity and log them in automatically
+
                 this.finish();
             }
         }
