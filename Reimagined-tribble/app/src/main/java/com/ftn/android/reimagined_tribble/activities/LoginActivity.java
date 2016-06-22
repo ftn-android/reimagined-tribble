@@ -9,17 +9,11 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.ftn.android.reimagined_tribble.R;
-import com.ftn.android.reimagined_tribble.dao.UserDao;
-import com.ftn.android.reimagined_tribble.model.Location;
 import com.ftn.android.reimagined_tribble.model.User;
-import com.google.common.collect.Iterables;
 
 import org.androidannotations.annotations.Click;
 import org.androidannotations.annotations.EActivity;
 import org.androidannotations.annotations.ViewById;
-
-import java.util.Iterator;
-import java.util.Map;
 
 /**
  * Created by szberko
@@ -43,8 +37,7 @@ public class LoginActivity extends AppCompatActivity {
 
     @Click(R.id.link_signup)
     void clickSignUpLink(){
-        Intent intent = new Intent(getApplicationContext(), SignupActivity.class);
-        startActivityForResult(intent, REQUEST_SIGNUP);
+        SignupActivity_.intent(this).startForResult(REQUEST_SIGNUP);
     }
 
 
