@@ -43,16 +43,16 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".activities.LoginActivity"
+            android:name=".activities.LoginActivity_"
             android:theme="@style/LoginActivity" />
         <activity
-            android:name=".activities.SignupActivity"
+            android:name=".activities.SignupActivity_"
             android:theme="@style/SignUpActivity" />
         <activity
-            android:name=".activities.SettingsActivity"
+            android:name=".activities.SettingsActivity_"
             android:label="@string/settings_name"
             android:theme="@style/SettingsTheme"/>
-        <activity android:name=".activities.AboutActivity"
+        <activity android:name=".activities.AboutActivity_"
             android:theme="@style/AboutActivity"/>
 
         <!--
@@ -65,9 +65,11 @@
         -->
 
         <activity
-            android:name=".activities.MapsActivity"
+            android:name=".activities.MapsActivity_"
             android:label="@string/title_activity_maps"
             android:theme="@style/MapActivity" />
+
+        <activity android:name=".activities.PhoneActivity_"/>
         <!--
              The API key for Google Maps-based APIs is defined as a string resource.
              (See the file "res/values/google_maps_api.xml").

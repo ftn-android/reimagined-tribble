@@ -6,9 +6,12 @@ import android.support.v7.app.AppCompatActivity;
 
 import com.ftn.android.reimagined_tribble.R;
 
+import org.androidannotations.annotations.EActivity;
+
 /**
  * Created by szberko
  */
+@EActivity
 public class AboutActivity extends AppCompatActivity {
 
     @Override

@@ -1,8 +1,6 @@
 package com.ftn.android.reimagined_tribble.activities;
 
 import android.content.Intent;
-import android.os.Bundle;
-import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.widget.Button;
@@ -13,52 +11,32 @@ import android.widget.Toast;
 import com.ftn.android.reimagined_tribble.R;
 import com.ftn.android.reimagined_tribble.dao.UserDao;
 
-import butterknife.BindView;
-import butterknife.ButterKnife;
-import butterknife.OnClick;
+import org.androidannotations.annotations.Click;
+import org.androidannotations.annotations.EActivity;
+import org.androidannotations.annotations.ViewById;
 
 /**
  * Created by szberko
  */
+@EActivity(R.layout.activity_login)
 public class LoginActivity extends AppCompatActivity {
     private static final String TAG = "LoginActivity";
     private static final int REQUEST_SIGNUP = 0;
 
     private UserDao userDatabase;
 
-    @BindView(R.id.input_email) EditText _emailText;
-    @BindView(R.id.input_password) EditText _passwordText;
-    @BindView(R.id.btn_login) Button _loginButton;
-    @BindView(R.id.link_signup) TextView _signupLink;
-
-    @Override
-    protected void onCreate(@Nullable Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_login);
-        ButterKnife.bind(this);
+    @ViewById(R.id.input_email) EditText _emailText;
+    @ViewById(R.id.input_password) EditText _passwordText;
+    @ViewById(R.id.btn_login) Button _loginButton;
+    @ViewById(R.id.link_signup) TextView _signupLink;
 
 
-        _emailText.setText("temp@email.com");
-        _passwordText.setText("temppassword");
-
-
-//        _signupLink.setOnClickListener(new View.OnClickListener() {
-//
-//            @Override
-//            public void onClick(View v) {
-//                // Start the Signup activity
-//                Intent intent = new Intent(getApplicationContext(), SignupActivity.class);
-//                startActivityForResult(intent, REQUEST_SIGNUP);
-//            }
-//        });
-    }
-
-    @OnClick(R.id.btn_login)
+    @Click(R.id.btn_login)
     void clickLoginButton(){
         login();
     }
 
-    @OnClick(R.id.link_signup)
+    @Click(R.id.link_signup)
     void clickSignUpLink(){
         Intent intent = new Intent(getApplicationContext(), SignupActivity.class);
         startActivityForResult(intent, REQUEST_SIGNUP);
@@ -108,8 +86,9 @@ public class LoginActivity extends AppCompatActivity {
 //                    }
 //                }, 3000);
 
-        startActivity(new Intent(getApplicationContext(), MapsActivity.class));
-        this.finish();
+        MapsActivity_.intent(this).start();
+//        startActivity(new Intent(getApplicationContext(), MapsActivity.class));
+//        this.finish();
     }
 
     @Override

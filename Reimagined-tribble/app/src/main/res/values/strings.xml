@@ -40,5 +40,8 @@
     <string name="about_university">Faculty of Technical Science</string>
     <string name="about_location">Novi Sad</string>
     <string name="settings_name">Settings</string>
+    <string name="phone_number_police">111</string>
+    <string name="phone_number_ambulance">222</string>
+    <string name="phone_number_firefighters">333</string>
 
 </resources>

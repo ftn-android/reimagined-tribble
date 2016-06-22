@@ -11,6 +11,8 @@ import android.widget.Toast;
 
 import com.ftn.android.reimagined_tribble.R;
 
+import org.androidannotations.annotations.EActivity;
+
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
@@ -18,6 +20,8 @@ import butterknife.OnClick;
 /**
  * Created by szberko
  */
+
+@EActivity
 public class SignupActivity extends AppCompatActivity {
 
     private static final String TAG = "SignupActivity";

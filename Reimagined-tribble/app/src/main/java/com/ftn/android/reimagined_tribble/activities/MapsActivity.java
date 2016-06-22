@@ -1,6 +1,5 @@
 package com.ftn.android.reimagined_tribble.activities;
 
-import android.Manifest;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
@@ -9,11 +8,8 @@ import android.location.Criteria;
 import android.location.Location;
 import android.location.LocationManager;
 import android.net.Uri;
-import android.os.Bundle;
 import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AppCompatActivity;
-import android.view.Menu;
-import android.view.MenuItem;
 import android.view.View;
 import android.widget.Toast;
 
@@ -21,7 +17,6 @@ import com.afollestad.materialdialogs.MaterialDialog;
 import com.afollestad.materialdialogs.simplelist.MaterialSimpleListAdapter;
 import com.afollestad.materialdialogs.simplelist.MaterialSimpleListItem;
 import com.ftn.android.reimagined_tribble.R;
-import com.google.android.gms.location.LocationListener;
 import com.google.android.gms.maps.CameraUpdate;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
@@ -32,27 +27,73 @@ import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 
-public class MapsActivity extends AppCompatActivity implements OnMapReadyCallback, GoogleMap.OnMapClickListener, GoogleMap.OnInfoWindowClickListener, LocationListener {
+import org.androidannotations.annotations.AfterViews;
+import org.androidannotations.annotations.EActivity;
+import org.androidannotations.annotations.FragmentById;
+import org.androidannotations.annotations.OptionsItem;
+import org.androidannotations.annotations.OptionsMenu;
+import org.androidannotations.annotations.res.StringRes;
+
+@EActivity(R.layout.activity_maps)
+@OptionsMenu(R.menu.main)
+public class MapsActivity extends AppCompatActivity implements OnMapReadyCallback, GoogleMap.OnMapClickListener, GoogleMap.OnInfoWindowClickListener {
 
     GoogleMap googleMap;
-    Location loc;
 
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_maps);
+    @FragmentById(R.id.map)
+    SupportMapFragment mapFragment;
 
-        SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
-                .findFragmentById(R.id.map);
+    @StringRes(R.string.phone_number_police)
+    String policePhoneNumber;
+
+    @StringRes(R.string.phone_number_ambulance)
+    String ambulancePhoneNumber;
+
+    @StringRes(R.string.phone_number_firefighters)
+    String firefightersPhoneNumber;
+
+    @AfterViews
+    protected void init(){
         mapFragment.getMapAsync(this);
-
     }
 
+    @OptionsItem(R.id.settings)
+    void settings(){
+        SettingsActivity_.intent(this).start();
+    }
 
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.main, menu);
-        return true;
+    @OptionsItem(R.id.call_the_police)
+    void callThePolice(){
+        launchPhoneActivity(policePhoneNumber);
+    }
+
+    @OptionsItem(R.id.call_the_ambulance)
+    void callTheAmbulance(){
+        launchPhoneActivity(ambulancePhoneNumber);
+    }
+
+    @OptionsItem(R.id.call_the_firefighters)
+    void callTheFireFighters(){
+        launchPhoneActivity(firefightersPhoneNumber);
+    }
+
+    private void launchPhoneActivity(String url){
+        Intent intent = new Intent(Intent.ACTION_DIAL);
+        intent.setData(Uri.parse("tel:" + url));
+        startActivity(intent);
+    }
+
+    @OptionsItem(R.id.about)
+    void about(){
+        AboutActivity_.intent(this).start();
+    }
+
+    @OptionsItem(R.id.exit)
+    void exit(){
+        Intent intent = new Intent(Intent.ACTION_MAIN);
+        intent.addCategory(Intent.CATEGORY_HOME);
+        intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+        startActivity(intent);
     }
 
     /**
@@ -111,14 +152,6 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
 
 
     @Override
-    public void onLocationChanged(Location location) {
-        //The last known location can be null. Because of this we need to get the latest location before we call onMapReady method
-        //Really stupid solution
-        location.getLatitude();
-        location.getLongitude();
-    }
-
-    @Override
     public void onMapClick(LatLng latLng) {
         // Creating a marker
         MarkerOptions markerOptions = new MarkerOptions();
@@ -144,62 +177,7 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
 
     }
 
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId()) {
-            case R.id.settings:
-                launchSettingsActivity();
-                return true;
-            case R.id.call_the_police:
-                launchPhoneActivity(getResources().getString(R.string.police_phone_number));
-                return true;
-            case R.id.call_the_firefighters:
-                launchPhoneActivity(getResources().getString(R.string.firefighters_phone_number));
-                return true;
-            case R.id.call_the_ambulance:
-                launchPhoneActivity(getResources().getString(R.string.ambulance_phone_number));
-                return true;
-            case R.id.about:
-                launchAboutActivity();
-                return true;
-            case R.id.exit:
-                exitFromApp();
-                return true;
-            default:
-                return super.onOptionsItemSelected(item);
-        }
-    }
 
-    private void launchAboutActivity(){
-        Intent intent = new Intent(getApplicationContext(), AboutActivity.class);
-        startActivity(intent);
-    }
-
-    private void exitFromApp(){
-        Intent intent = new Intent(Intent.ACTION_MAIN);
-        intent.addCategory(Intent.CATEGORY_HOME);
-        intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-        startActivity(intent);
-    }
-
-    private void launchPhoneActivity(String url){
-        Intent intent = new Intent(Intent.ACTION_CALL, Uri.parse(url));
-        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.CALL_PHONE) != PackageManager.PERMISSION_GRANTED) {
-            // TODO: Consider calling
-            //    ActivityCompat#requestPermissions
-            // here to request the missing permissions, and then overriding
-            //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
-            //                                          int[] grantResults)
-            // to handle the case where the user grants the permission. See the documentation
-            // for ActivityCompat#requestPermissions for more details.
-        }
-        startActivity(intent);
-    }
-
-    private void launchSettingsActivity(){
-        Intent settingsIntent = new Intent(getApplicationContext(), SettingsActivity.class);
-        startActivity(settingsIntent);
-    }
 
     class AddNewInfoWindowAdapter implements GoogleMap.InfoWindowAdapter {
 
