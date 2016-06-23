@@ -1,7 +1,6 @@
 package com.ftn.android.reimagined_tribble.activities;
 
 import android.app.ProgressDialog;
-import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.widget.Button;
@@ -11,41 +10,32 @@ import android.widget.Toast;
 
 import com.ftn.android.reimagined_tribble.R;
 
+import org.androidannotations.annotations.Click;
 import org.androidannotations.annotations.EActivity;
-
-import butterknife.BindView;
-import butterknife.ButterKnife;
-import butterknife.OnClick;
+import org.androidannotations.annotations.ViewById;
 
 /**
  * Created by szberko
  */
 
-@EActivity
+@EActivity(R.layout.activity_signup)
 public class SignupActivity extends AppCompatActivity {
 
     private static final String TAG = "SignupActivity";
 
-    @BindView(R.id.input_name) EditText _nameText;
-    @BindView(R.id.input_email) EditText _emailText;
-    @BindView(R.id.input_password) EditText _passwordText;
-    @BindView(R.id.btn_signup) Button _signupButton;
-    @BindView(R.id.link_login) TextView _loginLink;
+    @ViewById(R.id.input_name) EditText _nameText;
+    @ViewById(R.id.input_email) EditText _emailText;
+    @ViewById(R.id.input_password) EditText _passwordText;
+    @ViewById(R.id.btn_signup) Button _signupButton;
+    @ViewById(R.id.link_login) TextView _loginLink;
 
-    @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_signup);
-        ButterKnife.bind(this);
 
-    }
-
-    @OnClick(R.id.btn_signup)
+    @Click(R.id.btn_signup)
     void signUpButton(){
         signup();
     }
 
-    @OnClick(R.id.link_login)
+    @Click(R.id.link_login)
     void loginButton(){
         finish();
     }
