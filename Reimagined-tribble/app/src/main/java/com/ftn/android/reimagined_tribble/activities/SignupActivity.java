@@ -9,6 +9,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.ftn.android.reimagined_tribble.R;
+import com.ftn.android.reimagined_tribble.model.User;
 
 import org.androidannotations.annotations.Click;
 import org.androidannotations.annotations.EActivity;
@@ -61,6 +62,11 @@ public class SignupActivity extends AppCompatActivity {
         String password = _passwordText.getText().toString();
 
         // TODO: Implement your own activity_signup logic here.
+        User user = new User();
+        user.setUserName(name);
+        user.setEmail(email);
+        user.setPassword(password);
+        user.save();
 
         new android.os.Handler().postDelayed(
                 new Runnable() {

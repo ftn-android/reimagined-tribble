@@ -52,7 +52,7 @@ public class LoginActivity extends AppCompatActivity {
         User user = new User();
         user.setUserName("admin");
         user.setPassword("admin");
-        user.setEmail("admin");
+        user.setEmail("admin@admin.com");
         user.save();
 
 
@@ -72,7 +72,6 @@ public class LoginActivity extends AppCompatActivity {
 //        List<User> users = userDatabase.getAllUsers();
 //
         if(User.find(User.class, "email = ? and password =?", email, password).size()!=0){
-            onLoginSuccess();
             MapsActivity_.intent(this).start();
         }
         else {
@@ -104,7 +103,7 @@ public class LoginActivity extends AppCompatActivity {
 
                 // TODO: Implement successful activity_signup logic here
                 // By default we just finish the Activity and log them in automatically
-
+                MapsActivity_.intent(this).start();
                 this.finish();
             }
         }
@@ -135,7 +134,7 @@ public class LoginActivity extends AppCompatActivity {
         String password = _passwordText.getText().toString();
 
         if (email.isEmpty() || !android.util.Patterns.EMAIL_ADDRESS.matcher(email).matches()) {
-            _emailText.setError("enter a valid email address");
+            _emailText.setError("enter a valid email address/username");
             valid = false;
         } else {
             _emailText.setError(null);
