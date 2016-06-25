@@ -65,6 +65,7 @@ public class SignupActivity extends AppCompatActivity {
         if(User.find(User.class, "email=?",email).size()!=0){
             Toast.makeText(getBaseContext(), "User with this email already exists!", Toast.LENGTH_LONG).show();
             _signupButton.setEnabled(true);
+            progressDialog.hide();
             return;
         }
 
@@ -93,7 +94,7 @@ public class SignupActivity extends AppCompatActivity {
     }
 
     public void onSignupFailed() {
-        Toast.makeText(getBaseContext(), "Login failed", Toast.LENGTH_LONG).show();
+        Toast.makeText(getBaseContext(), "Sign up failed", Toast.LENGTH_LONG).show();
 
         _signupButton.setEnabled(true);
     }
