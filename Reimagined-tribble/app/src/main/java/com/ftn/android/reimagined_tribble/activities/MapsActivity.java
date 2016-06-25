@@ -2,6 +2,7 @@ package com.ftn.android.reimagined_tribble.activities;
 
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.graphics.Color;
 import android.location.Criteria;
@@ -40,6 +41,8 @@ import org.androidannotations.annotations.res.StringRes;
 public class MapsActivity extends AppCompatActivity implements OnMapReadyCallback, GoogleMap.OnMapClickListener, GoogleMap.OnInfoWindowClickListener {
 
     GoogleMap googleMap;
+    private SharedPreferences loginPreferences;
+    private SharedPreferences.Editor loginPrefsEditor;
 
     @FragmentById(R.id.map)
     SupportMapFragment mapFragment;
@@ -87,6 +90,16 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
     @OptionsItem(R.id.about)
     void about(){
         AboutActivity_.intent(this).start();
+    }
+
+    @OptionsItem(R.id.logout)
+    void logout() {
+        loginPreferences = getSharedPreferences("loginPrefs", MODE_PRIVATE);
+        loginPrefsEditor = loginPreferences.edit();
+        loginPrefsEditor.clear();
+        loginPrefsEditor.commit();
+        LoginActivity_.intent(this).start();
+
     }
 
     @OptionsItem(R.id.exit)
@@ -174,6 +187,12 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
 
         Marker marker = googleMap.addMarker(markerOptions);
         marker.showInfoWindow();
+    }
+
+    @Override
+    public void onBackPressed() {
+
+        moveTaskToBack(true);
     }
 
     @Override

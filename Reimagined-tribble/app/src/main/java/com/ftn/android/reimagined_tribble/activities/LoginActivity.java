@@ -1,12 +1,14 @@
 package com.ftn.android.reimagined_tribble.activities;
 
 import android.content.Intent;
+import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
+import android.content.SharedPreferences;
 
 import com.ftn.android.reimagined_tribble.R;
 import com.ftn.android.reimagined_tribble.model.User;
@@ -22,6 +24,8 @@ import org.androidannotations.annotations.ViewById;
 public class LoginActivity extends AppCompatActivity {
     private static final String TAG = "LoginActivity";
     private static final int REQUEST_SIGNUP = 0;
+    private SharedPreferences loginPreferences;
+    private SharedPreferences.Editor loginPrefsEditor;
 
 
     @ViewById(R.id.input_email) EditText _emailText;
@@ -72,7 +76,11 @@ public class LoginActivity extends AppCompatActivity {
 //        List<User> users = userDatabase.getAllUsers();
 //
         if(User.find(User.class, "email = ? and password =?", email, password).size()!=0){
+            loginPrefsEditor.putString("username", email);
+            loginPrefsEditor.putString("password", password);
+            loginPrefsEditor.commit();
             MapsActivity_.intent(this).start();
+            onLoginSuccess();
         }
         else {
             onLoginFailed();
@@ -104,8 +112,19 @@ public class LoginActivity extends AppCompatActivity {
                 // TODO: Implement successful activity_signup logic here
                 // By default we just finish the Activity and log them in automatically
                 MapsActivity_.intent(this).start();
-                this.finish();
+                onLoginSuccess();
             }
+        }
+    }
+
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        loginPreferences = getSharedPreferences("loginPrefs", MODE_PRIVATE);
+        loginPrefsEditor = loginPreferences.edit();
+        if(!loginPreferences.getString("username", "").equals(""))
+        {
+            MapsActivity_.intent(this).start();
+            onLoginSuccess();
         }
     }
 
