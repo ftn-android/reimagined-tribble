@@ -62,6 +62,12 @@ public class SignupActivity extends AppCompatActivity {
         String password = _passwordText.getText().toString();
 
         // TODO: Implement your own activity_signup logic here.
+        if(User.find(User.class, "email=?",email).size()!=0){
+            Toast.makeText(getBaseContext(), "User with this email already exists!", Toast.LENGTH_LONG).show();
+            _signupButton.setEnabled(true);
+            return;
+        }
+
         User user = new User();
         user.setUserName(name);
         user.setEmail(email);

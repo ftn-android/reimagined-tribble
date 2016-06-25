@@ -5,12 +5,16 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.graphics.Color;
+import android.location.Address;
 import android.location.Criteria;
+import android.location.Geocoder;
 import android.location.Location;
 import android.location.LocationManager;
 import android.net.Uri;
+import android.nfc.Tag;
 import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.View;
 import android.widget.Toast;
 
@@ -19,6 +23,7 @@ import com.afollestad.materialdialogs.simplelist.MaterialSimpleListAdapter;
 import com.afollestad.materialdialogs.simplelist.MaterialSimpleListItem;
 import com.ftn.android.reimagined_tribble.R;
 import com.ftn.android.reimagined_tribble.adapters.AddInfoWindowAdapter;
+import com.ftn.android.reimagined_tribble.model.User;
 import com.google.android.gms.maps.CameraUpdate;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
@@ -36,6 +41,10 @@ import org.androidannotations.annotations.OptionsItem;
 import org.androidannotations.annotations.OptionsMenu;
 import org.androidannotations.annotations.res.StringRes;
 
+import java.io.IOException;
+import java.util.List;
+import java.util.Locale;
+
 @EActivity(R.layout.activity_maps)
 @OptionsMenu(R.menu.main)
 public class MapsActivity extends AppCompatActivity implements OnMapReadyCallback, GoogleMap.OnMapClickListener, GoogleMap.OnInfoWindowClickListener {
@@ -43,6 +52,7 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
     GoogleMap googleMap;
     private SharedPreferences loginPreferences;
     private SharedPreferences.Editor loginPrefsEditor;
+    private static final String TAG = "MapsActivity";
 
     @FragmentById(R.id.map)
     SupportMapFragment mapFragment;
@@ -94,8 +104,7 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
 
     @OptionsItem(R.id.logout)
     void logout() {
-        loginPreferences = getSharedPreferences("loginPrefs", MODE_PRIVATE);
-        loginPrefsEditor = loginPreferences.edit();
+
         loginPrefsEditor.clear();
         loginPrefsEditor.commit();
         LoginActivity_.intent(this).start();
@@ -121,6 +130,8 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
      */
     @Override
     public void onMapReady(GoogleMap googleMap) {
+        loginPreferences = getSharedPreferences("loginPrefs", MODE_PRIVATE);
+        loginPrefsEditor = loginPreferences.edit();
         this.googleMap = googleMap;
 
         // Add a marker in Sydney and move the camera
@@ -150,7 +161,45 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
         Criteria crit = new Criteria();
         Location loc = locMan.getLastKnownLocation(locMan.getBestProvider(crit, false));
 
+        com.ftn.android.reimagined_tribble.model.Location location = new com.ftn.android.reimagined_tribble.model.Location();
+
         if(loc != null) {
+
+            Geocoder geocoder;
+            List<Address> addresses;
+            geocoder = new Geocoder(this, Locale.getDefault());
+            try {
+                addresses = geocoder.getFromLocation(loc.getLatitude(), loc.getLongitude(), 1); // Here 1 represent max location result to returned, by documents it recommended 1 to 5
+                String address="";
+                if(addresses.get(0).getSubThoroughfare()!=null) {
+                    address = addresses.get(0).getThoroughfare() + addresses.get(0).getSubThoroughfare();// If any additional address line present than only, check with max available address lines by getMaxAddressLineIndex()
+                }
+                else
+                {
+                    address = addresses.get(0).getThoroughfare();
+                }
+                String city = addresses.get(0).getLocality();
+                String state = addresses.get(0).getAdminArea();
+                String country = addresses.get(0).getCountryName();
+                String postalCode = addresses.get(0).getPostalCode();
+                String knownName = addresses.get(0).getFeatureName();
+
+                location.setAddress(address);
+                location.setCountry(country);
+                location.setCity(city);
+
+                String email = loginPreferences.getString("username", "");
+                User user = User.find(User.class, "email = ?",email).get(0);
+                user.setLocation(location);
+                user.save();
+                Log.d(TAG,address);
+
+            }
+            catch (IOException e) {
+                e.printStackTrace();
+
+            }
+
             CameraPosition camPos = new CameraPosition.Builder()
                     .target(new LatLng(loc.getLatitude(), loc.getLongitude()))
                     .zoom(12.8f)
@@ -158,6 +207,11 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
 
             CameraUpdate camUpdate = CameraUpdateFactory.newCameraPosition(camPos);
             googleMap.moveCamera(camUpdate);
+
+
+
+
+
         }
 
         googleMap.setOnMapClickListener(this);
