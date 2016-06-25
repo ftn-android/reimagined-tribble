@@ -11,7 +11,6 @@ import android.location.Geocoder;
 import android.location.Location;
 import android.location.LocationManager;
 import android.net.Uri;
-import android.nfc.Tag;
 import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
@@ -46,7 +45,7 @@ import java.util.List;
 import java.util.Locale;
 
 @EActivity(R.layout.activity_maps)
-@OptionsMenu(R.menu.main)
+@OptionsMenu(R.menu.maps_main)
 public class MapsActivity extends AppCompatActivity implements OnMapReadyCallback, GoogleMap.OnMapClickListener, GoogleMap.OnInfoWindowClickListener {
 
     GoogleMap googleMap;
