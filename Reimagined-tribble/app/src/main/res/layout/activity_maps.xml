@@ -31,6 +31,7 @@
         >
 
         <com.github.clans.fab.FloatingActionButton
+            android:id="@+id/fab_add_new_incident"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:src="@drawable/ic_incident_fab_add_new"
@@ -42,6 +43,7 @@
              />
 
         <com.github.clans.fab.FloatingActionButton
+            android:id="@+id/fab_add_new_gas_station"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:src="@drawable/ic_gas_station_fab_add_new"

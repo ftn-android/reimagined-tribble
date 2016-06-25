@@ -16,7 +16,6 @@ import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
-import android.widget.Toast;
 
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.afollestad.materialdialogs.simplelist.MaterialSimpleListAdapter;
@@ -35,6 +34,7 @@ import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 
 import org.androidannotations.annotations.AfterViews;
+import org.androidannotations.annotations.Click;
 import org.androidannotations.annotations.EActivity;
 import org.androidannotations.annotations.FragmentById;
 import org.androidannotations.annotations.OptionsItem;
@@ -69,6 +69,16 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
     @AfterViews
     protected void init(){
         mapFragment.getMapAsync(this);
+    }
+
+    @Click(R.id.fab_add_new_incident)
+    protected void clickNewIncident(){
+    }
+
+    @Click(R.id.fab_add_new_gas_station)
+    protected void clickNewGasStation(){
+        Intent intent = new Intent(getApplicationContext(), AddNewGasStationActivity.class);
+        startActivity(intent);
     }
 
     @OptionsItem(R.id.settings)
@@ -133,11 +143,6 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
         loginPreferences = getSharedPreferences("loginPrefs", MODE_PRIVATE);
         loginPrefsEditor = loginPreferences.edit();
         this.googleMap = googleMap;
-
-        // Add a marker in Sydney and move the camera
-//        LatLng sydney = new LatLng(-34, 151);
-//        this.googleMap.addMarker(new MarkerOptions().position(sydney).title("Marker in Sydney"));
-//        this.googleMap.moveCamera(CameraUpdateFactory.newLatLng(sydney));
 
         googleMap.setMapType(GoogleMap.MAP_TYPE_NORMAL);
 
@@ -253,13 +258,18 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
     public void onInfoWindowClick(Marker marker) {
         googleMap.clear();
 
+        final int ADD_NEW_GAS_STATION=0;
+        final int ADD_NEW_INCIDENT=1;
+
         final MaterialSimpleListAdapter adapter = new MaterialSimpleListAdapter(this);
         adapter.add(new MaterialSimpleListItem.Builder(this)
+                .id(ADD_NEW_GAS_STATION)
                 .content(R.string.add_new_gas_station_from_map)
                 .icon(R.drawable.ic_gas_station_dialog_add_new)
                 .backgroundColor(Color.WHITE)
                 .build());
         adapter.add(new MaterialSimpleListItem.Builder(this)
+                .id(ADD_NEW_INCIDENT)
                 .content(R.string.add_new_incident_from_map)
                 .icon(R.drawable.ic_incident_dialog_add_new)
                 .backgroundColor(Color.WHITE)
@@ -271,20 +281,15 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
                     @Override
                     public void onSelection(MaterialDialog dialog, View itemView, int which, CharSequence text) {
                         MaterialSimpleListItem item = adapter.getItem(which);
-                        showToast(item.getContent().toString());
+                        if(item.getId() == ADD_NEW_GAS_STATION){
+                            Intent intent = new Intent(getApplicationContext(), AddNewGasStationActivity.class);
+                            startActivity(intent);
+                        }
+                        if(item.getId() == ADD_NEW_INCIDENT){
+
+                        }
                     }
                 })
                 .show();
     }
-
-    private Toast mToast;
-    private void showToast(String message) {
-        if (mToast != null) {
-            mToast.cancel();
-            mToast = null;
-        }
-        mToast = Toast.makeText(this, message, Toast.LENGTH_SHORT);
-        mToast.show();
-    }
-
 }

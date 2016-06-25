@@ -10,12 +10,17 @@ import android.widget.TextView;
 import android.widget.Toast;
 import android.content.SharedPreferences;
 
+import com.facebook.stetho.Stetho;
+import com.facebook.stetho.okhttp3.StethoInterceptor;
 import com.ftn.android.reimagined_tribble.R;
 import com.ftn.android.reimagined_tribble.model.User;
 
+import org.androidannotations.annotations.AfterViews;
 import org.androidannotations.annotations.Click;
 import org.androidannotations.annotations.EActivity;
 import org.androidannotations.annotations.ViewById;
+
+import okhttp3.OkHttpClient;
 
 /**
  * Created by szberko
@@ -42,6 +47,18 @@ public class LoginActivity extends AppCompatActivity {
     @Click(R.id.link_signup)
     void clickSignUpLink(){
         SignupActivity_.intent(this).startForResult(REQUEST_SIGNUP);
+    }
+
+    @AfterViews
+    protected void init(){
+        Stetho.initializeWithDefaults(this);
+
+        new OkHttpClient.Builder()
+                .addNetworkInterceptor(new StethoInterceptor())
+                .build();
+
+        _emailText.setText("admin@admin.com");
+        _passwordText.setText("admin");
     }
 
 
