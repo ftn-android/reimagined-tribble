@@ -11,9 +11,14 @@ import android.location.Geocoder;
 import android.location.Location;
 import android.location.LocationManager;
 import android.net.Uri;
+import android.support.design.widget.NavigationView;
 import android.support.v4.app.ActivityCompat;
+import android.support.v4.view.GravityCompat;
+import android.support.v4.widget.DrawerLayout;
+import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
+import android.view.MenuItem;
 import android.view.View;
 
 import com.afollestad.materialdialogs.MaterialDialog;
@@ -38,6 +43,7 @@ import org.androidannotations.annotations.EActivity;
 import org.androidannotations.annotations.FragmentById;
 import org.androidannotations.annotations.OptionsItem;
 import org.androidannotations.annotations.OptionsMenu;
+import org.androidannotations.annotations.ViewById;
 import org.androidannotations.annotations.res.StringRes;
 
 import java.io.IOException;
@@ -46,7 +52,7 @@ import java.util.Locale;
 
 @EActivity(R.layout.activity_maps)
 @OptionsMenu(R.menu.maps_main)
-public class MapsActivity extends AppCompatActivity implements OnMapReadyCallback, GoogleMap.OnMapClickListener, GoogleMap.OnInfoWindowClickListener {
+public class MapsActivity extends AppCompatActivity implements OnMapReadyCallback, GoogleMap.OnMapClickListener, GoogleMap.OnInfoWindowClickListener, NavigationView.OnNavigationItemSelectedListener {
 
     GoogleMap googleMap;
     private SharedPreferences loginPreferences;
@@ -65,10 +71,36 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
     @StringRes(R.string.phone_number_firefighters)
     String firefightersPhoneNumber;
 
-    @AfterViews
-    protected void init(){
-        mapFragment.getMapAsync(this);
+    //region NavigationDrawer
+    @ViewById(R.id.drawer_layout)
+    DrawerLayout mDrawerLayout;
+
+    @ViewById(R.id.nav_view)
+    NavigationView navigationView;
+
+    @Override
+    public boolean onNavigationItemSelected(MenuItem item) {
+        item.setChecked(true);
+        mDrawerLayout.closeDrawers();
+        return true;
     }
+
+    //Cannot access to android.R.id.home through AndroidAnnotations.
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case android.R.id.home:
+                if(mDrawerLayout.isDrawerOpen(GravityCompat.START)){
+                    mDrawerLayout.closeDrawers();
+                }else{
+                    mDrawerLayout.openDrawer(GravityCompat.START);
+                }
+
+                return true;
+        }
+        return super.onOptionsItemSelected(item);
+    }
+    //endregion
 
     @Click(R.id.fab_add_new_incident)
     protected void clickNewIncident(){
@@ -126,6 +158,17 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
         intent.addCategory(Intent.CATEGORY_HOME);
         intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
         startActivity(intent);
+    }
+
+    @AfterViews
+    protected void init(){
+        mapFragment.getMapAsync(this);
+
+        final ActionBar ab = getSupportActionBar();
+        ab.setHomeAsUpIndicator(R.drawable.ic_menu);
+        ab.setDisplayHomeAsUpEnabled(true);
+
+        navigationView.setNavigationItemSelectedListener(this);
     }
 
     /**

@@ -1,7 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<android.support.v4.widget.DrawerLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/drawer_layout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".activities.MapsActivity">
@@ -18,44 +19,48 @@
         android:id="@+id/menu"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_gravity="bottom"
         android:layout_margin="16dp"
         android:clickable="true"
 
+        app:backgroundTint="@color/primary"
         app:menu_colorNormal="@color/primary"
         app:menu_colorPressed="@color/fab_pressed"
         app:menu_colorRipple="@color/fab_ripple"
-        app:menu_openDirection="down"
         app:menu_labels_position="right"
-        app:backgroundTint="@color/primary"
-        >
+        app:menu_openDirection="down">
 
         <com.github.clans.fab.FloatingActionButton
             android:id="@+id/fab_add_new_incident"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:src="@drawable/ic_incident_fab_add_new"
-            app:fab_size="mini"
-            app:fab_label="@string/add_new_incident_from_map"
             app:fab_colorNormal="@color/primary"
             app:fab_colorPressed="@color/fab_pressed"
             app:fab_colorRipple="@color/fab_ripple"
-             />
+            app:fab_label="@string/add_new_incident_from_map"
+            app:fab_size="mini" />
 
         <com.github.clans.fab.FloatingActionButton
             android:id="@+id/fab_add_new_gas_station"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:src="@drawable/ic_gas_station_fab_add_new"
-            app:fab_size="mini"
-            app:fab_label="@string/add_new_gas_station_from_map"
             app:fab_colorNormal="@color/primary"
             app:fab_colorPressed="@color/fab_pressed"
             app:fab_colorRipple="@color/fab_ripple"
-            />
+            app:fab_label="@string/add_new_gas_station_from_map"
+            app:fab_size="mini" />
 
 
     </com.github.clans.fab.FloatingActionMenu>
 
+    <android.support.design.widget.NavigationView
+        android:id="@+id/nav_view"
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:layout_gravity="start"
+        android:fitsSystemWindows="true"
+        app:headerLayout="@layout/nav_header"
+        app:menu="@menu/drawer_view" />
 
-</RelativeLayout>
+</android.support.v4.widget.DrawerLayout>
