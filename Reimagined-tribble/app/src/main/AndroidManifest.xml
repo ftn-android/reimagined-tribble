@@ -77,14 +77,8 @@
             android:label="@string/title_activity_maps"
             android:theme="@style/MapActivity" />
 
-        <!--<activity-->
-            <!--android:name=".activities.AddNewGasStationActivity"-->
-            <!--android:excludeFromRecents="true"-->
-            <!--android:taskAffinity=""-->
-            <!--android:theme="@style/AddNewGasStation" />-->
-
         <activity
-            android:name=".activities.AddNewGasStationActivity1_"
+            android:name=".activities.AddNewGasStationActivity_"
             android:theme="@style/AddNewGasStationActivity"
             android:parentActivityName=".activities.MapsActivity_">
             <meta-data android:name="android.support.PARENT_ACTIVITY"

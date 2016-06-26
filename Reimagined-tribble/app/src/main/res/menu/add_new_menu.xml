@@ -9,12 +9,12 @@
         android:id="@+id/add"
         android:icon="@drawable/ic_add"
         android:title="@string/btn_add"
-        app:showAsAction="always|withText"/>
+        app:showAsAction="always"/>
 
     <item
         android:id="@+id/cancel"
         android:icon="@drawable/ic_cancel"
         android:title="@string/btn_cancel"
-        app:showAsAction="always|withText" />
+        app:showAsAction="always" />
 
 </menu>

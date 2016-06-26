@@ -1,16 +1,18 @@
 package com.ftn.android.reimagined_tribble.activities;
 
 import android.content.Intent;
-import android.content.pm.ActivityInfo;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
-import android.os.Bundle;
-import android.view.Menu;
-import android.view.View;
+import android.support.design.widget.CollapsingToolbarLayout;
+import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.Toolbar;
 import android.widget.ImageView;
 
+import com.bumptech.glide.Glide;
 import com.ftn.android.reimagined_tribble.R;
-import com.klinker.android.sliding.SlidingActivity;
+
+import org.androidannotations.annotations.AfterViews;
+import org.androidannotations.annotations.Click;
+import org.androidannotations.annotations.EActivity;
+import org.androidannotations.annotations.OptionsMenu;
 
 import java.io.File;
 
@@ -19,15 +21,29 @@ import pl.aprilapps.easyphotopicker.EasyImage;
 
 /**
  * Created by szberko
- */
+*/
+@EActivity(R.layout.activity_detail)
+@OptionsMenu(R.menu.add_new_menu)
+public class AddNewGasStationActivity extends AppCompatActivity{
 
-public class AddNewGasStationActivity extends SlidingActivity {
+    @AfterViews
+    protected void init(){
+        final Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
-    public static final String ARG_USE_EXPANSION = "arg_use_expansion";
-    public static final String ARG_EXPANSION_LEFT_OFFSET = "arg_left_offset";
-    public static final String ARG_EXPANSION_TOP_OFFSET = "arg_top_offset";
-    public static final String ARG_EXPANSION_VIEW_WIDTH = "arg_view_width";
-    public static final String ARG_EXPANSION_VIEW_HEIGHT = "arg_view_height";
+        CollapsingToolbarLayout collapsingToolbar =
+                (CollapsingToolbarLayout) findViewById(R.id.collapsing_toolbar);
+        collapsingToolbar.setTitle("cheese name");
+
+        final ImageView imageView = (ImageView) findViewById(R.id.backdrop);
+        Glide.with(this).load("").error(R.drawable.ic_photo_placeholder).into(imageView);
+    }
+
+    @Click(R.id.fab_add_new_gas_station_details)
+    protected void startTheCamera(){
+        EasyImage.openCamera(AddNewGasStationActivity.this, 1);
+    }
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
@@ -42,9 +58,8 @@ public class AddNewGasStationActivity extends SlidingActivity {
             @Override
             public void onImagePicked(File imageFile, EasyImage.ImageSource source, int type) {
                 //Handle the image
-                Bitmap bitmap = BitmapFactory.decodeFile(imageFile.getPath());
-                ImageView headerPhoto = (ImageView) findViewById(R.id.header_photo);
-                headerPhoto.setImageBitmap(bitmap);
+                ImageView headerPhoto = (ImageView) findViewById(R.id.backdrop);
+                Glide.with(AddNewGasStationActivity.this).load(imageFile).centerCrop().into(headerPhoto);
             }
 
             @Override
@@ -58,50 +73,5 @@ public class AddNewGasStationActivity extends SlidingActivity {
         });
     }
 
-    @Override
-    public void init(Bundle savedInstanceState) {
 
-        setTitle("Activity Title");
-        setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
-        setPrimaryColors(
-                getResources().getColor(R.color.primary),
-                getResources().getColor(R.color.primary_dark)
-        );
-
-        try {
-            getActionBar().setHomeButtonEnabled(true);
-        }catch (NullPointerException e){}
-
-        setContent(R.layout.activity_content);
-        setHeaderContent(R.layout.activity_header_add_new);
-
-        enableFullscreen();
-        setFab(
-                getResources().getColor(R.color.primary_dark),
-                R.drawable.ic_gas_station_fab_add_new,
-                new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        EasyImage.openCamera(AddNewGasStationActivity.this, 1);
-                    }
-                }
-        );
-
-
-//        Intent intent = getIntent();
-//        if (intent.getBooleanExtra(ARG_USE_EXPANSION, false)) {
-//            expandFromPoints(
-//                    intent.getIntExtra(ARG_EXPANSION_LEFT_OFFSET, 0),
-//                    intent.getIntExtra(ARG_EXPANSION_TOP_OFFSET, 0),
-//                    intent.getIntExtra(ARG_EXPANSION_VIEW_WIDTH, 0),
-//                    intent.getIntExtra(ARG_EXPANSION_VIEW_HEIGHT, 0)
-//            );
-//        }
-    }
-
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.add_new_menu, menu);
-        return true;
-    }
 }
