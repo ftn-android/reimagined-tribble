@@ -80,7 +80,7 @@
         <activity android:name=".activities.AddNewGasStationActivity"
             android:excludeFromRecents="true"
             android:taskAffinity=""
-            android:theme="@style/Theme.Sliding.Light"/>
+            android:theme="@style/AddNewGasStation"/>
 
 
 

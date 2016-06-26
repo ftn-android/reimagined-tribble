@@ -74,16 +74,18 @@
     <style name="SignUpDialog" parent="AppTheme.Dialog">
     </style>
 
-    <style name="AboutActivity" parent="AppTheme.NoActionBar"></style>
+    <style name="AboutActivity" parent="AppTheme.NoActionBar">
+    </style>
 
     <style name="LogoutActivity" parent="AppTheme.NoActionBar">
     </style>
 
-
-
-
-
-
+    <style name="AddNewGasStation" parent="Theme.Sliding.Light">
+        <item name="colorControlNormal">@color/jumbo</item>
+        <item name="colorControlActivated">@color/primary</item>
+        <item name="colorControlHighlight">@color/primary</item>
+        <item name="android:textColorHint">@color/jumbo</item>
+    </style>
 
 
 

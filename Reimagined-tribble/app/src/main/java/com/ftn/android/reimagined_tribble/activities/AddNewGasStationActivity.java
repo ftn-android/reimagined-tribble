@@ -5,7 +5,9 @@ import android.content.pm.ActivityInfo;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Bundle;
+import android.view.Menu;
 import android.view.View;
+import android.widget.ImageView;
 
 import com.ftn.android.reimagined_tribble.R;
 import com.klinker.android.sliding.SlidingActivity;
@@ -27,10 +29,6 @@ public class AddNewGasStationActivity extends SlidingActivity {
     public static final String ARG_EXPANSION_VIEW_WIDTH = "arg_view_width";
     public static final String ARG_EXPANSION_VIEW_HEIGHT = "arg_view_height";
 
-    private Bitmap bitmap;
-
-
-
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
@@ -44,8 +42,9 @@ public class AddNewGasStationActivity extends SlidingActivity {
             @Override
             public void onImagePicked(File imageFile, EasyImage.ImageSource source, int type) {
                 //Handle the image
-                setHeaderImage(imageFile);
-
+                Bitmap bitmap = BitmapFactory.decodeFile(imageFile.getPath());
+                ImageView headerPhoto = (ImageView) findViewById(R.id.header_photo);
+                headerPhoto.setImageBitmap(bitmap);
             }
 
             @Override
@@ -57,16 +56,7 @@ public class AddNewGasStationActivity extends SlidingActivity {
                 }
             }
         });
-
-
     }
-
-    private void setHeaderImage(File imageFile){
-        bitmap = BitmapFactory.decodeFile(imageFile.getPath());
-        setImage(bitmap);
-    }
-
-
 
     @Override
     public void init(Bundle savedInstanceState) {
@@ -78,22 +68,20 @@ public class AddNewGasStationActivity extends SlidingActivity {
                 getResources().getColor(R.color.primary_dark)
         );
 
-        setContent(R.layout.activity_content);
+        try {
+            getActionBar().setHomeButtonEnabled(true);
+        }catch (NullPointerException e){}
 
-        if(bitmap == null) {
-            setImage(R.drawable.ic_photo_placeholder);
-        }
-        else {
-            setImage(bitmap);
-        }
+        setContent(R.layout.activity_content);
+        setHeaderContent(R.layout.activity_header_add_new);
+
         enableFullscreen();
         setFab(
-                getResources().getColor(R.color.primary),
+                getResources().getColor(R.color.primary_dark),
                 R.drawable.ic_gas_station_fab_add_new,
                 new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-//                        AboutActivity_.intent(AddNewGasStationActivity.this).start();
                         EasyImage.openCamera(AddNewGasStationActivity.this, 1);
                     }
                 }
@@ -109,5 +97,11 @@ public class AddNewGasStationActivity extends SlidingActivity {
 //                    intent.getIntExtra(ARG_EXPANSION_VIEW_HEIGHT, 0)
 //            );
 //        }
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.add_new_menu, menu);
+        return true;
     }
 }
