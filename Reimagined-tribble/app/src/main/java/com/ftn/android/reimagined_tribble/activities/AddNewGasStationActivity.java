@@ -79,7 +79,7 @@ public class AddNewGasStationActivity extends AppCompatActivity{
     }
 
     @OptionsItem(R.id.add)
-    protected void clickOnAddGasStaion(){
+    protected void clickOnAddGasStation(){
 
     }
 
