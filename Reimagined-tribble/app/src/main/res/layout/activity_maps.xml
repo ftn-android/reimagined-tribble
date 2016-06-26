@@ -23,9 +23,9 @@
         android:clickable="true"
 
         app:backgroundTint="@color/primary"
-        app:menu_colorNormal="@color/primary"
-        app:menu_colorPressed="@color/fab_pressed"
-        app:menu_colorRipple="@color/fab_ripple"
+        app:menu_colorNormal="@color/accent"
+        app:menu_colorPressed="@color/primary_light"
+        app:menu_colorRipple="@color/primary"
         app:menu_labels_position="right"
         app:menu_openDirection="down">
 
@@ -34,9 +34,9 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:src="@drawable/ic_incident_fab_add_new"
-            app:fab_colorNormal="@color/primary"
-            app:fab_colorPressed="@color/fab_pressed"
-            app:fab_colorRipple="@color/fab_ripple"
+            app:fab_colorNormal="@color/accent"
+            app:fab_colorPressed="@color/primary_light"
+            app:fab_colorRipple="@color/primary"
             app:fab_label="@string/add_new_incident_from_map"
             app:fab_size="mini" />
 
@@ -45,9 +45,9 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:src="@drawable/ic_gas_station_fab_add_new"
-            app:fab_colorNormal="@color/primary"
-            app:fab_colorPressed="@color/fab_pressed"
-            app:fab_colorRipple="@color/fab_ripple"
+            app:fab_colorNormal="@color/accent"
+            app:fab_colorPressed="@color/primary_light"
+            app:fab_colorRipple="@color/primary"
             app:fab_label="@string/add_new_gas_station_from_map"
             app:fab_size="mini" />
 

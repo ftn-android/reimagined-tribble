@@ -108,8 +108,11 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
 
     @Click(R.id.fab_add_new_gas_station)
     protected void clickNewGasStation(){
-        Intent intent = new Intent(getApplicationContext(), AddNewGasStationActivity.class);
-        startActivity(intent);
+//        Intent intent = new Intent(getApplicationContext(), AddNewGasStationActivity.class);
+//        startActivity(intent);
+//        Intent intent = new Intent(getApplicationContext(), AddNewGasStationActivity1.class);
+//        startActivity(intent);
+        AddNewGasStationActivity1_.intent(this).start();
     }
 
     @OptionsItem(R.id.settings)
@@ -324,8 +327,9 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
                     public void onSelection(MaterialDialog dialog, View itemView, int which, CharSequence text) {
                         MaterialSimpleListItem item = adapter.getItem(which);
                         if(item.getId() == ADD_NEW_GAS_STATION){
-                            Intent intent = new Intent(getApplicationContext(), AddNewGasStationActivity.class);
-                            startActivity(intent);
+                            AddNewGasStationActivity1_.intent(MapsActivity.this).start();
+//                            Intent intent = new Intent(getApplicationContext(), AddNewGasStationActivity1.class);
+//                            startActivity(intent);
                         }
                         if(item.getId() == ADD_NEW_INCIDENT){
 

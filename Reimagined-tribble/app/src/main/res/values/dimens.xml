@@ -2,6 +2,7 @@
     <dimen name="app_bar_height">180dp</dimen>
     <dimen name="fab_margin">16dp</dimen>
     <dimen name="text_margin">16dp</dimen>
+    <dimen name="detail_backdrop_height">256dp</dimen>
 
     <dimen name="flexible_space_image_height">240dp</dimen>
     <dimen name="flexible_space_show_fab_offset">120dp</dimen>
@@ -9,4 +10,5 @@
     <dimen name="margin_standard">16dp</dimen>
     <dimen name="margin_short">8dp</dimen>
     <dimen name="margin_extra_short">4dp</dimen>
+
 </resources>
