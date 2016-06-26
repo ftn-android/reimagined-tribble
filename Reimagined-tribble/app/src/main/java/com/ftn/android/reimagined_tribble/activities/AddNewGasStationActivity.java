@@ -12,7 +12,9 @@ import com.ftn.android.reimagined_tribble.R;
 import org.androidannotations.annotations.AfterViews;
 import org.androidannotations.annotations.Click;
 import org.androidannotations.annotations.EActivity;
+import org.androidannotations.annotations.OptionsItem;
 import org.androidannotations.annotations.OptionsMenu;
+import org.androidannotations.annotations.res.StringRes;
 
 import java.io.File;
 
@@ -26,6 +28,9 @@ import pl.aprilapps.easyphotopicker.EasyImage;
 @OptionsMenu(R.menu.add_new_menu)
 public class AddNewGasStationActivity extends AppCompatActivity{
 
+    @StringRes(R.string.title_add_new_gas_station)
+    String activityTitle;
+
     @AfterViews
     protected void init(){
         final Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
@@ -34,7 +39,7 @@ public class AddNewGasStationActivity extends AppCompatActivity{
 
         CollapsingToolbarLayout collapsingToolbar =
                 (CollapsingToolbarLayout) findViewById(R.id.collapsing_toolbar);
-        collapsingToolbar.setTitle("cheese name");
+        collapsingToolbar.setTitle(activityTitle);
 
         final ImageView imageView = (ImageView) findViewById(R.id.backdrop);
         Glide.with(this).load("").error(R.drawable.ic_photo_placeholder).into(imageView);
@@ -73,5 +78,9 @@ public class AddNewGasStationActivity extends AppCompatActivity{
         });
     }
 
+    @OptionsItem(R.id.add)
+    protected void clickOnAddGasStaion(){
+
+    }
 
 }
