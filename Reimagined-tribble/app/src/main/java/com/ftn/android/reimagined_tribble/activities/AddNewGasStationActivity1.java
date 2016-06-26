@@ -37,7 +37,7 @@ public class AddNewGasStationActivity1 extends AppCompatActivity{
         collapsingToolbar.setTitle("cheese name");
 
         final ImageView imageView = (ImageView) findViewById(R.id.backdrop);
-        Glide.with(this).load(R.drawable.ic_photo_placeholder).into(imageView);
+        Glide.with(this).load("").error(R.drawable.ic_photo_placeholder).into(imageView);
     }
 
     @Click(R.id.fab_add_new_gas_station_details)
