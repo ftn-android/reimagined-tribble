@@ -13,22 +13,24 @@ public class GasStation extends SugarRecord {
 
     private String name;
     private String description;
-    private Date date;
+    private String date;
     private String image;
-    private Location location;
     private String user;
+    private double lattitude;
+    private double longittude;
 
     public GasStation(){
 
     }
 
-    public GasStation(String name, String description, Date date, String image, Location location,String user) {
+    public GasStation(String name, String description, String date, String image, String user, double lattitude, double longittude) {
         this.name = name;
         this.description = description;
         this.date = date;
         this.image = image;
-        this.location = location;
         this.user = user;
+        this.lattitude = lattitude;
+        this.longittude = longittude;
     }
 
     public String getName() {
@@ -47,11 +49,11 @@ public class GasStation extends SugarRecord {
         this.description = description;
     }
 
-    public Date getDate() {
+    public String getDate() {
         return date;
     }
 
-    public void setDate(Date date) {
+    public void setDate(String date) {
         this.date = date;
     }
 
@@ -63,20 +65,28 @@ public class GasStation extends SugarRecord {
         this.image = image;
     }
 
-    public Location getLocation() {
-        return location;
-    }
-
-    public void setLocation(Location location) {
-        this.location = location;
-    }
-
     public String getUser() {
         return user;
     }
 
     public void setUser(String user) {
         this.user = user;
+    }
+
+    public double getLattitude() {
+        return lattitude;
+    }
+
+    public void setLattitude(double lattitude) {
+        this.lattitude = lattitude;
+    }
+
+    public double getLongittude() {
+        return longittude;
+    }
+
+    public void setLongittude(double longittude) {
+        this.longittude = longittude;
     }
 
     @Override
@@ -86,8 +96,9 @@ public class GasStation extends SugarRecord {
                 ", description='" + description + '\'' +
                 ", date=" + date +
                 ", image='" + image + '\'' +
-                ", location=" + location +
-                ", user=" + user +
+                ", user='" + user + '\'' +
+                ", lattitude=" + lattitude +
+                ", longittude=" + longittude +
                 '}';
     }
 }

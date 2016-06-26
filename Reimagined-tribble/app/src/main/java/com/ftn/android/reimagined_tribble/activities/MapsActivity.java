@@ -207,44 +207,14 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
         Criteria crit = new Criteria();
         Location loc = locMan.getLastKnownLocation(locMan.getBestProvider(crit, false));
 
-        com.ftn.android.reimagined_tribble.model.Location location = new com.ftn.android.reimagined_tribble.model.Location();
-
         if(loc != null) {
 
-            Geocoder geocoder;
-            List<Address> addresses;
-            geocoder = new Geocoder(this, Locale.getDefault());
-            try {
-                addresses = geocoder.getFromLocation(loc.getLatitude(), loc.getLongitude(), 1); // Here 1 represent max location result to returned, by documents it recommended 1 to 5
-                String address="";
-                if(addresses.get(0).getSubThoroughfare()!=null) {
-                    address = addresses.get(0).getThoroughfare() + addresses.get(0).getSubThoroughfare();// If any additional address line present than only, check with max available address lines by getMaxAddressLineIndex()
-                }
-                else
-                {
-                    address = addresses.get(0).getThoroughfare();
-                }
-                String city = addresses.get(0).getLocality();
-                String state = addresses.get(0).getAdminArea();
-                String country = addresses.get(0).getCountryName();
-                String postalCode = addresses.get(0).getPostalCode();
-                String knownName = addresses.get(0).getFeatureName();
+            String email = loginPreferences.getString("username", "");
+            User user = User.find(User.class, "email = ?",email).get(0);
 
-                location.setAddress(address);
-                location.setCountry(country);
-                location.setCity(city);
-
-                String email = loginPreferences.getString("username", "");
-                User user = User.find(User.class, "email = ?",email).get(0);
-                user.setLocation(location);
-                user.save();
-                Log.d(TAG,address);
-
-            }
-            catch (IOException e) {
-                e.printStackTrace();
-
-            }
+            user.setLattitude(loc.getLatitude());
+            user.setLongitude(loc.getLongitude());
+            user.save();
 
             CameraPosition camPos = new CameraPosition.Builder()
                     .target(new LatLng(loc.getLatitude(), loc.getLongitude()))
@@ -286,6 +256,18 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
         googleMap.setOnInfoWindowClickListener(this);
 
         Marker marker = googleMap.addMarker(markerOptions);
+
+        loginPreferences = getSharedPreferences("loginPrefs", MODE_PRIVATE);
+        loginPrefsEditor = loginPreferences.edit();
+
+        Double l1=latLng.latitude;
+        Double l2=latLng.longitude;
+        String coordl1 = l1.toString();
+        String coordl2 = l2.toString();
+        loginPrefsEditor.putString("lat",coordl1);
+        loginPrefsEditor.putString("long",coordl2);
+
+        loginPrefsEditor.commit();
         marker.showInfoWindow();
     }
 

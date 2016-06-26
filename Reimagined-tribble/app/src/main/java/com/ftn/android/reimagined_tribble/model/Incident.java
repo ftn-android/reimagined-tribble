@@ -13,23 +13,24 @@ public class Incident extends SugarRecord {
     private String name;
     private String description;
     private boolean active;
-    private Date date;
+    private String date;
     private List<String> images;
-    private Location location;
+    private double longitude;
+    private double lattitude;
     private String type;
     private String author;
     private List<String> confirmedFrom;
 
     public Incident() {}
 
-    public Incident(String name, String description, boolean active, Date date, List<String> images,
-                    Location location, String type, String author, List<String> confirmedFrom) {
+    public Incident(String name, String description, boolean active, String date, List<String> images, double longitude, double lattitude, String type, String author, List<String> confirmedFrom) {
         this.name = name;
         this.description = description;
         this.active = active;
         this.date = date;
         this.images = images;
-        this.location = location;
+        this.longitude = longitude;
+        this.lattitude = lattitude;
         this.type = type;
         this.author = author;
         this.confirmedFrom = confirmedFrom;
@@ -59,11 +60,11 @@ public class Incident extends SugarRecord {
         this.active = active;
     }
 
-    public Date getDate() {
+    public String getDate() {
         return date;
     }
 
-    public void setDate(Date date) {
+    public void setDate(String date) {
         this.date = date;
     }
 
@@ -75,12 +76,20 @@ public class Incident extends SugarRecord {
         this.images = images;
     }
 
-    public Location getLocation() {
-        return location;
+    public double getLongitude() {
+        return longitude;
     }
 
-    public void setLocation(Location location) {
-        this.location = location;
+    public void setLongitude(double longitude) {
+        this.longitude = longitude;
+    }
+
+    public double getLattitude() {
+        return lattitude;
+    }
+
+    public void setLattitude(double lattitude) {
+        this.lattitude = lattitude;
     }
 
     public String getType() {
@@ -110,14 +119,15 @@ public class Incident extends SugarRecord {
     @Override
     public String toString() {
         return "Incident{" +
-                "name=" + name +
+                "name='" + name + '\'' +
                 ", description='" + description + '\'' +
                 ", active=" + active +
                 ", date=" + date +
                 ", images=" + images +
-                ", location=" + location +
-                ", type=" + type +
-                ", author=" + author +
+                ", longitude=" + longitude +
+                ", lattitude=" + lattitude +
+                ", type='" + type + '\'' +
+                ", author='" + author + '\'' +
                 ", confirmedFrom=" + confirmedFrom +
                 '}';
     }
