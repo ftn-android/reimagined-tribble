@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+ <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <edmx:Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <!-- Diagram content (shape and connector positions) -->
+    <edmx:Diagrams>
+      <Diagram DiagramId="b2b0f84589d7404b9ee6454df4448946" Name="Diagram1" >
+        <EntityTypeShape EntityType="FTNBackend.UserDto" Width="1.5" PointX="1" PointY="1.875" />
+        <EntityTypeShape EntityType="FTNBackend.LocatableDTO" Width="1.5" PointX="5" PointY="0.5" />
+        <EntityTypeShape EntityType="FTNBackend.Images" Width="1.5" PointX="1" PointY="4.875" />
+        <AssociationConnector Association="FTNBackend.LocatableDTOImages" />
+        <AssociationConnector Association="FTNBackend.AuthorOfLocatableDTO" />
+        <AssociationConnector Association="FTNBackend.ConfirmedFromUser" />
+      </Diagram>
+    </edmx:Diagrams>
+  </edmx:Designer>
+</edmx:Edmx>
