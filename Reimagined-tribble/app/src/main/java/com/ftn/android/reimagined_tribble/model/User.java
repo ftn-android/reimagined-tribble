@@ -9,17 +9,19 @@ public class User extends SugarRecord{
 
     private String password;
     private String email;
-    private Location location;
+    private double longitude;
+    private double lattitude;
     private String userName;
 
     public User() {
 
     }
 
-    public User(String userName, String password, Location location, String email) {
+    public User(String userName, String password, double longitude, double lattitude, String email) {
         this.userName = userName;
         this.password = password;
-        this.location = location;
+        this.longitude = longitude;
+        this.lattitude = lattitude;
         this.email = email;
     }
 
@@ -39,14 +41,6 @@ public class User extends SugarRecord{
         this.password = password;
     }
 
-    public Location getLocation() {
-        return location;
-    }
-
-    public void setLocation(Location location) {
-        this.location = location;
-    }
-
     public String getEmail() {
         return email;
     }
@@ -58,10 +52,27 @@ public class User extends SugarRecord{
     @Override
     public String toString() {
         return "User{" +
-                "username='" + userName + '\'' +
-                ", password='" + password + '\'' +
+                "password='" + password + '\'' +
                 ", email='" + email + '\'' +
-                ", location=" + location +
+                ", longitude=" + longitude +
+                ", lattitude=" + lattitude +
+                ", userName='" + userName + '\'' +
                 '}';
+    }
+
+    public double getLongitude() {
+        return longitude;
+    }
+
+    public void setLongitude(double longitude) {
+        this.longitude = longitude;
+    }
+
+    public double getLattitude() {
+        return lattitude;
+    }
+
+    public void setLattitude(double lattitude) {
+        this.lattitude = lattitude;
     }
 }
