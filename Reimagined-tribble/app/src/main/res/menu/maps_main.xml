@@ -3,48 +3,9 @@
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <item
-        android:id="@+id/show_hide"
-        android:icon="@drawable/ic_show_hide"
-        android:title="@string/menu_item_show_hide"
-        app:showAsAction="ifRoom">
-        <menu>
-            <item
-                android:id="@+id/show_hide_incident"
-                android:icon="@drawable/ic_incident_show_hide"
-                android:title="@string/menu_item_show_hide_incidents"
-                app:showAsAction="ifRoom" />
-
-            <item
-                android:id="@+id/show_hide_gasstation"
-                android:icon="@drawable/ic_gas_station_show_hide"
-                android:title="@string/menu_item_show_hide_gas_station"
-                app:showAsAction="ifRoom" />
-        </menu>
-
-    </item>
-
-    <item
         android:id="@+id/refresh"
         android:icon="@drawable/ic_refresh"
         android:title="@string/menu_item_refresh"
-        app:showAsAction="ifRoom" />
-
-    <item
-        android:id="@+id/call_the_police"
-        android:icon="@drawable/ic_call"
-        android:title="@string/menu_item_call_the_police"
-        app:showAsAction="ifRoom" />
-
-    <item
-        android:id="@+id/call_the_ambulance"
-        android:icon="@drawable/ic_call"
-        android:title="@string/menu_item_call_the_ambulance"
-        app:showAsAction="ifRoom" />
-
-    <item
-        android:id="@+id/call_the_firefighters"
-        android:icon="@drawable/ic_call"
-        android:title="@string/menu_item_call_the_firefighters"
         app:showAsAction="ifRoom" />
 
     <item
@@ -61,7 +22,7 @@
 
     <item
         android:id="@+id/logout"
-        android:icon="@drawable/ic_about"
+        android:icon="@drawable/ic_logout"
         android:title="@string/menu_item_logout"
         app:showAsAction="ifRoom" />
 

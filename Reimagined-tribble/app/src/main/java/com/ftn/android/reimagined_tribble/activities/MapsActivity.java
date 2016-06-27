@@ -5,9 +5,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.graphics.Color;
-import android.location.Address;
 import android.location.Criteria;
-import android.location.Geocoder;
 import android.location.Location;
 import android.location.LocationManager;
 import android.net.Uri;
@@ -17,7 +15,6 @@ import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.TextView;
@@ -47,10 +44,6 @@ import org.androidannotations.annotations.OptionsMenu;
 import org.androidannotations.annotations.ViewById;
 import org.androidannotations.annotations.res.StringRes;
 
-import java.io.IOException;
-import java.util.List;
-import java.util.Locale;
-
 @EActivity(R.layout.activity_maps)
 @OptionsMenu(R.menu.maps_main)
 public class MapsActivity extends AppCompatActivity implements OnMapReadyCallback, GoogleMap.OnMapClickListener, GoogleMap.OnInfoWindowClickListener, NavigationView.OnNavigationItemSelectedListener {
@@ -79,9 +72,45 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
     @ViewById(R.id.nav_view)
     NavigationView navigationView;
 
+    //Unfortunately there is no other way to handle this.
+    //Try to use android annotations but it can't handle navigation drawer
     @Override
     public boolean onNavigationItemSelected(MenuItem item) {
         mDrawerLayout.closeDrawers();
+        switch (item.getItemId()){
+            case R.id.show_just_incident_menu_drawer:
+                //TODO implement business logic here
+                break;
+            case R.id.show_just_gasstation_menu_drawer:
+                //TODO implement business logic here
+                break;
+            case R.id.show_gasstation_and_incident_menu_drawer:
+                //TODO implement business logic here
+                break;
+            case R.id.call_the_police_menu_drawer:
+                launchPhoneActivity(policePhoneNumber);
+                break;
+            case R.id.call_the_ambulance_menu_drawer:
+                launchPhoneActivity(ambulancePhoneNumber);
+                break;
+            case R.id.call_the_firefighters_menu_drawer:
+                launchPhoneActivity(firefightersPhoneNumber);
+                break;
+            case R.id.settings_menu_drawer:
+                settings();
+                break;
+            case R.id.about_menu_drawer:
+                about();
+                break;
+            case R.id.logout_menu_drawer:
+                logout();
+                break;
+            case R.id.exit_menu_drawer:
+                exit();
+                break;
+            default:
+                return true;
+        }
         return true;
     }
 
@@ -114,21 +143,6 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
     @OptionsItem(R.id.settings)
     void settings(){
         SettingsActivity_.intent(this).start();
-    }
-
-    @OptionsItem(R.id.call_the_police)
-    void callThePolice(){
-        launchPhoneActivity(policePhoneNumber);
-    }
-
-    @OptionsItem(R.id.call_the_ambulance)
-    void callTheAmbulance(){
-        launchPhoneActivity(ambulancePhoneNumber);
-    }
-
-    @OptionsItem(R.id.call_the_firefighters)
-    void callTheFireFighters(){
-        launchPhoneActivity(firefightersPhoneNumber);
     }
 
     private void launchPhoneActivity(String url){
