@@ -110,7 +110,7 @@
         android:layout_height="wrap_content"
         android:layout_margin="@dimen/fab_margin"
         android:clickable="true"
-        android:src="@drawable/ic_gas_station_fab_add_new"
+        android:src="@drawable/ic_camera"
         app:layout_anchor="@id/appbar"
         app:layout_anchorGravity="bottom|right|end" />
 
