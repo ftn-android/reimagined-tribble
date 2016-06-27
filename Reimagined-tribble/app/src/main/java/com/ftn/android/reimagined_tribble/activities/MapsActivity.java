@@ -20,6 +20,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.TextView;
 
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.afollestad.materialdialogs.simplelist.MaterialSimpleListAdapter;
@@ -80,7 +81,6 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
 
     @Override
     public boolean onNavigationItemSelected(MenuItem item) {
-        item.setChecked(true);
         mDrawerLayout.closeDrawers();
         return true;
     }
@@ -168,6 +168,13 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
         ab.setDisplayHomeAsUpEnabled(true);
 
         navigationView.setNavigationItemSelectedListener(this);
+
+        NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
+        View header=navigationView.getHeaderView(0);
+        TextView usernameTextView= (TextView)header.findViewById(R.id.menu_drawer_name);
+        //TODO Set the current user's name here
+        usernameTextView.setText("custom.text");
+
     }
 
     /**

@@ -49,5 +49,10 @@
     <string name="btn_add">ADD</string>
     <string name="btn_cancel">CANCEL</string>
     <string name="title_add_new_gas_station">Add new gas station</string>
+    <string name="show_both_menu_drawer">Show both</string>
+    <string name="show_just_gas_stations_menu_drawer">Show just gas stations</string>
+    <string name="show_just_incidents_menu_drawer">Show just incidents</string>
+    <string name="calls_menu_drawer">Calls</string>
+    <string name="others_menu_drawer">Others</string>
 
 </resources>
