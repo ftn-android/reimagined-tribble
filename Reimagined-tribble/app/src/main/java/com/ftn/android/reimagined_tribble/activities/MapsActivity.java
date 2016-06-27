@@ -44,6 +44,9 @@ import org.androidannotations.annotations.OptionsMenu;
 import org.androidannotations.annotations.ViewById;
 import org.androidannotations.annotations.res.StringRes;
 
+/**
+ * Created by ftn/tim
+ */
 @EActivity(R.layout.activity_maps)
 @OptionsMenu(R.menu.maps_main)
 public class MapsActivity extends AppCompatActivity implements OnMapReadyCallback, GoogleMap.OnMapClickListener, GoogleMap.OnInfoWindowClickListener, NavigationView.OnNavigationItemSelectedListener {

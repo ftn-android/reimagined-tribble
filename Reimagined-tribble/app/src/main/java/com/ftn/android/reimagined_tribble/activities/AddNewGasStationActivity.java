@@ -4,11 +4,9 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.location.Address;
 import android.location.Geocoder;
-import android.location.Location;
 import android.support.design.widget.CollapsingToolbarLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.widget.EditText;
 import android.widget.ImageView;
 
@@ -29,7 +27,6 @@ import java.io.File;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
-import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 
@@ -37,9 +34,9 @@ import pl.aprilapps.easyphotopicker.DefaultCallback;
 import pl.aprilapps.easyphotopicker.EasyImage;
 
 /**
- * Created by szberko
+ * Created by ftn/tim
 */
-@EActivity(R.layout.activity_detail)
+@EActivity(R.layout.activity_add_new_gasstation)
 @OptionsMenu(R.menu.add_new_menu)
 public class AddNewGasStationActivity extends AppCompatActivity{
 

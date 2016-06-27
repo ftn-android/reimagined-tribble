@@ -3,13 +3,8 @@ package com.ftn.android.reimagined_tribble.activities;
 import android.app.Activity;
 import android.os.Bundle;
 
-import com.facebook.stetho.Stetho;
-import com.facebook.stetho.okhttp3.StethoInterceptor;
-
-import okhttp3.OkHttpClient;
-
 /**
- * Created by szberko
+ * Created by ftn/tim
  */
 
 public class SplashScreenActivity extends Activity {

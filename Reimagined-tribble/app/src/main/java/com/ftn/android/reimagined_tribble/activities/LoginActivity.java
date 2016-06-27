@@ -23,7 +23,7 @@ import org.androidannotations.annotations.ViewById;
 import okhttp3.OkHttpClient;
 
 /**
- * Created by szberko
+ * Created by ftn/tim
  */
 @EActivity(R.layout.activity_login)
 public class LoginActivity extends AppCompatActivity {

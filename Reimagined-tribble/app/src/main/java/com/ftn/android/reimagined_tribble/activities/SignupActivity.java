@@ -16,9 +16,8 @@ import org.androidannotations.annotations.EActivity;
 import org.androidannotations.annotations.ViewById;
 
 /**
- * Created by szberko
+ * Created by ftn/tim
  */
-
 @EActivity(R.layout.activity_signup)
 public class SignupActivity extends AppCompatActivity {
 

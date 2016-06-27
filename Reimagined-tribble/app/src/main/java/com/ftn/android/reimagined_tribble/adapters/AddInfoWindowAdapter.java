@@ -8,7 +8,7 @@ import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.model.Marker;
 
 /**
- * Created by szberko
+ * Created by ftn/tim
  */
 public class AddInfoWindowAdapter implements GoogleMap.InfoWindowAdapter {
 
