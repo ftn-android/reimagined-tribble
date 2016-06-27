@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="utf-8"?><!--
+  ~ Copyright (C) 2015 The Android Open Source Project
+  ~
+  ~ Licensed under the Apache License, Version 2.0 (the "License");
+  ~ you may not use this file except in compliance with the License.
+  ~ You may obtain a copy of the License at
+  ~
+  ~      http://www.apache.org/licenses/LICENSE-2.0
+  ~
+  ~ Unless required by applicable law or agreed to in writing, software
+  ~ distributed under the License is distributed on an "AS IS" BASIS,
+  ~ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  ~ See the License for the specific language governing permissions and
+  ~ limitations under the License.
+  -->
+<menu
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+
+    <group android:checkableBehavior="single">
+        <item
+            android:id="@+id/show_just_incident_menu_drawer"
+            android:icon="@drawable/ic_incident_show_hide"
+            android:title="@string/show_just_incidents_menu_drawer" />
+
+        <item
+            android:id="@+id/show_just_gasstation_menu_drawer"
+            android:icon="@drawable/ic_gas_station_show_hide"
+            android:title="@string/show_just_gas_stations_menu_drawer" />
+
+        <item
+            android:id="@+id/show_gasstation_and_incident_menu_drawer"
+            android:icon="@drawable/ic_show_both"
+            android:title="@string/show_both_menu_drawer" />
+    </group>
+
+    <item android:title="@string/calls_menu_drawer">
+        <menu>
+            <item
+                android:id="@+id/call_the_police_menu_drawer"
+                android:icon="@drawable/ic_call"
+                android:title="@string/menu_item_call_the_police" />
+            <item
+                android:id="@+id/call_the_ambulance_menu_drawer"
+                android:icon="@drawable/ic_call"
+                android:title="@string/menu_item_call_the_ambulance" />
+            <item
+                android:id="@+id/call_the_firefighters_menu_drawer"
+                android:icon="@drawable/ic_call"
+                android:title="@string/menu_item_call_the_firefighters" />
+        </menu>
+    </item>
+
+    <item android:title="@string/others_menu_drawer">
+        <menu>
+            <item
+                android:id="@+id/settings_menu_drawer"
+                android:icon="@drawable/ic_settings"
+                android:title="@string/menu_item_settings" />
+            <item
+                android:id="@+id/about_menu_drawer"
+                android:icon="@drawable/ic_about"
+                android:title="@string/menu_item_about" />
+            <item
+                android:id="@+id/logout_menu_drawer"
+                android:icon="@drawable/ic_logout"
+                android:title="@string/menu_item_logout" />
+            <item
+                android:id="@+id/exit_menu_drawer"
+                android:icon="@drawable/ic_exit"
+                android:title="@string/menu_item_exit" />
+        </menu>
+    </item>
+
+</menu>
