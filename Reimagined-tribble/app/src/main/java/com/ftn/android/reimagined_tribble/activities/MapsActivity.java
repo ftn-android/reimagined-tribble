@@ -136,6 +136,7 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
 
     @Click(R.id.fab_add_new_incident)
     protected void clickNewIncident(){
+        AddNewIncidentActivity_.intent(this).start();
     }
 
     @Click(R.id.fab_add_new_gas_station)
@@ -248,10 +249,6 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
             CameraUpdate camUpdate = CameraUpdateFactory.newCameraPosition(camPos);
             googleMap.moveCamera(camUpdate);
 
-
-
-
-
         }
 
         googleMap.setOnMapClickListener(this);
@@ -332,7 +329,7 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
                             AddNewGasStationActivity_.intent(MapsActivity.this).start();
                         }
                         if(item.getId() == ADD_NEW_INCIDENT){
-
+                            AddNewIncidentActivity_.intent(MapsActivity.this).start();
                         }
                     }
                 })

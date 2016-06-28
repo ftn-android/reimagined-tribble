@@ -54,5 +54,18 @@
     <string name="show_just_incidents_menu_drawer">Show just incidents</string>
     <string name="calls_menu_drawer">Calls</string>
     <string name="others_menu_drawer">Others</string>
+    <string name="hint_name_of_the_gas_station">Name of the gas station</string>
+    <string name="hint_description">Description</string>
+    <string name="hint_name_of_the_incident">Name of the incident</string>
+
+
+    <string-array name="incident_types">
+        <item>Crash</item>
+        <item>Jam</item>
+        <item>Repair</item>
+        <item>Police block</item>
+        <item>Firefighter block</item>
+        <item>Bridge repair</item>
+    </string-array>
 
 </resources>
