@@ -14,7 +14,8 @@
   ~ limitations under the License.
 -->
 
-<android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<android.support.design.widget.CoordinatorLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/main_content"
     android:layout_width="match_parent"
@@ -79,7 +80,8 @@
                     android:id="@+id/input_name_of_gas_station"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:hint="Name of the gas station"
+                    android:singleLine="true"
+                    android:hint="@string/hint_name_of_the_gas_station"
                     android:textColor="@color/jumbo"/>
             </android.support.design.widget.TextInputLayout>
 
@@ -93,7 +95,7 @@
                     android:id="@+id/input_description_of_gas_station"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:hint="Description"
+                    android:hint="@string/hint_description"
                     android:inputType="textMultiLine"
                     android:lines="7"
                     android:maxLines="7"
