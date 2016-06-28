@@ -1,16 +1,25 @@
 package com.ftn.android.reimagined_tribble.activities;
 
+import android.content.Context;
+import android.content.ContextWrapper;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.graphics.drawable.BitmapDrawable;
+import android.graphics.drawable.Drawable;
 import android.location.Address;
 import android.location.Geocoder;
 import android.support.design.widget.CollapsingToolbarLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.widget.EditText;
 import android.widget.ImageView;
 
 import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.resource.bitmap.GlideBitmapDrawable;
+import com.bumptech.glide.request.target.GlideDrawableImageViewTarget;
 import com.ftn.android.reimagined_tribble.R;
 import com.ftn.android.reimagined_tribble.model.GasStation;
 import com.ftn.android.reimagined_tribble.model.User;
@@ -23,10 +32,13 @@ import org.androidannotations.annotations.OptionsMenu;
 import org.androidannotations.annotations.ViewById;
 import org.androidannotations.annotations.res.StringRes;
 
+import java.io.ByteArrayOutputStream;
 import java.io.File;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 
@@ -69,11 +81,13 @@ public class AddNewGasStationActivity extends AppCompatActivity{
 
         final ImageView imageView = (ImageView) findViewById(R.id.backdrop);
         Glide.with(this).load("").error(R.drawable.ic_photo_placeholder).into(imageView);
-
-        Double l1 = Double.parseDouble(loginPreferences.getString("lat",""));
-        Double l2 = Double.parseDouble(loginPreferences.getString("long",""));
-
-        if(l1==0) {
+        Double l1;
+        Double l2;
+        if(!loginPreferences.getString("lat","").equals("")) {
+            l1 = Double.parseDouble(loginPreferences.getString("lat", ""));
+            l2 = Double.parseDouble(loginPreferences.getString("long", ""));
+        }
+        else {
             String email = loginPreferences.getString("username", "");
             User user = User.find(User.class, "email = ?",email).get(0);
             l1 = user.getLattitude();
@@ -141,13 +155,13 @@ public class AddNewGasStationActivity extends AppCompatActivity{
     }
 
     @OptionsItem(R.id.add)
-    protected void clickOnAddGasStation(){
+    protected void clickOnAddGasStation() {
         String stationName = _name.getText().toString();
         String stationDesc = _description.getText().toString();
-        String userName = loginPreferences.getString("username","");
+        String userName = loginPreferences.getString("username", "");
 
-        Double l1 = Double.parseDouble(loginPreferences.getString("lat",""));
-        Double l2 = Double.parseDouble(loginPreferences.getString("long",""));
+        Double l1 = Double.parseDouble(loginPreferences.getString("lat", ""));
+        Double l2 = Double.parseDouble(loginPreferences.getString("long", ""));
 
         Calendar c = Calendar.getInstance();
 
@@ -161,13 +175,45 @@ public class AddNewGasStationActivity extends AppCompatActivity{
         gasStation.setLongittude(l2);
         gasStation.setDescription(stationDesc);
         gasStation.setName(stationName);
+        Bitmap bitmap = null;
 
+        Drawable d = image.getDrawable();
+        bitmap = ((GlideBitmapDrawable) d).getBitmap();
+        ByteArrayOutputStream bos = new ByteArrayOutputStream();
+        bitmap.compress(Bitmap.CompressFormat.PNG, 100, bos);
+        byte[] img = bos.toByteArray();
+        gasStation.setImage(img);
         gasStation.save();
+
+        Log.d("GasStation", img.toString());
         finish();
+
+
+
        /*
 
+/*private void loadImageFromStorage(String path)
+{
 
-*/
+    try {
+        File f=new File(path, "profile.jpg");
+        Bitmap b = BitmapFactory.decodeStream(new FileInputStream(f));
+            ImageView img=(ImageView)findViewById(R.id.imgPicker);
+        img.setImageBitmap(b);
     }
+    catch (FileNotFoundException e)
+    {
+        e.printStackTrace();
+    }
+
+}*/
+
+    }
+    //function for showing image from byte array
+    public static void setImageViewWithByteArray(ImageView view, byte[] data) {
+        Bitmap bitmap = BitmapFactory.decodeByteArray(data, 0, data.length);
+        view.setImageBitmap(bitmap);
+    }
+
 
 }
