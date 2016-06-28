@@ -14,7 +14,7 @@ public class GasStation extends SugarRecord {
     private String name;
     private String description;
     private String date;
-    private String image;
+    private byte[] image;
     private String user;
     private double lattitude;
     private double longittude;
@@ -23,7 +23,7 @@ public class GasStation extends SugarRecord {
 
     }
 
-    public GasStation(String name, String description, String date, String image, String user, double lattitude, double longittude) {
+    public GasStation(String name, String description, String date, byte[] image, String user, double lattitude, double longittude) {
         this.name = name;
         this.description = description;
         this.date = date;
@@ -57,11 +57,11 @@ public class GasStation extends SugarRecord {
         this.date = date;
     }
 
-    public String getImage() {
+    public  byte[] getImage() {
         return image;
     }
 
-    public void setImage(String image) {
+    public void setImage( byte[] image) {
         this.image = image;
     }
 
