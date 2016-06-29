@@ -20,5 +20,5 @@ if all 3 optional param is present, it will filter the objects by location
 
 see other CRUD operations of needed.
 
-GetNearestGasStation - TODO
-[12:31:20 AM] Kovács József: TODO 2 => define settings for user
+TODO GetNearestGasStation
+TODO 2 => define settings for user
