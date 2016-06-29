@@ -58,6 +58,7 @@
     <string name="hint_name_of_the_gas_station">Name of the gas station</string>
     <string name="hint_description">Description</string>
     <string name="hint_name_of_the_incident">Name of the incident</string>
+    <string name="view_gas_station_name">Name:</string>
 
 
     <string-array name="incident_types">
