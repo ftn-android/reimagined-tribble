@@ -96,6 +96,9 @@
     <style name="AddNewIncidentActivity" parent="AddNewAndDetailsActivityTheme">
     </style>
 
+    <style name="ViewGasStationActivity" parent="AddNewAndDetailsActivityTheme">
+    </style>"
+
 
 
 </resources>
