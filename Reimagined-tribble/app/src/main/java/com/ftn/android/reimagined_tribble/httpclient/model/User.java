@@ -1,30 +1,26 @@
-package com.ftn.android.reimagined_tribble.io.swagger.client.model;
+package com.ftn.android.reimagined_tribble.httpclient.model;
 
-
-import io.swagger.annotations.*;
-
-import com.google.gson.annotations.SerializedName;
-
-
-@ApiModel(description = "")
+/**
+ * Created by Jozef on 6/30/2016.
+ */
 public class User {
 
-    @SerializedName("Email")
+
     private String email = null;
-    @SerializedName("UserName")
+
     private String userName = null;
-    @SerializedName("Password")
+
     private String password = null;
-    @SerializedName("Longittude")
+
     private Double longittude = null;
-    @SerializedName("Lattitude")
+
     private Double lattitude = null;
-    @SerializedName("Id")
+
     private Integer id = null;
 
     /**
      **/
-    @ApiModelProperty(value = "")
+
     public String getEmail() {
         return email;
     }
@@ -35,7 +31,7 @@ public class User {
 
     /**
      **/
-    @ApiModelProperty(value = "")
+
     public String getUserName() {
         return userName;
     }
@@ -46,7 +42,7 @@ public class User {
 
     /**
      **/
-    @ApiModelProperty(value = "")
+
     public String getPassword() {
         return password;
     }
@@ -57,7 +53,7 @@ public class User {
 
     /**
      **/
-    @ApiModelProperty(value = "")
+
     public Double getLongittude() {
         return longittude;
     }
@@ -68,7 +64,7 @@ public class User {
 
     /**
      **/
-    @ApiModelProperty(value = "")
+
     public Double getLattitude() {
         return lattitude;
     }
@@ -79,7 +75,7 @@ public class User {
 
     /**
      **/
-    @ApiModelProperty(value = "")
+
     public Integer getId() {
         return id;
     }
@@ -132,4 +128,5 @@ public class User {
         sb.append("}\n");
         return sb.toString();
     }
+
 }

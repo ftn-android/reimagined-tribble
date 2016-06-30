@@ -13,17 +13,20 @@ import android.content.SharedPreferences;
 import com.facebook.stetho.Stetho;
 import com.facebook.stetho.okhttp3.StethoInterceptor;
 import com.ftn.android.reimagined_tribble.R;
-import com.ftn.android.reimagined_tribble.model.User;
-
-import net.apispark.webapi.Config;
-import net.apispark.webapi.resource.client.ApiUsersIdClientResource;
+import com.ftn.android.reimagined_tribble.httpclient.BackEnd;
+import com.ftn.android.reimagined_tribble.httpclient.model.User;
 
 import org.androidannotations.annotations.AfterViews;
 import org.androidannotations.annotations.Click;
 import org.androidannotations.annotations.EActivity;
 import org.androidannotations.annotations.ViewById;
 
+import java.io.IOException;
+import java.util.List;
+
 import okhttp3.OkHttpClient;
+import retrofit2.Call;
+import retrofit2.Response;
 
 /**
  * Created by ftn/tim
@@ -73,7 +76,7 @@ public class LoginActivity extends AppCompatActivity {
             return;
         }
 
-        User user = new User();
+        com.ftn.android.reimagined_tribble.model.User user = new com.ftn.android.reimagined_tribble.model.User();
         user.setUserName("admin");
         user.setPassword("admin");
         user.setEmail("admin@admin.com");
@@ -95,10 +98,16 @@ public class LoginActivity extends AppCompatActivity {
         // TODO: Implement your own authentication logic here.
 //        List<User> users = userDatabase.getAllUsers();
 //
-        //ApiUsersIdClientResource apiUsersIdClientResource = new ApiUsersIdClientResource(new Config(),"1");
-        //net.apispark.webapi.representation.User u=  apiUsersIdClientResource.users_GetUser();
+        BackEnd backEnd = new BackEnd();
+        Call<List<User>> users = backEnd.listUsers();
+        try {
+            Response<List<User>> userList = users.execute();
+            List<User> userListBody = userList.body();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
 
-        if(User.find(User.class, "email = ? and password =?", email, password).size()!=0){
+        if(com.ftn.android.reimagined_tribble.model.User.find(com.ftn.android.reimagined_tribble.model.User.class, "email = ? and password =?", email, password).size()!=0){
             loginPrefsEditor.putString("username", email);
             loginPrefsEditor.putString("password", password);
             loginPrefsEditor.commit();
@@ -108,6 +117,7 @@ public class LoginActivity extends AppCompatActivity {
         else {
             onLoginFailed();
         }
+
 
 
 
