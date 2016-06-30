@@ -15,6 +15,9 @@ import com.facebook.stetho.okhttp3.StethoInterceptor;
 import com.ftn.android.reimagined_tribble.R;
 import com.ftn.android.reimagined_tribble.model.User;
 
+import net.apispark.webapi.Config;
+import net.apispark.webapi.resource.client.ApiUsersIdClientResource;
+
 import org.androidannotations.annotations.AfterViews;
 import org.androidannotations.annotations.Click;
 import org.androidannotations.annotations.EActivity;
@@ -92,6 +95,9 @@ public class LoginActivity extends AppCompatActivity {
         // TODO: Implement your own authentication logic here.
 //        List<User> users = userDatabase.getAllUsers();
 //
+        //ApiUsersIdClientResource apiUsersIdClientResource = new ApiUsersIdClientResource(new Config(),"1");
+        //net.apispark.webapi.representation.User u=  apiUsersIdClientResource.users_GetUser();
+
         if(User.find(User.class, "email = ? and password =?", email, password).size()!=0){
             loginPrefsEditor.putString("username", email);
             loginPrefsEditor.putString("password", password);
