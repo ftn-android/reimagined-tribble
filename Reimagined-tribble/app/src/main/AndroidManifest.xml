@@ -93,6 +93,14 @@
                 android:value=".activities.MapsActivity_" />
         </activity>
 
+        <activity
+            android:name=".activities.ViewGasStationActivity_"
+            android:theme="@style/ViewGasStationActivity"
+            android:parentActivityName=".activities.MapsActivity_">
+            <meta-data android:name="android.support.PARENT_ACTIVITY"
+                android:value=".activities.MapsActivity_" />
+        </activity>
+
 
         <!--
              The API key for Google Maps-based APIs is defined as a string resource.
