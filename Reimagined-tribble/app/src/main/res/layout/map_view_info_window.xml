@@ -16,7 +16,7 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
-    android:background="@drawable/ic_add_new_on_map"
+    android:background="@drawable/ic_gas_station_dialog_add_new"
     android:orientation="horizontal">
 
 
