@@ -24,12 +24,15 @@ import com.afollestad.materialdialogs.simplelist.MaterialSimpleListAdapter;
 import com.afollestad.materialdialogs.simplelist.MaterialSimpleListItem;
 import com.ftn.android.reimagined_tribble.R;
 import com.ftn.android.reimagined_tribble.adapters.AddInfoWindowAdapter;
+import com.ftn.android.reimagined_tribble.adapters.ViewInfoWindowAdapter;
+import com.ftn.android.reimagined_tribble.model.GasStation;
 import com.ftn.android.reimagined_tribble.model.User;
 import com.google.android.gms.maps.CameraUpdate;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
+import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.CameraPosition;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
@@ -44,17 +47,28 @@ import org.androidannotations.annotations.OptionsMenu;
 import org.androidannotations.annotations.ViewById;
 import org.androidannotations.annotations.res.StringRes;
 
+import java.util.Iterator;
+import java.util.WeakHashMap;
+
 /**
  * Created by ftn/tim
  */
 @EActivity(R.layout.activity_maps)
 @OptionsMenu(R.menu.maps_main)
-public class MapsActivity extends AppCompatActivity implements OnMapReadyCallback, GoogleMap.OnMapClickListener, GoogleMap.OnInfoWindowClickListener, NavigationView.OnNavigationItemSelectedListener {
+public class MapsActivity extends AppCompatActivity implements
+        OnMapReadyCallback,
+        GoogleMap.OnMapClickListener,
+        GoogleMap.OnInfoWindowClickListener,
+        NavigationView.OnNavigationItemSelectedListener,
+        GoogleMap.OnMarkerClickListener {
 
     GoogleMap googleMap;
     private SharedPreferences loginPreferences;
     private SharedPreferences.Editor loginPrefsEditor;
     private static final String TAG = "MapsActivity";
+    private Marker addNewMarker;
+    private WeakHashMap<Integer, Object> markers;
+    private MaterialDialog addNewDialog;
 
     @FragmentById(R.id.map)
     SupportMapFragment mapFragment;
@@ -226,7 +240,11 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
 
         googleMap.setMyLocationEnabled(true);
         // Show Zoom buttons
+        googleMap.getUiSettings().setMyLocationButtonEnabled(true);
         googleMap.getUiSettings().setZoomControlsEnabled(true);
+        googleMap.getUiSettings().setCompassEnabled(true);
+
+        addMarkers();
 
         LocationManager locMan = (LocationManager) this.getSystemService(Context.LOCATION_SERVICE);
         Criteria crit = new Criteria();
@@ -255,17 +273,28 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
 
     }
 
+    @Override
+    protected void onResume() {
+        super.onResume();
+        if(googleMap != null) {
+            addMarkers();
+        }
+    }
 
     @Override
     public void onMapClick(LatLng latLng) {
         // Creating a marker
+        if(addNewMarker != null){
+            addNewMarker.remove();
+        }
+
         MarkerOptions markerOptions = new MarkerOptions();
 
         // Setting the position for the marker
         markerOptions.position(latLng);
 
         // Clears the previously touched position
-        googleMap.clear();
+//        googleMap.clear();
 
         // Animating to the touched position
         googleMap.animateCamera(CameraUpdateFactory.newLatLng(latLng));
@@ -275,8 +304,9 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
 
         googleMap.setInfoWindowAdapter(new AddInfoWindowAdapter(getLayoutInflater()));
         googleMap.setOnInfoWindowClickListener(this);
+        googleMap.setOnMarkerClickListener(this);
 
-        Marker marker = googleMap.addMarker(markerOptions);
+        addNewMarker = googleMap.addMarker(markerOptions);
 
         loginPreferences = getSharedPreferences("loginPrefs", MODE_PRIVATE);
         loginPrefsEditor = loginPreferences.edit();
@@ -289,7 +319,35 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
         loginPrefsEditor.putString("long",coordl2);
 
         loginPrefsEditor.commit();
-        marker.showInfoWindow();
+        addNewMarker.showInfoWindow();
+    }
+
+    private void addMarkers(){
+        Iterator<GasStation> gasStationIterator = User.findAll(GasStation.class);
+        while (gasStationIterator.hasNext()){
+            GasStation gs = gasStationIterator.next();
+
+//            Marker gasstation = googleMap.addMarker(new MarkerOptions()
+//                    .position(new LatLng(gs.getLattitude(), gs.getLongittude()))
+//                    .title("Brisbane")
+//                    .snippet("Population: 2,074,200")
+//                    .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_AZURE)));
+
+            Marker gasstation = googleMap.addMarker(new MarkerOptions()
+                    .position(new LatLng(gs.getLattitude(), gs.getLongittude()))
+                    .title(gs.getName())
+                    .snippet(gs.getDescription())
+                    .icon(BitmapDescriptorFactory.fromResource(R.drawable.ic_local_gas_station_black_36dp))
+                    );
+        }
+    }
+
+    @Override
+    public boolean onMarkerClick(Marker marker) {
+        addNewMarker.remove();
+        googleMap.setInfoWindowAdapter(new ViewInfoWindowAdapter(getLayoutInflater()));
+        googleMap.setOnInfoWindowClickListener(this);
+        return false;
     }
 
     @Override
@@ -300,7 +358,9 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
 
     @Override
     public void onInfoWindowClick(Marker marker) {
-        googleMap.clear();
+        if(addNewMarker != null){
+            addNewMarker.remove();
+        }
 
         final int ADD_NEW_GAS_STATION=0;
         final int ADD_NEW_INCIDENT=1;
@@ -319,7 +379,7 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
                 .backgroundColor(Color.WHITE)
                 .build());
 
-        new MaterialDialog.Builder(this)
+        MaterialDialog.Builder builder = new MaterialDialog.Builder(this)
                 .title(R.string.add_new_dialog_title)
                 .adapter(adapter, new MaterialDialog.ListCallback() {
                     @Override
@@ -331,8 +391,10 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
                         if(item.getId() == ADD_NEW_INCIDENT){
                             AddNewIncidentActivity_.intent(MapsActivity.this).start();
                         }
+                        addNewDialog.dismiss();
                     }
-                })
-                .show();
+                });
+        addNewDialog = builder.build();
+        addNewDialog.show();
     }
 }
