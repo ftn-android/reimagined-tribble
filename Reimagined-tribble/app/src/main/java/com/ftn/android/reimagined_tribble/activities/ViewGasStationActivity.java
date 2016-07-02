@@ -3,7 +3,6 @@ package com.ftn.android.reimagined_tribble.activities;
 import android.location.Address;
 import android.location.Geocoder;
 import android.support.design.widget.CollapsingToolbarLayout;
-import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.widget.ImageView;
@@ -15,7 +14,6 @@ import com.ftn.android.reimagined_tribble.R;
 import com.ftn.android.reimagined_tribble.model.GasStation;
 
 import org.androidannotations.annotations.AfterViews;
-import org.androidannotations.annotations.Click;
 import org.androidannotations.annotations.EActivity;
 import org.androidannotations.annotations.Extra;
 import org.androidannotations.annotations.ViewById;
@@ -84,11 +82,5 @@ public class ViewGasStationActivity extends AppCompatActivity {
         gasStationCreatedOn.setText(chosenGasStation.getDate());
         gasStationDescription.setText(chosenGasStation.getDescription());
     }
-
-    @Click(R.id.fab_view_gas_station)
-    protected void clickRefresh(){
-        Snackbar.make(container, "snackbar", Snackbar.LENGTH_SHORT).show();
-    }
-
 
 }
