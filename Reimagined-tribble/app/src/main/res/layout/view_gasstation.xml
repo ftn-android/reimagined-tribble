@@ -76,7 +76,7 @@
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight=".60"
-                    android:gravity="center_vertical|right"
+                    android:gravity="center_vertical|end"
                     />
             </LinearLayout>
 
@@ -104,6 +104,7 @@
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight=".60"
+                    android:gravity="center_vertical|end"
                     />
             </LinearLayout>
 
@@ -131,6 +132,7 @@
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight=".60"
+                    android:gravity="center_vertical|end"
                     />
             </LinearLayout>
 
@@ -158,6 +160,7 @@
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight=".60"
+                    android:gravity="center_vertical|end"
                     />
             </LinearLayout>
 
@@ -169,22 +172,20 @@
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="horizontal"
+                android:orientation="vertical"
                 android:paddingTop="20dp"
                 android:paddingBottom="5dp">
 
                 <TextView
-                    android:layout_width="0dp"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_weight=".40"
                     android:textSize="18sp"
                     android:text="@string/view_description"/>
 
                 <TextView
                     android:id="@+id/view_gas_station_description"
-                    android:layout_width="0dp"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_weight=".60"
                     />
             </LinearLayout>
 
