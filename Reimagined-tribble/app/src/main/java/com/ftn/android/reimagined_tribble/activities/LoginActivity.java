@@ -1,6 +1,8 @@
 package com.ftn.android.reimagined_tribble.activities;
 
+import android.app.ProgressDialog;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
@@ -8,17 +10,20 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
-import android.content.SharedPreferences;
 
 import com.facebook.stetho.Stetho;
 import com.facebook.stetho.okhttp3.StethoInterceptor;
 import com.ftn.android.reimagined_tribble.R;
-import com.ftn.android.reimagined_tribble.model.User;
+import com.ftn.android.reimagined_tribble.httpclient.IBackEnd;
+import com.ftn.android.reimagined_tribble.httpclient.model.User;
 
 import org.androidannotations.annotations.AfterViews;
+import org.androidannotations.annotations.Background;
 import org.androidannotations.annotations.Click;
 import org.androidannotations.annotations.EActivity;
+import org.androidannotations.annotations.SupposeBackground;
 import org.androidannotations.annotations.ViewById;
+import org.androidannotations.rest.spring.annotations.RestService;
 
 import okhttp3.OkHttpClient;
 
@@ -31,36 +36,84 @@ public class LoginActivity extends AppCompatActivity {
     private static final int REQUEST_SIGNUP = 0;
     private SharedPreferences loginPreferences;
     private SharedPreferences.Editor loginPrefsEditor;
+    private ProgressDialog progressDialog;
 
+    @RestService
+    IBackEnd serviceClient;
 
-    @ViewById(R.id.input_email) EditText _emailText;
-    @ViewById(R.id.input_password) EditText _passwordText;
-    @ViewById(R.id.btn_login) Button _loginButton;
-    @ViewById(R.id.link_signup) TextView _signupLink;
+    @ViewById(R.id.input_email)
+    EditText _emailText;
+    @ViewById(R.id.input_password)
+    EditText _passwordText;
+    @ViewById(R.id.btn_login)
+    Button _loginButton;
+    @ViewById(R.id.link_signup)
+    TextView _signupLink;
 
 
     @Click(R.id.btn_login)
-    void clickLoginButton(){
+    void clickLoginButton() {
         login();
     }
 
     @Click(R.id.link_signup)
-    void clickSignUpLink(){
+    void clickSignUpLink() {
         SignupActivity_.intent(this).startForResult(REQUEST_SIGNUP);
     }
 
     @AfterViews
-    protected void init(){
+    protected void init() {
         Stetho.initializeWithDefaults(this);
 
         new OkHttpClient.Builder()
                 .addNetworkInterceptor(new StethoInterceptor())
                 .build();
 
+        //TODO delete this hardcoded values
         _emailText.setText("admin@admin.com");
         _passwordText.setText("admin");
     }
 
+
+    @Background
+    void FetchUser(String email, String password) {
+
+        if (progressDialog==null)
+            return;
+
+        //Look in local db
+        int localDB = com.ftn.android.reimagined_tribble.model.User.find(com.ftn.android.reimagined_tribble.model.User.class, "email = ? and password =?", email, password).size();
+
+        if (localDB != 0) {
+            onLoginSuccess(email, password);
+            return;
+        }
+
+        try {
+            User[] usersService = serviceClient.getUserswithEmailAndPassword(email, password);
+            int serviceDB = usersService.length;
+
+            if (serviceDB != 0) {
+                saveNewUserFromService(usersService[0]);
+                onLoginSuccess(email, password);
+                return;
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        onLoginFailed();
+    }
+
+    @SupposeBackground
+    void saveNewUserFromService(User userService) {
+        com.ftn.android.reimagined_tribble.model.User user = new com.ftn.android.reimagined_tribble.model.User();
+        user.setUserName(userService.getUserName());
+        user.setPassword(userService.getPassword());
+        user.setEmail(userService.getEmail());
+        user.setLattitude(userService.getLattitude());
+        user.setLongitude(userService.getLongittude());
+        user.save();
+    }
 
     public void login() {
         Log.d(TAG, "Login");
@@ -70,55 +123,18 @@ public class LoginActivity extends AppCompatActivity {
             return;
         }
 
-        User user = new User();
-        user.setUserName("admin");
-        user.setPassword("admin");
-        user.setEmail("admin@admin.com");
-        user.save();
-
-
-
         _loginButton.setEnabled(false);
 
-//        final ProgressDialog progressDialog = new ProgressDialog(LoginActivity.this,
-//                R.style.AppTheme_Dark_Dialog);
-//        progressDialog.setIndeterminate(true);
-//        progressDialog.setMessage("Authenticating...");
-//        progressDialog.show();
+        progressDialog = new ProgressDialog(LoginActivity.this,
+                R.style.AppTheme_Dialog);
+        progressDialog.setIndeterminate(true);
+        progressDialog.setMessage("Authenticating...");
+        progressDialog.show();
 
         String email = _emailText.getText().toString();
         String password = _passwordText.getText().toString();
 
-        // TODO: Implement your own authentication logic here.
-//        List<User> users = userDatabase.getAllUsers();
-//
-        if(User.find(User.class, "email = ? and password =?", email, password).size()!=0){
-            loginPrefsEditor.putString("username", email);
-            loginPrefsEditor.putString("password", password);
-            loginPrefsEditor.commit();
-            MapsActivity_.intent(this).start();
-            onLoginSuccess();
-        }
-        else {
-            onLoginFailed();
-        }
-
-
-
-
-
-
-//        new android.os.Handler().postDelayed(
-//                new Runnable() {
-//                    public void run() {
-//                        // On complete call either onLoginSuccess or onLoginFailed
-//                        onLoginSuccess();
-//                        // onLoginFailed();
-//                        progressDialog.dismiss();
-//                    }
-//                }, 3000);
-
-    //    MapsActivity_.intent(this).start();
+        FetchUser(email, password);
     }
 
     @Override
@@ -138,8 +154,7 @@ public class LoginActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         loginPreferences = getSharedPreferences("loginPrefs", MODE_PRIVATE);
         loginPrefsEditor = loginPreferences.edit();
-        if(!loginPreferences.getString("username", "").equals(""))
-        {
+        if (!loginPreferences.getString("username", "").equals("")) {
             MapsActivity_.intent(this).start();
             onLoginSuccess();
         }
@@ -150,6 +165,15 @@ public class LoginActivity extends AppCompatActivity {
         // Disable going back to the MainActivity
         //TODO Get informed about this method
         moveTaskToBack(true);
+    }
+
+    public void onLoginSuccess(String email, String password) {
+        loginPrefsEditor.putString("username", email);
+        loginPrefsEditor.putString("password", password);
+        loginPrefsEditor.commit();
+        progressDialog.dismiss();
+        MapsActivity_.intent(this).start();
+        onLoginSuccess();
     }
 
     public void onLoginSuccess() {

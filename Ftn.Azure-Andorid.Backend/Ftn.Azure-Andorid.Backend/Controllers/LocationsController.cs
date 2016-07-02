@@ -17,6 +17,7 @@ namespace Ftn.Azure_Andorid.Backend.Controllers
         // GET: api/Locations/{bool}
         public IQueryable<Location> GetLocations(bool incident, double? longitude = null, double? latidude = null, double? radius = null)
         {
+            // TODO incident -> string, gas station incident vagy all
             var temp = db.Locations.Where(l => l.EndDate > DateTime.UtcNow && l.Type == incident);
             if (longitude.HasValue && latidude.HasValue && radius.HasValue)
             {
