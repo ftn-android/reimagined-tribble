@@ -100,13 +100,25 @@ public class MapsActivity extends AppCompatActivity implements
         mDrawerLayout.closeDrawers();
         switch (item.getItemId()){
             case R.id.show_just_incident_menu_drawer:
-                //TODO implement business logic here
+                googleMap.clear();
+                SHOW_ENTITY = 1;
+                loginPrefsEditor.putInt("showEntity", 1);
+                loginPrefsEditor.apply();
+                addMarkers();
                 break;
             case R.id.show_just_gasstation_menu_drawer:
-                //TODO implement business logic here
+                googleMap.clear();
+                SHOW_ENTITY = 2;
+                loginPrefsEditor.putInt("showEntity", 2);
+                loginPrefsEditor.apply();
+                addMarkers();
                 break;
             case R.id.show_gasstation_and_incident_menu_drawer:
-                //TODO implement business logic here
+                googleMap.clear();
+                SHOW_ENTITY = 0;
+                loginPrefsEditor.putInt("showEntity", 0);
+                loginPrefsEditor.apply();
+                addMarkers();
                 break;
             case R.id.call_the_police_menu_drawer:
                 launchPhoneActivity(policePhoneNumber);
@@ -204,6 +216,7 @@ public class MapsActivity extends AppCompatActivity implements
         markers = new HashMap<>();
         mapFragment.getMapAsync(this);
         loginPreferences = getSharedPreferences("loginPrefs", MODE_PRIVATE);
+        loginPrefsEditor = loginPreferences.edit();
 
         locMan = (LocationManager) this.getSystemService(Context.LOCATION_SERVICE);
 
@@ -234,8 +247,6 @@ public class MapsActivity extends AppCompatActivity implements
      */
     @Override
     public void onMapReady(GoogleMap googleMap) {
-        loginPreferences = getSharedPreferences("loginPrefs", MODE_PRIVATE);
-        loginPrefsEditor = loginPreferences.edit();
         this.googleMap = googleMap;
 
         googleMap.setMapType(GoogleMap.MAP_TYPE_NORMAL);
@@ -291,6 +302,15 @@ public class MapsActivity extends AppCompatActivity implements
     @Override
     protected void onResume() {
         super.onResume();
+        int showEntity = loginPreferences.getInt("showEntity", 0);
+        if(showEntity == 1){
+            navigationView.setCheckedItem(R.id.show_just_incident_menu_drawer);
+        }else if (showEntity == 2){
+            navigationView.setCheckedItem(R.id.show_just_gasstation_menu_drawer);
+        }else if(showEntity == 0) {
+            navigationView.setCheckedItem(R.id.show_gasstation_and_incident_menu_drawer);
+        }
+
         if(googleMap != null) {
             addMarkers();
         }
@@ -325,6 +345,18 @@ public class MapsActivity extends AppCompatActivity implements
     }
 
     private void addMarkers(){
+        int showEntity = loginPreferences.getInt("showEntity", 0);
+        if(showEntity == 1){
+            addIncidentMarkers();
+        }else if (showEntity == 2){
+            addGasStationMarkers();
+        }else if(showEntity == 0) {
+            addGasStationMarkers();
+            addIncidentMarkers();
+        }
+    }
+
+    private void addGasStationMarkers(){
         Iterator<GasStation> gasStationIterator = User.findAll(GasStation.class);
         while (gasStationIterator.hasNext()){
             GasStation gs = gasStationIterator.next();
@@ -334,11 +366,13 @@ public class MapsActivity extends AppCompatActivity implements
                     .title(gs.getName())
                     .snippet(gs.getDescription())
                     .icon(BitmapDescriptorFactory.fromResource(R.drawable.ic_local_gas_station_black_36dp))
-                    );
+            );
 
             markers.put(gasstation.getId(), gs);
         }
+    }
 
+    private void addIncidentMarkers(){
         Iterator<Incident> incidentIterator = User.findAll(Incident.class);
         while (incidentIterator.hasNext()){
             Incident incident = incidentIterator.next();
