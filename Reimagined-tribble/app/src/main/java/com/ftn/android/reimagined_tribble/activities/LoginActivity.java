@@ -1,5 +1,6 @@
 package com.ftn.android.reimagined_tribble.activities;
 
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
@@ -14,19 +15,20 @@ import com.facebook.stetho.Stetho;
 import com.facebook.stetho.okhttp3.StethoInterceptor;
 import com.ftn.android.reimagined_tribble.R;
 import com.ftn.android.reimagined_tribble.httpclient.BackEnd;
+import com.ftn.android.reimagined_tribble.httpclient.IBackEnd;
 import com.ftn.android.reimagined_tribble.httpclient.model.User;
 
 import org.androidannotations.annotations.AfterViews;
+import org.androidannotations.annotations.Background;
 import org.androidannotations.annotations.Click;
 import org.androidannotations.annotations.EActivity;
 import org.androidannotations.annotations.ViewById;
+import org.androidannotations.rest.spring.annotations.RestService;
 
 import java.io.IOException;
 import java.util.List;
 
 import okhttp3.OkHttpClient;
-import retrofit2.Call;
-import retrofit2.Response;
 
 /**
  * Created by ftn/tim
@@ -37,26 +39,33 @@ public class LoginActivity extends AppCompatActivity {
     private static final int REQUEST_SIGNUP = 0;
     private SharedPreferences loginPreferences;
     private SharedPreferences.Editor loginPrefsEditor;
+    private ProgressDialog progressDialog;
 
+    @RestService
+    IBackEnd serviceClient;
 
-    @ViewById(R.id.input_email) EditText _emailText;
-    @ViewById(R.id.input_password) EditText _passwordText;
-    @ViewById(R.id.btn_login) Button _loginButton;
-    @ViewById(R.id.link_signup) TextView _signupLink;
+    @ViewById(R.id.input_email)
+    EditText _emailText;
+    @ViewById(R.id.input_password)
+    EditText _passwordText;
+    @ViewById(R.id.btn_login)
+    Button _loginButton;
+    @ViewById(R.id.link_signup)
+    TextView _signupLink;
 
 
     @Click(R.id.btn_login)
-    void clickLoginButton(){
+    void clickLoginButton() {
         login();
     }
 
     @Click(R.id.link_signup)
-    void clickSignUpLink(){
+    void clickSignUpLink() {
         SignupActivity_.intent(this).startForResult(REQUEST_SIGNUP);
     }
 
     @AfterViews
-    protected void init(){
+    protected void init() {
         Stetho.initializeWithDefaults(this);
 
         new OkHttpClient.Builder()
@@ -67,6 +76,20 @@ public class LoginActivity extends AppCompatActivity {
         _passwordText.setText("admin");
     }
 
+
+    @Background
+    void FetchUser(String username, String password) {
+        try {
+            User[] asd = serviceClient.listUsers();
+            int a = asd.length;
+            onLoginSuccess();
+            progressDialog.dismiss();
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            onLoginFailed();
+        }
+    }
 
     public void login() {
         Log.d(TAG, "Login");
@@ -83,14 +106,13 @@ public class LoginActivity extends AppCompatActivity {
         user.save();
 
 
-
         _loginButton.setEnabled(false);
 
-//        final ProgressDialog progressDialog = new ProgressDialog(LoginActivity.this,
-//                R.style.AppTheme_Dark_Dialog);
-//        progressDialog.setIndeterminate(true);
-//        progressDialog.setMessage("Authenticating...");
-//        progressDialog.show();
+        progressDialog = new ProgressDialog(LoginActivity.this,
+                R.style.AppTheme_Dialog);
+        progressDialog.setIndeterminate(true);
+        progressDialog.setMessage("Authenticating...");
+        progressDialog.show();
 
         String email = _emailText.getText().toString();
         String password = _passwordText.getText().toString();
@@ -98,15 +120,8 @@ public class LoginActivity extends AppCompatActivity {
         // TODO: Implement your own authentication logic here.
 //        List<User> users = userDatabase.getAllUsers();
 //
-        BackEnd backEnd = new BackEnd();
-        Call<List<User>> users = backEnd.listUsers();
-        try {
-            Response<List<User>> userList = users.execute();
-            List<User> userListBody = userList.body();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
 
+        /*
         if(com.ftn.android.reimagined_tribble.model.User.find(com.ftn.android.reimagined_tribble.model.User.class, "email = ? and password =?", email, password).size()!=0){
             loginPrefsEditor.putString("username", email);
             loginPrefsEditor.putString("password", password);
@@ -118,10 +133,7 @@ public class LoginActivity extends AppCompatActivity {
             onLoginFailed();
         }
 
-
-
-
-
+*/
 
 
 //        new android.os.Handler().postDelayed(
@@ -134,7 +146,7 @@ public class LoginActivity extends AppCompatActivity {
 //                    }
 //                }, 3000);
 
-    //    MapsActivity_.intent(this).start();
+        //    MapsActivity_.intent(this).start();
     }
 
     @Override
@@ -154,8 +166,7 @@ public class LoginActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         loginPreferences = getSharedPreferences("loginPrefs", MODE_PRIVATE);
         loginPrefsEditor = loginPreferences.edit();
-        if(!loginPreferences.getString("username", "").equals(""))
-        {
+        if (!loginPreferences.getString("username", "").equals("")) {
             MapsActivity_.intent(this).start();
             onLoginSuccess();
         }

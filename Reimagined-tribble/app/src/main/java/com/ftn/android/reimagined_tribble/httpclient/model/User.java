@@ -1,5 +1,4 @@
 package com.ftn.android.reimagined_tribble.httpclient.model;
-
 /**
  * Created by Jozef on 6/30/2016.
  */
