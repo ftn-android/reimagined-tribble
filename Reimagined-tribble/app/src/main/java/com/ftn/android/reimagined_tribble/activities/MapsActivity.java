@@ -27,6 +27,7 @@ import com.ftn.android.reimagined_tribble.adapters.AddInfoWindowAdapter;
 import com.ftn.android.reimagined_tribble.adapters.ViewInfoWindowAdapter;
 import com.ftn.android.reimagined_tribble.model.Entity;
 import com.ftn.android.reimagined_tribble.model.GasStation;
+import com.ftn.android.reimagined_tribble.model.Incident;
 import com.ftn.android.reimagined_tribble.model.User;
 import com.google.android.gms.maps.CameraUpdate;
 import com.google.android.gms.maps.CameraUpdateFactory;
@@ -369,39 +370,50 @@ public class MapsActivity extends AppCompatActivity implements
             addNewMarker.remove();
         }
 
-        final int ADD_NEW_GAS_STATION=0;
-        final int ADD_NEW_INCIDENT=1;
+        Entity entity = markers.get(marker.getId());
+        if(entity != null){
+            if(entity instanceof GasStation){
+                ViewGasStationActivity_.intent(this).start();
+            }
+            else if(entity instanceof Incident){
+                ViewIncidentActivity_.intent(this).start();
+            }
+        }else {
 
-        final MaterialSimpleListAdapter adapter = new MaterialSimpleListAdapter(this);
-        adapter.add(new MaterialSimpleListItem.Builder(this)
-                .id(ADD_NEW_GAS_STATION)
-                .content(R.string.add_new_gas_station_from_map)
-                .icon(R.drawable.ic_gas_station_dialog_add_new)
-                .backgroundColor(Color.WHITE)
-                .build());
-        adapter.add(new MaterialSimpleListItem.Builder(this)
-                .id(ADD_NEW_INCIDENT)
-                .content(R.string.add_new_incident_from_map)
-                .icon(R.drawable.ic_incident_dialog_add_new)
-                .backgroundColor(Color.WHITE)
-                .build());
+            final int ADD_NEW_GAS_STATION = 0;
+            final int ADD_NEW_INCIDENT = 1;
 
-        MaterialDialog.Builder builder = new MaterialDialog.Builder(this)
-                .title(R.string.add_new_dialog_title)
-                .adapter(adapter, new MaterialDialog.ListCallback() {
-                    @Override
-                    public void onSelection(MaterialDialog dialog, View itemView, int which, CharSequence text) {
-                        MaterialSimpleListItem item = adapter.getItem(which);
-                        if(item.getId() == ADD_NEW_GAS_STATION){
-                            AddNewGasStationActivity_.intent(MapsActivity.this).start();
+            final MaterialSimpleListAdapter adapter = new MaterialSimpleListAdapter(this);
+            adapter.add(new MaterialSimpleListItem.Builder(this)
+                    .id(ADD_NEW_GAS_STATION)
+                    .content(R.string.add_new_gas_station_from_map)
+                    .icon(R.drawable.ic_gas_station_dialog_add_new)
+                    .backgroundColor(Color.WHITE)
+                    .build());
+            adapter.add(new MaterialSimpleListItem.Builder(this)
+                    .id(ADD_NEW_INCIDENT)
+                    .content(R.string.add_new_incident_from_map)
+                    .icon(R.drawable.ic_incident_dialog_add_new)
+                    .backgroundColor(Color.WHITE)
+                    .build());
+
+            MaterialDialog.Builder builder = new MaterialDialog.Builder(this)
+                    .title(R.string.add_new_dialog_title)
+                    .adapter(adapter, new MaterialDialog.ListCallback() {
+                        @Override
+                        public void onSelection(MaterialDialog dialog, View itemView, int which, CharSequence text) {
+                            MaterialSimpleListItem item = adapter.getItem(which);
+                            if (item.getId() == ADD_NEW_GAS_STATION) {
+                                AddNewGasStationActivity_.intent(MapsActivity.this).start();
+                            }
+                            if (item.getId() == ADD_NEW_INCIDENT) {
+                                AddNewIncidentActivity_.intent(MapsActivity.this).start();
+                            }
+                            addNewDialog.dismiss();
                         }
-                        if(item.getId() == ADD_NEW_INCIDENT){
-                            AddNewIncidentActivity_.intent(MapsActivity.this).start();
-                        }
-                        addNewDialog.dismiss();
-                    }
-                });
-        addNewDialog = builder.build();
-        addNewDialog.show();
+                    });
+            addNewDialog = builder.build();
+            addNewDialog.show();
+        }
     }
 }
