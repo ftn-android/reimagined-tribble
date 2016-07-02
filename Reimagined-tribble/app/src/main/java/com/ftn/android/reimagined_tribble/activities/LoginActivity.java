@@ -2,6 +2,7 @@ package com.ftn.android.reimagined_tribble.activities;
 
 import android.app.ProgressDialog;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
@@ -9,12 +10,10 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
-import android.content.SharedPreferences;
 
 import com.facebook.stetho.Stetho;
 import com.facebook.stetho.okhttp3.StethoInterceptor;
 import com.ftn.android.reimagined_tribble.R;
-import com.ftn.android.reimagined_tribble.httpclient.BackEnd;
 import com.ftn.android.reimagined_tribble.httpclient.IBackEnd;
 import com.ftn.android.reimagined_tribble.httpclient.model.User;
 
@@ -22,11 +21,9 @@ import org.androidannotations.annotations.AfterViews;
 import org.androidannotations.annotations.Background;
 import org.androidannotations.annotations.Click;
 import org.androidannotations.annotations.EActivity;
+import org.androidannotations.annotations.SupposeBackground;
 import org.androidannotations.annotations.ViewById;
 import org.androidannotations.rest.spring.annotations.RestService;
-
-import java.io.IOException;
-import java.util.List;
 
 import okhttp3.OkHttpClient;
 
@@ -78,17 +75,44 @@ public class LoginActivity extends AppCompatActivity {
 
 
     @Background
-    void FetchUser(String username, String password) {
-        try {
-            User[] asd = serviceClient.listUsers();
-            int a = asd.length;
-            onLoginSuccess();
-            progressDialog.dismiss();
+    void FetchUser(String email, String password) {
 
+        //Look in local db
+        int localDB = com.ftn.android.reimagined_tribble.model.User.find(com.ftn.android.reimagined_tribble.model.User.class, "email = ? and password =?", email, password).size();
+
+        if (localDB != 0) {
+            onLoginSuccess(email, password);
+            return;
+        }
+
+        try {
+            User[] usersService = serviceClient.getUserswithUsernameAndPassword(email, password);
+            int serviceDB = usersService.length;
+
+            if (serviceDB != 0) {
+                saveNewUserFromService(usersService[0]);
+                onLoginSuccess(email, password);
+                return;
+            }
         } catch (Exception e) {
             e.printStackTrace();
-            onLoginFailed();
+
+            // onLoginFailed();
+            // progressDialog.dismiss();
         }
+        progressDialog.dismiss();
+        onLoginFailed();
+    }
+
+    @SupposeBackground
+    void saveNewUserFromService(User userService) {
+        com.ftn.android.reimagined_tribble.model.User user = new com.ftn.android.reimagined_tribble.model.User();
+        user.setUserName(userService.getUserName());
+        user.setPassword(userService.getPassword());
+        user.setEmail(userService.getEmail());
+        user.setLattitude(userService.getLattitude());
+        user.setLongitude(userService.getLongittude());
+        user.save();
     }
 
     public void login() {
@@ -98,13 +122,6 @@ public class LoginActivity extends AppCompatActivity {
         if (!validate()) {
             return;
         }
-
-        com.ftn.android.reimagined_tribble.model.User user = new com.ftn.android.reimagined_tribble.model.User();
-        user.setUserName("admin");
-        user.setPassword("admin");
-        user.setEmail("admin@admin.com");
-        user.save();
-
 
         _loginButton.setEnabled(false);
 
@@ -117,36 +134,7 @@ public class LoginActivity extends AppCompatActivity {
         String email = _emailText.getText().toString();
         String password = _passwordText.getText().toString();
 
-        // TODO: Implement your own authentication logic here.
-//        List<User> users = userDatabase.getAllUsers();
-//
-
-        /*
-        if(com.ftn.android.reimagined_tribble.model.User.find(com.ftn.android.reimagined_tribble.model.User.class, "email = ? and password =?", email, password).size()!=0){
-            loginPrefsEditor.putString("username", email);
-            loginPrefsEditor.putString("password", password);
-            loginPrefsEditor.commit();
-            MapsActivity_.intent(this).start();
-            onLoginSuccess();
-        }
-        else {
-            onLoginFailed();
-        }
-
-*/
-
-
-//        new android.os.Handler().postDelayed(
-//                new Runnable() {
-//                    public void run() {
-//                        // On complete call either onLoginSuccess or onLoginFailed
-//                        onLoginSuccess();
-//                        // onLoginFailed();
-//                        progressDialog.dismiss();
-//                    }
-//                }, 3000);
-
-        //    MapsActivity_.intent(this).start();
+        FetchUser(email, password);
     }
 
     @Override
@@ -177,6 +165,15 @@ public class LoginActivity extends AppCompatActivity {
         // Disable going back to the MainActivity
         //TODO Get informed about this method
         moveTaskToBack(true);
+    }
+
+    public void onLoginSuccess(String email, String password) {
+        loginPrefsEditor.putString("username", email);
+        loginPrefsEditor.putString("password", password);
+        loginPrefsEditor.commit();
+        progressDialog.dismiss();
+        MapsActivity_.intent(this).start();
+        onLoginSuccess();
     }
 
     public void onLoginSuccess() {
