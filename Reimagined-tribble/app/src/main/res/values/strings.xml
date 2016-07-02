@@ -58,12 +58,13 @@
     <string name="hint_name_of_the_gas_station">Name of the gas station</string>
     <string name="hint_description">Description</string>
     <string name="hint_name_of_the_incident">Name of the incident</string>
-    <string name="view_gas_station_name">Name:</string>
+    <string name="view_name">Name:</string>
     <string name="type_of_incident">Type:</string>
-    <string name="view_gas_station_street">Street:</string>
-    <string name="view_gas_station_city">City:</string>
-    <string name="view_gas_station_created_on">Created on:</string>
-    <string name="view_gas_station_description">Description:</string>
+    <string name="view_street">Street:</string>
+    <string name="view_city">City:</string>
+    <string name="view_created_on">Created on:</string>
+    <string name="view_description">Description:</string>
+    <string name="view_incident_type">Type of incident:</string>
 
 
     <string-array name="incident_types">
