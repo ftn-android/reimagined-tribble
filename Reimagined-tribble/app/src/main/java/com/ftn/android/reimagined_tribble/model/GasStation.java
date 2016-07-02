@@ -16,21 +16,21 @@ public class GasStation extends SugarRecord implements Entity, Serializable{
     private String date;
     private byte[] image;
     private String user;
-    private double lattitude;
-    private double longittude;
+    private double latitude;
+    private double longitude;
 
     public GasStation(){
 
     }
 
-    public GasStation(String name, String description, String date, byte[] image, String user, double lattitude, double longittude) {
+    public GasStation(String name, String description, String date, byte[] image, String user, double latitude, double longitude) {
         this.name = name;
         this.description = description;
         this.date = date;
         this.image = image;
         this.user = user;
-        this.lattitude = lattitude;
-        this.longittude = longittude;
+        this.latitude = latitude;
+        this.longitude = longitude;
     }
 
     @Override
@@ -77,19 +77,19 @@ public class GasStation extends SugarRecord implements Entity, Serializable{
     }
 
     public double getLattitude() {
-        return lattitude;
+        return latitude;
     }
 
     public void setLattitude(double lattitude) {
-        this.lattitude = lattitude;
+        this.latitude = lattitude;
     }
 
     public double getLongittude() {
-        return longittude;
+        return longitude;
     }
 
     public void setLongittude(double longittude) {
-        this.longittude = longittude;
+        this.longitude = longittude;
     }
 
     @Override
@@ -100,8 +100,8 @@ public class GasStation extends SugarRecord implements Entity, Serializable{
                 ", date=" + date +
                 ", image='" + image + '\'' +
                 ", user='" + user + '\'' +
-                ", lattitude=" + lattitude +
-                ", longittude=" + longittude +
+                ", lattitude=" + latitude +
+                ", longittude=" + longitude +
                 '}';
     }
 }

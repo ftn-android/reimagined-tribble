@@ -2,16 +2,14 @@ package com.ftn.android.reimagined_tribble.httpclient.model;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 
-import java.util.Date;
-
 /**
  * Created by Jozef on 7/2/2016.
  */
 public class Location {
     @JsonProperty("Id")
     private int id;
-    @JsonProperty("Lattitude")
-    private double lattitude;
+    @JsonProperty("Latitude")
+    private double latitude;
     @JsonProperty("Longitude")
     private double longitude;
     @JsonProperty("Name")
@@ -19,11 +17,45 @@ public class Location {
     @JsonProperty("Description")
     private String description;
     @JsonProperty("StartDate")
-    private Date startDate;
+    private String startDate;
     @JsonProperty("EndDate")
-    private Date endDate;
+    private String endDate;
     @JsonProperty("Type")
     private boolean type;
+
+    @JsonProperty("Image")
+    private HeaderImage image;
+
+    public Location() {
+    }
+
+    public double getLatitude() {
+        return latitude;
+    }
+
+    public void setLatitude(double latitude) {
+        this.latitude = latitude;
+    }
+
+    public HeaderImage getImage() {
+        return image;
+    }
+
+    public void setImage(HeaderImage image) {
+        this.image = image;
+    }
+
+    public Location(int id, double latitude, double longitude, String name, String description, String startDate, String endDate, boolean type, HeaderImage image) {
+        this.id = id;
+        this.latitude = latitude;
+        this.longitude = longitude;
+        this.name = name;
+        this.description = description;
+        this.startDate = startDate;
+        this.endDate = endDate;
+        this.type = type;
+        this.image = image;
+    }
 
     public int getId() {
         return id;
@@ -34,11 +66,11 @@ public class Location {
     }
 
     public double getLattitude() {
-        return lattitude;
+        return latitude;
     }
 
     public void setLattitude(double lattitude) {
-        this.lattitude = lattitude;
+        this.latitude = lattitude;
     }
 
     public double getLongitude() {
@@ -65,19 +97,19 @@ public class Location {
         this.description = description;
     }
 
-    public Date getStartDate() {
+    public String getStartDate() {
         return startDate;
     }
 
-    public void setStartDate(Date startDate) {
+    public void setStartDate(String startDate) {
         this.startDate = startDate;
     }
 
-    public Date getEndDate() {
+    public String getEndDate() {
         return endDate;
     }
 
-    public void setEndDate(Date endDate) {
+    public void setEndDate(String endDate) {
         this.endDate = endDate;
     }
 
@@ -87,5 +119,20 @@ public class Location {
 
     public void setType(boolean type) {
         this.type = type;
+    }
+
+    @Override
+    public String toString() {
+        return "Location{" +
+                "id=" + id +
+                ", latitude=" + latitude +
+                ", longitude=" + longitude +
+                ", name='" + name + '\'' +
+                ", description='" + description + '\'' +
+                ", startDate=" + startDate +
+                ", endDate=" + endDate +
+                ", type=" + type +
+                ", image=" + image +
+                '}';
     }
 }
