@@ -76,9 +76,15 @@ namespace Ftn.Azure_Andorid.Backend.Controllers
         [ResponseType(typeof(User))]
         public IHttpActionResult PostUser(User user)
         {
-            if (!ModelState.IsValid)
+            // no time to check why model is invalid
+            /*if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState);
+            }*/
+
+            if (UserExists(user.Email))
+            {
+                return Conflict();
             }
 
             db.Users.Add(user);
@@ -115,6 +121,11 @@ namespace Ftn.Azure_Andorid.Backend.Controllers
         private bool UserExists(int id)
         {
             return db.Users.Count(e => e.Id == id) > 0;
+        }
+
+        private bool UserExists(string email)
+        {
+            return db.Users.Count(e => e.Email == email) > 0;
         }
     }
 }

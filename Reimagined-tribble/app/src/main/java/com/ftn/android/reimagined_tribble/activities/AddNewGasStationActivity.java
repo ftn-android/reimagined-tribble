@@ -1,12 +1,9 @@
 package com.ftn.android.reimagined_tribble.activities;
 
-import android.content.Context;
-import android.content.ContextWrapper;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.location.Address;
 import android.location.Geocoder;
@@ -19,7 +16,6 @@ import android.widget.ImageView;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.resource.bitmap.GlideBitmapDrawable;
-import com.bumptech.glide.request.target.GlideDrawableImageViewTarget;
 import com.ftn.android.reimagined_tribble.R;
 import com.ftn.android.reimagined_tribble.model.GasStation;
 import com.ftn.android.reimagined_tribble.model.User;
@@ -34,11 +30,9 @@ import org.androidannotations.annotations.res.StringRes;
 
 import java.io.ByteArrayOutputStream;
 import java.io.File;
-import java.io.FileOutputStream;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
-import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 
@@ -177,15 +171,22 @@ public class AddNewGasStationActivity extends AppCompatActivity{
         gasStation.setName(stationName);
         Bitmap bitmap = null;
 
-        Drawable d = image.getDrawable();
-        bitmap = ((GlideBitmapDrawable) d).getBitmap();
-        ByteArrayOutputStream bos = new ByteArrayOutputStream();
-        bitmap.compress(Bitmap.CompressFormat.PNG, 100, bos);
-        byte[] img = bos.toByteArray();
-        gasStation.setImage(img);
+        try {
+            Drawable d = image.getDrawable();
+            bitmap = ((GlideBitmapDrawable) d).getBitmap();
+            ByteArrayOutputStream bos = new ByteArrayOutputStream();
+            bitmap.compress(Bitmap.CompressFormat.PNG, 100, bos);
+            byte[] img = bos.toByteArray();
+            gasStation.setImage(img);
+            Log.d("GasStation", img.toString());
+        }catch (Exception e)
+        {
+            e.printStackTrace();
+            gasStation.setImage(new byte[] {0});
+        }
         gasStation.save();
 
-        Log.d("GasStation", img.toString());
+
         finish();
 
 

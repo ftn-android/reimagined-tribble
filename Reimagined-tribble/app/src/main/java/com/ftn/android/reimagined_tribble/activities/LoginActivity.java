@@ -15,13 +15,14 @@ import com.facebook.stetho.Stetho;
 import com.facebook.stetho.okhttp3.StethoInterceptor;
 import com.ftn.android.reimagined_tribble.R;
 import com.ftn.android.reimagined_tribble.httpclient.IBackEnd;
-import com.ftn.android.reimagined_tribble.httpclient.model.User;
+import com.ftn.android.reimagined_tribble.model.User;
 
 import org.androidannotations.annotations.AfterViews;
 import org.androidannotations.annotations.Background;
 import org.androidannotations.annotations.Click;
 import org.androidannotations.annotations.EActivity;
 import org.androidannotations.annotations.SupposeBackground;
+import org.androidannotations.annotations.UiThread;
 import org.androidannotations.annotations.ViewById;
 import org.androidannotations.rest.spring.annotations.RestService;
 
@@ -70,8 +71,8 @@ public class LoginActivity extends AppCompatActivity {
                 .build();
 
         //TODO delete this hardcoded values
-        _emailText.setText("admin@admin.com");
-        _passwordText.setText("admin");
+        _emailText.setText("a@a.com");
+        _passwordText.setText("1234");
     }
 
 
@@ -82,13 +83,13 @@ public class LoginActivity extends AppCompatActivity {
             return;
 
         //Look in local db
-        int localDB = com.ftn.android.reimagined_tribble.model.User.find(com.ftn.android.reimagined_tribble.model.User.class, "email = ? and password =?", email, password).size();
+        int localDB = User.find(User.class, "email = ? and password =?", email, password).size();
 
         if (localDB != 0) {
             onLoginSuccess(email, password);
             return;
         }
-
+        // no match? search backend for it
         try {
             User[] usersService = serviceClient.getUserswithEmailAndPassword(email, password);
             int serviceDB = usersService.length;
@@ -106,13 +107,7 @@ public class LoginActivity extends AppCompatActivity {
 
     @SupposeBackground
     void saveNewUserFromService(User userService) {
-        com.ftn.android.reimagined_tribble.model.User user = new com.ftn.android.reimagined_tribble.model.User();
-        user.setUserName(userService.getUserName());
-        user.setPassword(userService.getPassword());
-        user.setEmail(userService.getEmail());
-        user.setLattitude(userService.getLattitude());
-        user.setLongitude(userService.getLongittude());
-        user.save();
+        userService.save();
     }
 
     public void login() {
@@ -141,10 +136,7 @@ public class LoginActivity extends AppCompatActivity {
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (requestCode == REQUEST_SIGNUP) {
             if (resultCode == RESULT_OK) {
-
-                // TODO: Implement successful activity_signup logic here
-                // By default we just finish the Activity and log them in automatically
-                MapsActivity_.intent(this).start();
+               // MapsActivity_.intent(this).start();
                 onLoginSuccess();
             }
         }
@@ -167,6 +159,7 @@ public class LoginActivity extends AppCompatActivity {
         moveTaskToBack(true);
     }
 
+    @UiThread
     public void onLoginSuccess(String email, String password) {
         loginPrefsEditor.putString("username", email);
         loginPrefsEditor.putString("password", password);
@@ -180,9 +173,10 @@ public class LoginActivity extends AppCompatActivity {
         finish();
     }
 
+    @UiThread
     public void onLoginFailed() {
         Toast.makeText(getBaseContext(), "Login failed", Toast.LENGTH_LONG).show();
-
+        progressDialog.hide();
         _loginButton.setEnabled(true);
     }
 

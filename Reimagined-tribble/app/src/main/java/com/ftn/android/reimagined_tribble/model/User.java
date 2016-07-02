@@ -1,5 +1,6 @@
 package com.ftn.android.reimagined_tribble.model;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import com.orm.SugarRecord;
 
 /**
@@ -7,14 +8,31 @@ import com.orm.SugarRecord;
  */
 public class User extends SugarRecord{
 
-    private String password;
+    @JsonProperty("Email")
     private String email;
-    private double longitude;
-    private double lattitude;
+
+    @JsonProperty("UserName")
     private String userName;
 
-    public User() {
+    @JsonProperty("Password")
+    private String password;
 
+    @JsonProperty("Longitude")
+    private Double longitude;
+
+    @JsonProperty("Lattitude")
+    private Double lattitude;
+
+    @JsonProperty("Id")
+    private Integer id;
+
+    public User() {
+        this.userName = "";
+        this.password = "";
+        this.longitude = new Double(0);
+        this.lattitude = new Double(0);
+        this.email = "";
+        this.id = 0;
     }
 
     public User(String userName, String password, double longitude, double lattitude, String email) {
@@ -23,6 +41,7 @@ public class User extends SugarRecord{
         this.longitude = longitude;
         this.lattitude = lattitude;
         this.email = email;
+        this.id = 0;
     }
 
     public String getUserName() {
@@ -30,7 +49,7 @@ public class User extends SugarRecord{
     }
 
     public void setUserName(String username) {
-        this.userName = userName;
+        this.userName = username;
     }
 
     public String getPassword() {
