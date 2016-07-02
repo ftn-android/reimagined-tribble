@@ -12,6 +12,7 @@ public class HeaderImage {
     private int id;
     @JsonProperty("ImageData")
     private byte[] imageData;
+    @JsonProperty("ImageName")
     private String imageName;
     @JsonProperty("IsActive")
     private boolean isActive;

@@ -17,16 +17,21 @@ import android.widget.ImageView;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.resource.bitmap.GlideBitmapDrawable;
 import com.ftn.android.reimagined_tribble.R;
+import com.ftn.android.reimagined_tribble.httpclient.IBackEnd;
+import com.ftn.android.reimagined_tribble.httpclient.model.HeaderImage;
+import com.ftn.android.reimagined_tribble.httpclient.model.Location;
 import com.ftn.android.reimagined_tribble.model.GasStation;
 import com.ftn.android.reimagined_tribble.model.User;
 
 import org.androidannotations.annotations.AfterViews;
+import org.androidannotations.annotations.Background;
 import org.androidannotations.annotations.Click;
 import org.androidannotations.annotations.EActivity;
 import org.androidannotations.annotations.OptionsItem;
 import org.androidannotations.annotations.OptionsMenu;
 import org.androidannotations.annotations.ViewById;
 import org.androidannotations.annotations.res.StringRes;
+import org.androidannotations.rest.spring.annotations.RestService;
 
 import java.io.ByteArrayOutputStream;
 import java.io.File;
@@ -41,13 +46,16 @@ import pl.aprilapps.easyphotopicker.EasyImage;
 
 /**
  * Created by ftn/tim
-*/
+ */
 @EActivity(R.layout.activity_add_new_gasstation)
 @OptionsMenu(R.menu.add_new_menu)
-public class AddNewGasStationActivity extends AppCompatActivity{
+public class AddNewGasStationActivity extends AppCompatActivity {
 
     @StringRes(R.string.title_add_new_gas_station)
     String activityTitle;
+
+    @RestService
+    IBackEnd serviceClient;
 
     private SharedPreferences loginPreferences;
     private SharedPreferences.Editor loginPrefsEditor;
@@ -61,7 +69,7 @@ public class AddNewGasStationActivity extends AppCompatActivity{
 
 
     @AfterViews
-    protected void init(){
+    protected void init() {
         final Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
@@ -77,13 +85,12 @@ public class AddNewGasStationActivity extends AppCompatActivity{
         Glide.with(this).load("").error(R.drawable.ic_photo_placeholder).into(imageView);
         Double l1;
         Double l2;
-        if(!loginPreferences.getString("lat","").equals("")) {
+        if (!loginPreferences.getString("lat", "").equals("")) {
             l1 = Double.parseDouble(loginPreferences.getString("lat", ""));
             l2 = Double.parseDouble(loginPreferences.getString("long", ""));
-        }
-        else {
+        } else {
             String email = loginPreferences.getString("username", "");
-            User user = User.find(User.class, "email = ?",email).get(0);
+            User user = User.find(User.class, "email = ?", email).get(0);
             l1 = user.getLattitude();
             l2 = user.getLongitude();
         }
@@ -92,13 +99,11 @@ public class AddNewGasStationActivity extends AppCompatActivity{
         List<Address> addresses;
         geocoder = new Geocoder(this, Locale.getDefault());
         try {
-            addresses = geocoder.getFromLocation(l1,l2, 1); // Here 1 represent max location result to returned, by documents it recommended 1 to 5
-            String address="";
-            if(addresses.get(0).getSubThoroughfare()!=null) {
+            addresses = geocoder.getFromLocation(l1, l2, 1); // Here 1 represent max location result to returned, by documents it recommended 1 to 5
+            String address = "";
+            if (addresses.get(0).getSubThoroughfare() != null) {
                 address = addresses.get(0).getThoroughfare() + addresses.get(0).getSubThoroughfare();// If any additional address line present than only, check with max available address lines by getMaxAddressLineIndex()
-            }
-            else
-            {
+            } else {
                 address = addresses.get(0).getThoroughfare();
             }
             String city = addresses.get(0).getLocality();
@@ -107,8 +112,7 @@ public class AddNewGasStationActivity extends AppCompatActivity{
             String postalCode = addresses.get(0).getPostalCode();
             String knownName = addresses.get(0).getFeatureName();
 
-        }
-        catch (IOException e) {
+        } catch (IOException e) {
             e.printStackTrace();
 
         }
@@ -116,7 +120,7 @@ public class AddNewGasStationActivity extends AppCompatActivity{
     }
 
     @Click(R.id.fab_add_new_gas_station_details)
-    protected void startTheCamera(){
+    protected void startTheCamera() {
         EasyImage.openCamera(AddNewGasStationActivity.this, 1);
     }
 
@@ -154,37 +158,31 @@ public class AddNewGasStationActivity extends AppCompatActivity{
         String stationDesc = _description.getText().toString();
         String userName = loginPreferences.getString("username", "");
 
-        Double l1 = Double.parseDouble(loginPreferences.getString("lat", ""));
-        Double l2 = Double.parseDouble(loginPreferences.getString("long", ""));
+        Double latitude = Double.parseDouble(loginPreferences.getString("lat", ""));
+        Double longitude = Double.parseDouble(loginPreferences.getString("long", ""));
 
         Calendar c = Calendar.getInstance();
 
         SimpleDateFormat df = new SimpleDateFormat("dd-MMM-yyyy");
         String formattedDate = df.format(c.getTime());
 
-        GasStation gasStation = new GasStation();
+        GasStation gasStation = new GasStation(stationName, stationDesc, formattedDate, new byte[]{0},
+                userName, latitude, longitude);
         gasStation.setUser(userName);
-        gasStation.setDate(formattedDate);
-        gasStation.setLattitude(l1);
-        gasStation.setLongittude(l2);
-        gasStation.setDescription(stationDesc);
-        gasStation.setName(stationName);
-        Bitmap bitmap = null;
+
 
         try {
             Drawable d = image.getDrawable();
-            bitmap = ((GlideBitmapDrawable) d).getBitmap();
+            Bitmap bitmap = ((GlideBitmapDrawable) d).getBitmap();
             ByteArrayOutputStream bos = new ByteArrayOutputStream();
             bitmap.compress(Bitmap.CompressFormat.PNG, 100, bos);
             byte[] img = bos.toByteArray();
             gasStation.setImage(img);
             Log.d("GasStation", img.toString());
-        }catch (Exception e)
-        {
+        } catch (Exception e) {
             e.printStackTrace();
-            gasStation.setImage(new byte[] {0});
         }
-        gasStation.save();
+        SaveGasStation(gasStation);
 
 
         finish();
@@ -210,6 +208,31 @@ public class AddNewGasStationActivity extends AppCompatActivity{
 }*/
 
     }
+
+    @Background
+    void SaveGasStation(GasStation gasStation) {
+
+
+        Location location = new Location(0,
+                gasStation.getLattitude(),
+                gasStation.getLongittude(),
+                gasStation.getName(),
+                gasStation.getDescription(),
+                gasStation.getDate(),
+                "2020-01-01",
+                false,
+//                null);
+                new HeaderImage(0, gasStation.getImage(), gasStation.getName(), true));
+        try {
+            gasStation.save();
+            Log.d("GasStation", location.toString());
+
+            Location locationService = serviceClient.addNewLocation(location);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
     //function for showing image from byte array
     public static void setImageViewWithByteArray(ImageView view, byte[] data) {
         Bitmap bitmap = BitmapFactory.decodeByteArray(data, 0, data.length);
