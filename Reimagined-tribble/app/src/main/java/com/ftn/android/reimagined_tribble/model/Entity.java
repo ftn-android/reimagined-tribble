@@ -1,7 +1,7 @@
 package com.ftn.android.reimagined_tribble.model;
 
 /**
- * Created by szberko
+ * Created by ftn/tim
  */
 public interface Entity {
 

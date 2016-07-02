@@ -4,12 +4,10 @@ package com.ftn.android.reimagined_tribble.model;
 
 import com.orm.SugarRecord;
 
-import java.util.Date;
-
 /**
  * Created by FilipF on 14.6.2016.
  */
-public class GasStation extends SugarRecord {
+public class GasStation extends SugarRecord implements Entity{
 
     private String name;
     private String description;
@@ -33,6 +31,7 @@ public class GasStation extends SugarRecord {
         this.longittude = longittude;
     }
 
+    @Override
     public String getName() {
         return name;
     }
@@ -41,6 +40,7 @@ public class GasStation extends SugarRecord {
         this.name = name;
     }
 
+    @Override
     public String getDescription() {
         return description;
     }
@@ -57,6 +57,7 @@ public class GasStation extends SugarRecord {
         this.date = date;
     }
 
+    @Override
     public  byte[] getImage() {
         return image;
     }

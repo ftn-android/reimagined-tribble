@@ -2,19 +2,18 @@ package com.ftn.android.reimagined_tribble.model;
 
 import com.orm.SugarRecord;
 
-import java.util.Date;
 import java.util.List;
 
 /**
  * Created by FilipF on 14.6.2016.
  */
-public class Incident extends SugarRecord {
+public class Incident extends SugarRecord implements Entity {
 
     private String name;
     private String description;
     private boolean active;
     private String date;
-    private List<String> images;
+    private byte[] image;
     private double longitude;
     private double lattitude;
     private String type;
@@ -23,12 +22,12 @@ public class Incident extends SugarRecord {
 
     public Incident() {}
 
-    public Incident(String name, String description, boolean active, String date, List<String> images, double longitude, double lattitude, String type, String author, List<String> confirmedFrom) {
+    public Incident(String name, String description, boolean active, String date, byte[] image, double longitude, double lattitude, String type, String author, List<String> confirmedFrom) {
         this.name = name;
         this.description = description;
         this.active = active;
         this.date = date;
-        this.images = images;
+        this.image = image;
         this.longitude = longitude;
         this.lattitude = lattitude;
         this.type = type;
@@ -36,6 +35,7 @@ public class Incident extends SugarRecord {
         this.confirmedFrom = confirmedFrom;
     }
 
+    @Override
     public String getName() {
         return name;
     }
@@ -44,6 +44,7 @@ public class Incident extends SugarRecord {
         this.name = name;
     }
 
+    @Override
     public String getDescription() {
         return description;
     }
@@ -68,12 +69,13 @@ public class Incident extends SugarRecord {
         this.date = date;
     }
 
-    public List<String> getImages() {
-        return images;
+    @Override
+    public byte[] getImage() {
+        return image;
     }
 
-    public void setImages(List<String> images) {
-        this.images = images;
+    public void setImage(byte[] image) {
+        this.image = image;
     }
 
     public double getLongitude() {
@@ -123,7 +125,6 @@ public class Incident extends SugarRecord {
                 ", description='" + description + '\'' +
                 ", active=" + active +
                 ", date=" + date +
-                ", images=" + images +
                 ", longitude=" + longitude +
                 ", lattitude=" + lattitude +
                 ", type='" + type + '\'' +
