@@ -101,7 +101,7 @@ public class LoginActivity extends AppCompatActivity {
             // progressDialog.dismiss();
         }
         progressDialog.dismiss();
-        onLoginFailed();
+        _loginButton.setEnabled(true);
     }
 
     @SupposeBackground

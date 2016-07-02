@@ -13,13 +13,13 @@ namespace Ftn.Azure_Andorid.Backend.Controllers
         private FtnAzure_AndoridBackendContext db = new FtnAzure_AndoridBackendContext();
 
         // GET: api/Users
-        public IQueryable<User> GetUsers(string eamil = "", string password = "")
+        public IQueryable<User> GetUsers(string email = "", string password = "")
         {
-            if (string.IsNullOrEmpty(eamil) && string.IsNullOrEmpty(password))
+            if (string.IsNullOrEmpty(email) && string.IsNullOrEmpty(password))
             {
                 return db.Users;
             }
-            var users = db.Users.Where(u => u.Email == eamil && u.Password == password);
+            var users = db.Users.Where(u => u.Email == email && u.Password == password);
 
             return users;
         }
