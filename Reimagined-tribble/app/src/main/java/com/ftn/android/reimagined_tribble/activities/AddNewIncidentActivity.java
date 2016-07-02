@@ -1,26 +1,38 @@
 package com.ftn.android.reimagined_tribble.activities;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
+import android.graphics.Bitmap;
+import android.graphics.drawable.Drawable;
 import android.support.design.widget.CollapsingToolbarLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.widget.ArrayAdapter;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.Spinner;
 import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.resource.bitmap.GlideBitmapDrawable;
 import com.ftn.android.reimagined_tribble.R;
+import com.ftn.android.reimagined_tribble.model.Incident;
+import com.google.android.gms.maps.model.LatLng;
 
 import org.androidannotations.annotations.AfterViews;
 import org.androidannotations.annotations.Click;
 import org.androidannotations.annotations.EActivity;
+import org.androidannotations.annotations.Extra;
 import org.androidannotations.annotations.OptionsItem;
 import org.androidannotations.annotations.OptionsMenu;
 import org.androidannotations.annotations.ViewById;
 import org.androidannotations.annotations.res.StringRes;
 
+import java.io.ByteArrayOutputStream;
 import java.io.File;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
 
 import pl.aprilapps.easyphotopicker.DefaultCallback;
 import pl.aprilapps.easyphotopicker.EasyImage;
@@ -39,6 +51,20 @@ public class AddNewIncidentActivity extends AppCompatActivity{
     @StringRes(R.string.title_add_new_incident)
     String activityTitle;
 
+    @ViewById(R.id.input_name_of_incident)
+    EditText _name;
+
+    @ViewById(R.id.input_description_of_incident)
+    EditText _description;
+
+    @ViewById(R.id.backdrop)
+    ImageView image;
+
+    @Extra
+    LatLng location;
+
+    private SharedPreferences loginPreferences;
+
     @AfterViews
     protected void init(){
         //Toolbar and back button setup
@@ -48,6 +74,8 @@ public class AddNewIncidentActivity extends AppCompatActivity{
         CollapsingToolbarLayout collapsingToolbar =
                 (CollapsingToolbarLayout) findViewById(R.id.collapsing_toolbar);
         collapsingToolbar.setTitle(activityTitle);
+
+        loginPreferences = getSharedPreferences("loginPrefs", MODE_PRIVATE);
 
         //Spinner setup
         ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(this,
@@ -95,5 +123,43 @@ public class AddNewIncidentActivity extends AppCompatActivity{
     @OptionsItem(R.id.add)
     protected void clickOnAddIncident(){
         Toast.makeText(this, "Add button", Toast.LENGTH_LONG).show();
+        String incidentName = _name.getText().toString();
+        String incidentDescription = _description.getText().toString();
+        String incidentType = spinner.getSelectedItem().toString();
+        String userName = loginPreferences.getString("username", "");
+
+        Calendar c = Calendar.getInstance();
+
+        SimpleDateFormat df = new SimpleDateFormat("dd-MMM-yyyy");
+        String formattedDate = df.format(c.getTime());
+
+        Incident incident = new Incident();
+        incident.setName(incidentName);
+        incident.setActive(true);
+        incident.setAuthor(userName);
+        incident.setDate(formattedDate);
+        incident.setDescription(incidentDescription);
+        incident.setLattitude(location.latitude);
+        incident.setLongitude(location.longitude);
+        incident.setType(incidentType);
+        incident.addConfirmedFrom(userName);
+
+        try {
+            Drawable d = image.getDrawable();
+            Bitmap bitmap = ((GlideBitmapDrawable) d).getBitmap();
+            ByteArrayOutputStream bos = new ByteArrayOutputStream();
+            bitmap.compress(Bitmap.CompressFormat.PNG, 100, bos);
+            byte[] img = bos.toByteArray();
+            incident.setImage(img);
+            Log.d("Incident", img.toString());
+        }catch (Exception e)
+        {
+            e.printStackTrace();
+            incident.setImage(new byte[] {0});
+        }
+
+        incident.save();
+
+        finish();
     }
 }
