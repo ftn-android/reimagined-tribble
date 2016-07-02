@@ -69,7 +69,7 @@
                     android:layout_height="wrap_content"
                     android:layout_weight=".40"
                     android:textSize="18sp"
-                    android:text="@string/view_gas_station_name"/>
+                    android:text="@string/view_name"/>
 
                 <TextView
                     android:id="@+id/view_gas_station_name"
@@ -97,7 +97,7 @@
                     android:layout_height="wrap_content"
                     android:layout_weight=".40"
                     android:textSize="18sp"
-                    android:text="@string/view_gas_station_street"/>
+                    android:text="@string/view_street"/>
 
                 <TextView
                     android:id="@+id/view_gas_station_street"
@@ -124,7 +124,7 @@
                     android:layout_height="wrap_content"
                     android:layout_weight=".40"
                     android:textSize="18sp"
-                    android:text="@string/view_gas_station_city"/>
+                    android:text="@string/view_city"/>
 
                 <TextView
                     android:id="@+id/view_gas_station_city"
@@ -151,7 +151,7 @@
                     android:layout_height="wrap_content"
                     android:layout_weight=".40"
                     android:textSize="18sp"
-                    android:text="@string/view_gas_station_created_on"/>
+                    android:text="@string/view_created_on"/>
 
                 <TextView
                     android:id="@+id/view_gas_station_created_on"
@@ -178,7 +178,7 @@
                     android:layout_height="wrap_content"
                     android:layout_weight=".40"
                     android:textSize="18sp"
-                    android:text="@string/view_gas_station_description"/>
+                    android:text="@string/view_description"/>
 
                 <TextView
                     android:id="@+id/view_gas_station_description"
