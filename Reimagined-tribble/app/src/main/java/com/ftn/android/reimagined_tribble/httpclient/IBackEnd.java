@@ -17,5 +17,5 @@ public interface IBackEnd {
     User[] listUsers();
 
     @Get("/api/Users?email={email}&password={password}")
-    User[] getUserswithUsernameAndPassword(@Path String email,@Path String password);
+    User[] getUserswithEmailAndPassword(@Path String email, @Path String password);
 }

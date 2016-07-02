@@ -69,6 +69,7 @@ public class LoginActivity extends AppCompatActivity {
                 .addNetworkInterceptor(new StethoInterceptor())
                 .build();
 
+        //TODO delete this hardcoded values
         _emailText.setText("admin@admin.com");
         _passwordText.setText("admin");
     }
@@ -76,6 +77,9 @@ public class LoginActivity extends AppCompatActivity {
 
     @Background
     void FetchUser(String email, String password) {
+
+        if (progressDialog==null)
+            return;
 
         //Look in local db
         int localDB = com.ftn.android.reimagined_tribble.model.User.find(com.ftn.android.reimagined_tribble.model.User.class, "email = ? and password =?", email, password).size();
@@ -86,7 +90,7 @@ public class LoginActivity extends AppCompatActivity {
         }
 
         try {
-            User[] usersService = serviceClient.getUserswithUsernameAndPassword(email, password);
+            User[] usersService = serviceClient.getUserswithEmailAndPassword(email, password);
             int serviceDB = usersService.length;
 
             if (serviceDB != 0) {
@@ -96,12 +100,8 @@ public class LoginActivity extends AppCompatActivity {
             }
         } catch (Exception e) {
             e.printStackTrace();
-
-            // onLoginFailed();
-            // progressDialog.dismiss();
         }
-        progressDialog.dismiss();
-        _loginButton.setEnabled(true);
+        onLoginFailed();
     }
 
     @SupposeBackground
