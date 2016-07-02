@@ -101,21 +101,18 @@ public class MapsActivity extends AppCompatActivity implements
         switch (item.getItemId()){
             case R.id.show_just_incident_menu_drawer:
                 googleMap.clear();
-                SHOW_ENTITY = 1;
                 loginPrefsEditor.putInt("showEntity", 1);
                 loginPrefsEditor.apply();
                 addMarkers();
                 break;
             case R.id.show_just_gasstation_menu_drawer:
                 googleMap.clear();
-                SHOW_ENTITY = 2;
                 loginPrefsEditor.putInt("showEntity", 2);
                 loginPrefsEditor.apply();
                 addMarkers();
                 break;
             case R.id.show_gasstation_and_incident_menu_drawer:
                 googleMap.clear();
-                SHOW_ENTITY = 0;
                 loginPrefsEditor.putInt("showEntity", 0);
                 loginPrefsEditor.apply();
                 addMarkers();
