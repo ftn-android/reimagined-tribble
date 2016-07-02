@@ -373,7 +373,7 @@ public class MapsActivity extends AppCompatActivity implements
         Entity entity = markers.get(marker.getId());
         if(entity != null){
             if(entity instanceof GasStation){
-                ViewGasStationActivity_.intent(this).start();
+                ViewGasStationActivity_.intent(this).chosenGasStation((GasStation) entity).start();
             }
             else if(entity instanceof Incident){
                 ViewIncidentActivity_.intent(this).start();
