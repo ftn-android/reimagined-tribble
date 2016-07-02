@@ -4,10 +4,12 @@ package com.ftn.android.reimagined_tribble.model;
 
 import com.orm.SugarRecord;
 
+import java.io.Serializable;
+
 /**
  * Created by FilipF on 14.6.2016.
  */
-public class GasStation extends SugarRecord implements Entity{
+public class GasStation extends SugarRecord implements Entity, Serializable{
 
     private String name;
     private String description;
