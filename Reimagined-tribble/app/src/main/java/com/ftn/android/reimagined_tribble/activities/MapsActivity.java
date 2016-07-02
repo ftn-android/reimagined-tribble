@@ -25,6 +25,7 @@ import com.afollestad.materialdialogs.simplelist.MaterialSimpleListItem;
 import com.ftn.android.reimagined_tribble.R;
 import com.ftn.android.reimagined_tribble.adapters.AddInfoWindowAdapter;
 import com.ftn.android.reimagined_tribble.adapters.ViewInfoWindowAdapter;
+import com.ftn.android.reimagined_tribble.model.Entity;
 import com.ftn.android.reimagined_tribble.model.GasStation;
 import com.ftn.android.reimagined_tribble.model.User;
 import com.google.android.gms.maps.CameraUpdate;
@@ -47,8 +48,8 @@ import org.androidannotations.annotations.OptionsMenu;
 import org.androidannotations.annotations.ViewById;
 import org.androidannotations.annotations.res.StringRes;
 
+import java.util.HashMap;
 import java.util.Iterator;
-import java.util.WeakHashMap;
 
 /**
  * Created by ftn/tim
@@ -67,7 +68,7 @@ public class MapsActivity extends AppCompatActivity implements
     private SharedPreferences.Editor loginPrefsEditor;
     private static final String TAG = "MapsActivity";
     private Marker addNewMarker;
-    private WeakHashMap<Integer, Object> markers;
+    private HashMap<String, Entity> markers;
     private MaterialDialog addNewDialog;
 
     @FragmentById(R.id.map)
@@ -193,7 +194,9 @@ public class MapsActivity extends AppCompatActivity implements
 
     @AfterViews
     protected void init(){
+        markers = new HashMap<>();
         mapFragment.getMapAsync(this);
+        loginPreferences = getSharedPreferences("loginPrefs", MODE_PRIVATE);
 
         final ActionBar ab = getSupportActionBar();
         ab.setHomeAsUpIndicator(R.drawable.ic_menu);
@@ -204,10 +207,12 @@ public class MapsActivity extends AppCompatActivity implements
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         View header=navigationView.getHeaderView(0);
         TextView usernameTextView= (TextView)header.findViewById(R.id.menu_drawer_name);
-        //TODO Set the current user's name here
-        usernameTextView.setText("custom.text");
+
+        usernameTextView.setText(loginPreferences.getString("username", "Username"));
 
     }
+
+
 
     /**
      * Manipulates the map once available.
@@ -244,7 +249,8 @@ public class MapsActivity extends AppCompatActivity implements
         googleMap.getUiSettings().setZoomControlsEnabled(true);
         googleMap.getUiSettings().setCompassEnabled(true);
 
-        addMarkers();
+        googleMap.setOnInfoWindowClickListener(this);
+        googleMap.setOnMarkerClickListener(this);
 
         LocationManager locMan = (LocationManager) this.getSystemService(Context.LOCATION_SERVICE);
         Criteria crit = new Criteria();
@@ -271,6 +277,7 @@ public class MapsActivity extends AppCompatActivity implements
 
         googleMap.setOnMapClickListener(this);
 
+        addMarkers();
     }
 
     @Override
@@ -290,6 +297,7 @@ public class MapsActivity extends AppCompatActivity implements
 
         MarkerOptions markerOptions = new MarkerOptions();
 
+        googleMap.setInfoWindowAdapter(new AddInfoWindowAdapter(getLayoutInflater()));
         // Setting the position for the marker
         markerOptions.position(latLng);
 
@@ -302,13 +310,8 @@ public class MapsActivity extends AppCompatActivity implements
         // Placing a marker on the touched position
 //        googleMap.addMarker(markerOptions);
 
-        googleMap.setInfoWindowAdapter(new AddInfoWindowAdapter(getLayoutInflater()));
-        googleMap.setOnInfoWindowClickListener(this);
-        googleMap.setOnMarkerClickListener(this);
-
         addNewMarker = googleMap.addMarker(markerOptions);
 
-        loginPreferences = getSharedPreferences("loginPrefs", MODE_PRIVATE);
         loginPrefsEditor = loginPreferences.edit();
 
         Double l1=latLng.latitude;
@@ -339,13 +342,17 @@ public class MapsActivity extends AppCompatActivity implements
                     .snippet(gs.getDescription())
                     .icon(BitmapDescriptorFactory.fromResource(R.drawable.ic_local_gas_station_black_36dp))
                     );
+
+            markers.put(gasstation.getId(), gs);
         }
     }
 
     @Override
     public boolean onMarkerClick(Marker marker) {
-        addNewMarker.remove();
-        googleMap.setInfoWindowAdapter(new ViewInfoWindowAdapter(getLayoutInflater()));
+        if(addNewMarker != null) {
+            addNewMarker.remove();
+        }
+        googleMap.setInfoWindowAdapter(new ViewInfoWindowAdapter(getLayoutInflater(), markers.get(marker.getId())));
         googleMap.setOnInfoWindowClickListener(this);
         return false;
     }
