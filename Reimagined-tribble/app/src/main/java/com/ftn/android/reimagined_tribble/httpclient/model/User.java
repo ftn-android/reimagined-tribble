@@ -1,20 +1,28 @@
 package com.ftn.android.reimagined_tribble.httpclient.model;
+
+import com.fasterxml.jackson.annotation.JsonProperty;
+
 /**
  * Created by Jozef on 6/30/2016.
  */
 public class User {
 
-
+    @JsonProperty("Email")
     private String email = null;
 
+    @JsonProperty("UserName")
     private String userName = null;
 
+    @JsonProperty("Password")
     private String password = null;
 
+    @JsonProperty("Longittude")
     private Double longittude = null;
 
+    @JsonProperty("Lattitude")
     private Double lattitude = null;
 
+    @JsonProperty("Id")
     private Integer id = null;
 
     /**
