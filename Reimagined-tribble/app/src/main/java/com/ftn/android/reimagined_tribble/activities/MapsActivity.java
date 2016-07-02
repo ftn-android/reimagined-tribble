@@ -71,6 +71,8 @@ public class MapsActivity extends AppCompatActivity implements
     private Marker addNewMarker;
     private HashMap<String, Entity> markers;
     private MaterialDialog addNewDialog;
+    private LatLng tappedLocation;
+    private LocationManager locMan;
 
     @FragmentById(R.id.map)
     SupportMapFragment mapFragment;
@@ -152,12 +154,16 @@ public class MapsActivity extends AppCompatActivity implements
 
     @Click(R.id.fab_add_new_incident)
     protected void clickNewIncident(){
-        AddNewIncidentActivity_.intent(this).start();
+        Location location = locMan.getLastKnownLocation(locMan.getBestProvider(new Criteria(), false));
+        LatLng latLng = new LatLng(location.getLatitude(), location.getLongitude());
+        AddNewIncidentActivity_.intent(this).location(latLng).start();
     }
 
     @Click(R.id.fab_add_new_gas_station)
     protected void clickNewGasStation(){
-        AddNewGasStationActivity_.intent(this).start();
+        Location location = locMan.getLastKnownLocation(locMan.getBestProvider(new Criteria(), false));
+        LatLng latLng = new LatLng(location.getLatitude(), location.getLongitude());
+        AddNewGasStationActivity_.intent(this).location(latLng).start();
     }
 
     @OptionsItem(R.id.settings)
@@ -198,6 +204,8 @@ public class MapsActivity extends AppCompatActivity implements
         markers = new HashMap<>();
         mapFragment.getMapAsync(this);
         loginPreferences = getSharedPreferences("loginPrefs", MODE_PRIVATE);
+
+        locMan = (LocationManager) this.getSystemService(Context.LOCATION_SERVICE);
 
         final ActionBar ab = getSupportActionBar();
         ab.setHomeAsUpIndicator(R.drawable.ic_menu);
@@ -253,7 +261,6 @@ public class MapsActivity extends AppCompatActivity implements
         googleMap.setOnInfoWindowClickListener(this);
         googleMap.setOnMarkerClickListener(this);
 
-        LocationManager locMan = (LocationManager) this.getSystemService(Context.LOCATION_SERVICE);
         Criteria crit = new Criteria();
         Location loc = locMan.getLastKnownLocation(locMan.getBestProvider(crit, false));
 
@@ -313,16 +320,7 @@ public class MapsActivity extends AppCompatActivity implements
 
         addNewMarker = googleMap.addMarker(markerOptions);
 
-        loginPrefsEditor = loginPreferences.edit();
-
-        Double l1=latLng.latitude;
-        Double l2=latLng.longitude;
-        String coordl1 = l1.toString();
-        String coordl2 = l2.toString();
-        loginPrefsEditor.putString("lat",coordl1);
-        loginPrefsEditor.putString("long",coordl2);
-
-        loginPrefsEditor.commit();
+        tappedLocation = latLng;
         addNewMarker.showInfoWindow();
     }
 
@@ -330,12 +328,6 @@ public class MapsActivity extends AppCompatActivity implements
         Iterator<GasStation> gasStationIterator = User.findAll(GasStation.class);
         while (gasStationIterator.hasNext()){
             GasStation gs = gasStationIterator.next();
-
-//            Marker gasstation = googleMap.addMarker(new MarkerOptions()
-//                    .position(new LatLng(gs.getLattitude(), gs.getLongittude()))
-//                    .title("Brisbane")
-//                    .snippet("Population: 2,074,200")
-//                    .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_AZURE)));
 
             Marker gasstation = googleMap.addMarker(new MarkerOptions()
                     .position(new LatLng(gs.getLattitude(), gs.getLongittude()))
@@ -345,6 +337,20 @@ public class MapsActivity extends AppCompatActivity implements
                     );
 
             markers.put(gasstation.getId(), gs);
+        }
+
+        Iterator<Incident> incidentIterator = User.findAll(Incident.class);
+        while (incidentIterator.hasNext()){
+            Incident incident = incidentIterator.next();
+
+            Marker incidentMarker = googleMap.addMarker(new MarkerOptions()
+                    .position(new LatLng(incident.getLattitude(), incident.getLongitude()))
+                    .title(incident.getName())
+                    .snippet(incident.getDescription())
+                    .icon(BitmapDescriptorFactory.fromResource(R.drawable.ic_sms_failed_black_36dp))
+            );
+
+            markers.put(incidentMarker.getId(), incident);
         }
     }
 
@@ -376,7 +382,7 @@ public class MapsActivity extends AppCompatActivity implements
                 ViewGasStationActivity_.intent(this).chosenGasStation((GasStation) entity).start();
             }
             else if(entity instanceof Incident){
-                ViewIncidentActivity_.intent(this).start();
+                ViewIncidentActivity_.intent(this).chosenIncident((Incident) entity).start();
             }
         }else {
 
@@ -404,10 +410,10 @@ public class MapsActivity extends AppCompatActivity implements
                         public void onSelection(MaterialDialog dialog, View itemView, int which, CharSequence text) {
                             MaterialSimpleListItem item = adapter.getItem(which);
                             if (item.getId() == ADD_NEW_GAS_STATION) {
-                                AddNewGasStationActivity_.intent(MapsActivity.this).start();
+                                AddNewGasStationActivity_.intent(MapsActivity.this).location(tappedLocation).start();
                             }
                             if (item.getId() == ADD_NEW_INCIDENT) {
-                                AddNewIncidentActivity_.intent(MapsActivity.this).start();
+                                AddNewIncidentActivity_.intent(MapsActivity.this).location(tappedLocation).start();
                             }
                             addNewDialog.dismiss();
                         }
