@@ -92,9 +92,6 @@ namespace Ftn.Azure_Andorid.Backend.Controllers
                  return BadRequest(ModelState);
              }*/
 
-            if (location.Image!= null)
-                db.HeaderImages.Add(location.Image);
-
             db.Locations.Add(location);
 
             db.SaveChanges();

@@ -18,7 +18,6 @@ import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.resource.bitmap.GlideBitmapDrawable;
 import com.ftn.android.reimagined_tribble.R;
 import com.ftn.android.reimagined_tribble.httpclient.IBackEnd;
-import com.ftn.android.reimagined_tribble.httpclient.model.HeaderImage;
 import com.ftn.android.reimagined_tribble.httpclient.model.Location;
 import com.ftn.android.reimagined_tribble.model.GasStation;
 import com.ftn.android.reimagined_tribble.model.User;
@@ -221,8 +220,7 @@ public class AddNewGasStationActivity extends AppCompatActivity {
                 gasStation.getDate(),
                 "2020-01-01",
                 false,
-//                null);
-                new HeaderImage(0, gasStation.getImage(), gasStation.getName(), true));
+                gasStation.getImage());
         try {
             gasStation.save();
             Log.d("GasStation", location.toString());

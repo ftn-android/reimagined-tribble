@@ -2,10 +2,13 @@ package com.ftn.android.reimagined_tribble.httpclient.model;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 
+import java.util.Arrays;
+
 /**
  * Created by Jozef on 7/2/2016.
  */
 public class Location {
+
     @JsonProperty("Id")
     private int id;
     @JsonProperty("Latitude")
@@ -23,8 +26,8 @@ public class Location {
     @JsonProperty("Type")
     private boolean type;
 
-    @JsonProperty("Image")
-    private HeaderImage image;
+    @JsonProperty("ImageData")
+    private byte[] imageData;
 
     public Location() {
     }
@@ -37,15 +40,15 @@ public class Location {
         this.latitude = latitude;
     }
 
-    public HeaderImage getImage() {
-        return image;
+    public  byte[] getImageData() {
+        return imageData;
     }
 
-    public void setImage(HeaderImage image) {
-        this.image = image;
+    public void setImageData( byte[] imageData) {
+        this.imageData = imageData;
     }
 
-    public Location(int id, double latitude, double longitude, String name, String description, String startDate, String endDate, boolean type, HeaderImage image) {
+    public Location(int id, double latitude, double longitude, String name, String description, String startDate, String endDate, boolean type,  byte[] image) {
         this.id = id;
         this.latitude = latitude;
         this.longitude = longitude;
@@ -54,7 +57,7 @@ public class Location {
         this.startDate = startDate;
         this.endDate = endDate;
         this.type = type;
-        this.image = image;
+        this.imageData = image;
     }
 
     public int getId() {
@@ -129,10 +132,10 @@ public class Location {
                 ", longitude=" + longitude +
                 ", name='" + name + '\'' +
                 ", description='" + description + '\'' +
-                ", startDate=" + startDate +
-                ", endDate=" + endDate +
+                ", startDate='" + startDate + '\'' +
+                ", endDate='" + endDate + '\'' +
                 ", type=" + type +
-                ", image=" + image +
+                ", imageData=" + Arrays.toString(imageData) +
                 '}';
     }
 }

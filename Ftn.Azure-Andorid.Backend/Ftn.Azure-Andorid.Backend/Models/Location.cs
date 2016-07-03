@@ -14,6 +14,6 @@ namespace Ftn.Azure_Andorid.Backend.Models
         public DateTime EndDate { get; set; }
         public bool Type { get; set; }
 
-        public HeaderImage Image { get; set; }
+        public byte[] ImageData { get; set; }
     }
 }
