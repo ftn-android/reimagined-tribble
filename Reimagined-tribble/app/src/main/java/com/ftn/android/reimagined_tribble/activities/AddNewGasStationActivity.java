@@ -16,7 +16,7 @@ import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.resource.bitmap.GlideBitmapDrawable;
 import com.ftn.android.reimagined_tribble.R;
 import com.ftn.android.reimagined_tribble.httpclient.IBackEnd;
-import com.ftn.android.reimagined_tribble.httpclient.model.Location;
+import com.ftn.android.reimagined_tribble.httpclient.Synchroniser;
 import com.ftn.android.reimagined_tribble.model.GasStation;
 import com.google.android.gms.maps.model.LatLng;
 
@@ -123,7 +123,6 @@ public class AddNewGasStationActivity extends AppCompatActivity {
         String userName = loginPreferences.getString("username", "");
 
 
-
         Calendar c = Calendar.getInstance();
 
         SimpleDateFormat df = new SimpleDateFormat("dd-MMM-yyyy");
@@ -144,36 +143,13 @@ public class AddNewGasStationActivity extends AppCompatActivity {
             e.printStackTrace();
         }
         SaveGasStation(gasStation);
-
-
         finish();
     }
 
-
     @Background
     void SaveGasStation(GasStation gasStation) {
-        Location location = new Location(0,
-                gasStation.getLattitude(),
-                gasStation.getLongittude(),
-                gasStation.getName(),
-                gasStation.getDescription(),
-                gasStation.getDate(),
-                "2020-01-01",
-                false,
-                "",
-                gasStation.getImage(),
-                gasStation.getUID());
-        try {
-            gasStation.save();
-            Log.d("GasStation", location.toString());
-
-            Location locationService = serviceClient.addNewLocation(location);
-
-            gasStation.setSynchronised(true);
-            gasStation.save();
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+        Synchroniser synchroniser = new Synchroniser(serviceClient);
+        synchroniser.AddNewGasStation(gasStation);
     }
 
     //function for showing image from byte array
