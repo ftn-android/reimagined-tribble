@@ -180,9 +180,9 @@ public class MapsActivity extends AppCompatActivity implements
             Log.d("FetchNewInfoFromBackend", "Last known location is null");
         }
 
-        double radius = loginPreferences.getFloat("radius", 55);
+        double radius = preferences.getFloat("radius", 55);
         Log.d("radius km: ",radius+"");
-        Synchroniser sync = new Synchroniser(serviceClient, loginPreferences);
+        Synchroniser sync = new Synchroniser(serviceClient, preferences);
         sync.FetchAllLocation(latLng, radius);
         sync.UploadAllLocation();
         sync.DeleteExcessDataInDB();
