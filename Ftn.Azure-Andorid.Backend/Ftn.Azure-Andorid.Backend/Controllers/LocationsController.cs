@@ -17,7 +17,8 @@ namespace Ftn.Azure_Andorid.Backend.Controllers
         // GET: api/Locations/{typeFilter}
         public IQueryable<Location> GetLocations(string typeFilter, double? longitude = null, double? latitude = null, double? radius = null)
         {
-            var temp = db.Locations.Where(l => l.EndDate > DateTime.UtcNow.ToFileTimeUtc());
+            long longDateNow = DateTime.UtcNow.ToFileTimeUtc();
+            var temp = db.Locations.Where(l => l.EndDate > longDateNow);
 
             switch (typeFilter.ToLower())
             {
