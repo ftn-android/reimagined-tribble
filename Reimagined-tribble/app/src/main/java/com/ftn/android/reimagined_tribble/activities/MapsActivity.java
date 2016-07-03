@@ -27,7 +27,7 @@ import com.ftn.android.reimagined_tribble.R;
 import com.ftn.android.reimagined_tribble.adapters.AddInfoWindowAdapter;
 import com.ftn.android.reimagined_tribble.adapters.ViewInfoWindowAdapter;
 import com.ftn.android.reimagined_tribble.httpclient.IBackEnd;
-import com.ftn.android.reimagined_tribble.httpclient.TypeFilter;
+import com.ftn.android.reimagined_tribble.httpclient.Synchroniser;
 import com.ftn.android.reimagined_tribble.model.Entity;
 import com.ftn.android.reimagined_tribble.model.GasStation;
 import com.ftn.android.reimagined_tribble.model.Incident;
@@ -57,7 +57,6 @@ import org.androidannotations.rest.spring.annotations.RestService;
 
 import java.util.HashMap;
 import java.util.Iterator;
-import java.util.List;
 
 /**
  * Created by ftn/tim
@@ -175,87 +174,8 @@ public class MapsActivity extends AppCompatActivity implements
             Log.d("FetchNewInfoFromBackend", "Last known location is null");
         }
 
-        try {
-            com.ftn.android.reimagined_tribble.httpclient.model.Location[] locations =
-                    serviceClient.getLocationsByRadius(
-                            TypeFilter.ALL,
-                            latLng.longitude,
-                            latLng.latitude,
-                            RADIUS);
-            for (com.ftn.android.reimagined_tribble.httpclient.model.Location loc :
-                    locations) {
-                if (loc.isType()) { // Incident
-
-                    // duplicates ?
-                    List<Incident> incidentListDB = Incident.find(Incident.class, "uid = ?", loc.getUid());
-                    if (incidentListDB.size() == 0 ){
-                        Incident incident = new Incident(
-                                loc.getName(),
-                                loc.getDescription(),
-                                true,
-                                loc.getStartDate(),
-                                loc.getImageData(),
-                                loc.getLongitude(),
-                                loc.getLatitude(),
-                                loc.getAdditionalInfo(),
-                                "author ?",
-                                "confirmed ?",
-                                true
-                                ,loc.getUid());
-                        incident.save();
-                    }
-                    else
-                    {
-                        Incident incident = incidentListDB.get(0);
-                        incident.setLongitude(loc.getLongitude());
-                        incident.setLatitude(loc.getLatitude());
-                        incident.setSynchronised(true);
-                        incident.setName(loc.getName());
-                        incident.setDescription(loc.getDescription());
-                        incident.setType(loc.getAdditionalInfo());
-                        incident.setAuthor("author ??");
-                        incident.setConfirmedFrom("list of user ?");
-                        incident.setDate(loc.getStartDate());
-                        incident.setImage(loc.getImageData());
-
-                        incident.save();
-                    }
-
-                } else { // GasStation
-                    List<GasStation> gasStationListDB = GasStation.find(GasStation.class, "uid = ?", loc.getUid());
-                    if (gasStationListDB.size() == 0 ){
-                        GasStation gasStation = new GasStation(
-                                loc.getName(),
-                                loc.getDescription(),
-                                loc.getStartDate(),
-                                loc.getImageData(),
-                                "author ?",
-                                loc.getLatitude(),
-                                loc.getLongitude(),
-                                true,
-                                loc.getUid());
-                        gasStation.save();
-                    }
-                    else
-                    {
-                        GasStation gasStation = gasStationListDB.get(0);
-                        gasStation.setLongitude(loc.getLongitude());
-                        gasStation.setLatitude(loc.getLatitude());
-                        gasStation.setSynchronised(true);
-                        gasStation.setName(loc.getName());
-                        gasStation.setDescription(loc.getDescription());
-                        gasStation.setDate(loc.getStartDate());
-                        gasStation.setImage(loc.getImageData());
-
-                        gasStation.save();
-                    }
-
-                }
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-            Log.d(TAG, "Fetching new data from backend : failed");
-        }
+        Synchroniser sync = new Synchroniser(serviceClient);
+        sync.FetchAllLocation(latLng,RADIUS);
 
         addMarkers();
     }

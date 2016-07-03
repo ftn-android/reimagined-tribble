@@ -18,7 +18,7 @@ import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.resource.bitmap.GlideBitmapDrawable;
 import com.ftn.android.reimagined_tribble.R;
 import com.ftn.android.reimagined_tribble.httpclient.IBackEnd;
-import com.ftn.android.reimagined_tribble.httpclient.model.Location;
+import com.ftn.android.reimagined_tribble.httpclient.Synchroniser;
 import com.ftn.android.reimagined_tribble.model.Incident;
 import com.google.android.gms.maps.model.LatLng;
 
@@ -37,7 +37,6 @@ import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
-import java.util.Date;
 
 import pl.aprilapps.easyphotopicker.DefaultCallback;
 import pl.aprilapps.easyphotopicker.EasyImage;
@@ -167,42 +166,12 @@ public class AddNewIncidentActivity extends AppCompatActivity {
         }
 
         SaveIncident(incident);
-
         finish();
     }
 
     @Background
     void SaveIncident(Incident incident) {
-
-        Date endDate = new Date();
-
-        // according to google this is 6 h : (2.16 * 10000000)
-        // todo move this somewhere else :D some constant anything
-        endDate.setTime((long) (endDate.getTime() + (2.16 * 10000000)));
-        SimpleDateFormat df = new SimpleDateFormat("dd-MMM-yyyy");
-        String formattedEndDate = df.format(endDate.getTime());
-
-        Location location = new Location(0,
-                incident.getLatitude(),
-                incident.getLongitude(),
-                incident.getName(),
-                incident.getDescription(),
-                incident.getDate(),
-                formattedEndDate,
-                true,
-                incident.getType(),
-                incident.getImage(),
-                incident.getUID());
-        try {
-            incident.save();
-            Log.d("SaveIncident", location.toString());
-
-            Location locationService = serviceClient.addNewLocation(location);
-
-            incident.setSynchronised(true);
-            incident.save();
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+        Synchroniser synchroniser = new Synchroniser(serviceClient);
+        synchroniser.AddNewIncident(incident);
     }
 }
