@@ -10,6 +10,7 @@ import com.google.android.gms.maps.model.LatLng;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 
 /**
  * Created by Jozef on 7/3/2016.
@@ -18,7 +19,7 @@ public class Synchroniser {
 
     IBackEnd serviceClient;
     private final String TAG = "Synchroniser";
-    private final long PLUSHOUR = (long) (2.16 * 10000000);
+    private final long PLUSHOUR = (long)6;
 
     public Synchroniser(IBackEnd serviceClient) {
         this.serviceClient = serviceClient;
@@ -165,10 +166,10 @@ public class Synchroniser {
 
     public void AddNewIncident(Incident incident, boolean saveFrist) {
 
-        Date endDate = new Date();
+        Date oldDate = new Date(); // oldDate == current time
+        Date endDate = new Date(oldDate.getTime() + TimeUnit.HOURS.toMillis(PLUSHOUR));
 
-        endDate.setTime(endDate.getTime() + PLUSHOUR);
-        SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd'T'hh:mm:ss");
+        SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss");
         String formattedEndDate = df.format(endDate.getTime());
 
         Location location = new Location(0,
