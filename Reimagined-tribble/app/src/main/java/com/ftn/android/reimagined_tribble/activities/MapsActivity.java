@@ -72,11 +72,13 @@ public class MapsActivity extends AppCompatActivity implements
         GoogleMap.OnMapClickListener,
         GoogleMap.OnInfoWindowClickListener,
         NavigationView.OnNavigationItemSelectedListener,
-        GoogleMap.OnMarkerClickListener {
+        GoogleMap.OnMarkerClickListener{
 
     GoogleMap googleMap;
     private SharedPreferences loginPreferences;
     private SharedPreferences.Editor loginPrefsEditor;
+    private SharedPreferences preferences;
+    private SharedPreferences.Editor preferencesEditor;
     private static final String TAG = "MapsActivity";
     private static final double RADIUS = 20;
     private Marker addNewMarker;
@@ -266,6 +268,8 @@ public class MapsActivity extends AppCompatActivity implements
         mapFragment.getMapAsync(this);
         loginPreferences = getSharedPreferences("loginPrefs", MODE_PRIVATE);
         loginPrefsEditor = loginPreferences.edit();
+        preferences = getSharedPreferences("preferences", MODE_PRIVATE);
+        preferencesEditor = preferences.edit();
 
         locMan = (LocationManager) this.getSystemService(Context.LOCATION_SERVICE);
 
