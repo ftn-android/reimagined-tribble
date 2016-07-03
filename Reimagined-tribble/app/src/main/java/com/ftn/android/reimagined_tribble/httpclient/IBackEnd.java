@@ -38,6 +38,6 @@ public interface IBackEnd {
     @Get("/api/Locations?typeFilter={typeFilter}")
     Location[] getLocations(@Path TypeFilter typeFilter);
 
-    @Get("/api/LocationsLocations?typeFilter={typeFilter}&longitude={longitude}&latitude={latitude}&radius={radius}")
+    @Get("/api/Locations?typeFilter={typeFilter}&longitude={longitude}&latitude={latitude}&radius={radius}")
     Location[] getLocationsByRadius(@Path TypeFilter typeFilter, @Path double longitude, @Path double latitude, @Path double radius);
 }

@@ -26,6 +26,8 @@ import com.afollestad.materialdialogs.simplelist.MaterialSimpleListItem;
 import com.ftn.android.reimagined_tribble.R;
 import com.ftn.android.reimagined_tribble.adapters.AddInfoWindowAdapter;
 import com.ftn.android.reimagined_tribble.adapters.ViewInfoWindowAdapter;
+import com.ftn.android.reimagined_tribble.httpclient.IBackEnd;
+import com.ftn.android.reimagined_tribble.httpclient.TypeFilter;
 import com.ftn.android.reimagined_tribble.model.Entity;
 import com.ftn.android.reimagined_tribble.model.GasStation;
 import com.ftn.android.reimagined_tribble.model.Incident;
@@ -42,16 +44,20 @@ import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 
 import org.androidannotations.annotations.AfterViews;
+import org.androidannotations.annotations.Background;
 import org.androidannotations.annotations.Click;
 import org.androidannotations.annotations.EActivity;
 import org.androidannotations.annotations.FragmentById;
 import org.androidannotations.annotations.OptionsItem;
 import org.androidannotations.annotations.OptionsMenu;
+import org.androidannotations.annotations.UiThread;
 import org.androidannotations.annotations.ViewById;
 import org.androidannotations.annotations.res.StringRes;
+import org.androidannotations.rest.spring.annotations.RestService;
 
 import java.util.HashMap;
 import java.util.Iterator;
+import java.util.List;
 
 /**
  * Created by ftn/tim
@@ -69,11 +75,15 @@ public class MapsActivity extends AppCompatActivity implements
     private SharedPreferences loginPreferences;
     private SharedPreferences.Editor loginPrefsEditor;
     private static final String TAG = "MapsActivity";
+    private static final double RADIUS = 50;
     private Marker addNewMarker;
     private HashMap<String, Entity> markers;
     private MaterialDialog addNewDialog;
     private LatLng tappedLocation;
     private LocationManager locMan;
+
+    @RestService
+    IBackEnd serviceClient;
 
     @FragmentById(R.id.map)
     SupportMapFragment mapFragment;
@@ -99,7 +109,7 @@ public class MapsActivity extends AppCompatActivity implements
     @Override
     public boolean onNavigationItemSelected(MenuItem item) {
         mDrawerLayout.closeDrawers();
-        switch (item.getItemId()){
+        switch (item.getItemId()) {
             case R.id.show_just_incident_menu_drawer:
                 googleMap.clear();
                 loginPrefsEditor.putInt("showEntity", 1);
@@ -127,6 +137,9 @@ public class MapsActivity extends AppCompatActivity implements
             case R.id.call_the_firefighters_menu_drawer:
                 launchPhoneActivity(firefightersPhoneNumber);
                 break;
+            case R.id.refresh:
+                refresh();
+                break;
             case R.id.settings_menu_drawer:
                 settings();
                 break;
@@ -145,14 +158,117 @@ public class MapsActivity extends AppCompatActivity implements
         return true;
     }
 
+    @OptionsItem(R.id.refresh)
+    void refresh() {
+        Log.d(TAG, "Start fetching new data from backend");
+        FetchNewInfoFromBackend();
+    }
+
+    @Background
+    void FetchNewInfoFromBackend() {
+        LatLng latLng;
+        Location location = locMan.getLastKnownLocation(locMan.getBestProvider(new Criteria(), false));
+        if (location != null) {
+            latLng = new LatLng(location.getLatitude(), location.getLongitude());
+        } else {
+            latLng = new LatLng(0, 0);
+            Log.d("FetchNewInfoFromBackend", "Last known location is null");
+        }
+
+        try {
+            com.ftn.android.reimagined_tribble.httpclient.model.Location[] locations =
+                    serviceClient.getLocationsByRadius(
+                            TypeFilter.ALL,
+                            latLng.longitude,
+                            latLng.latitude,
+                            RADIUS);
+            for (com.ftn.android.reimagined_tribble.httpclient.model.Location loc :
+                    locations) {
+                if (loc.isType()) { // Incident
+
+                    // duplicates ?
+                    List<Incident> incidentListDB = Incident.find(Incident.class, "uid = ?", loc.getUid());
+                    if (incidentListDB.size() == 0 ){
+                        Incident incident = new Incident(
+                                loc.getName(),
+                                loc.getDescription(),
+                                true,
+                                loc.getStartDate(),
+                                loc.getImageData(),
+                                loc.getLongitude(),
+                                loc.getLatitude(),
+                                loc.getAdditionalInfo(),
+                                "author ?",
+                                "confirmed ?",
+                                true
+                                ,loc.getUid());
+                        incident.save();
+                    }
+                    else
+                    {
+                        Incident incident = incidentListDB.get(0);
+                        incident.setLongitude(loc.getLongitude());
+                        incident.setLatitude(loc.getLatitude());
+                        incident.setSynchronised(true);
+                        incident.setName(loc.getName());
+                        incident.setDescription(loc.getDescription());
+                        incident.setType(loc.getAdditionalInfo());
+                        incident.setAuthor("author ??");
+                        incident.setConfirmedFrom("list of user ?");
+                        incident.setDate(loc.getStartDate());
+                        incident.setImage(loc.getImageData());
+
+                        incident.save();
+                    }
+
+                } else { // GasStation
+                    List<GasStation> gasStationListDB = GasStation.find(GasStation.class, "uid = ?", loc.getUid());
+                    if (gasStationListDB.size() == 0 ){
+                        GasStation gasStation = new GasStation(
+                                loc.getName(),
+                                loc.getDescription(),
+                                loc.getStartDate(),
+                                loc.getImageData(),
+                                "author ?",
+                                loc.getLatitude(),
+                                loc.getLongitude(),
+                                true,
+                                loc.getUid());
+                        gasStation.save();
+                    }
+                    else
+                    {
+                        GasStation gasStation = gasStationListDB.get(0);
+                        gasStation.setLongitude(loc.getLongitude());
+                        gasStation.setLatitude(loc.getLatitude());
+                        gasStation.setSynchronised(true);
+                        gasStation.setName(loc.getName());
+                        gasStation.setDescription(loc.getDescription());
+                        gasStation.setDate(loc.getStartDate());
+                        gasStation.setImage(loc.getImageData());
+
+                        gasStation.save();
+                    }
+
+                }
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            Log.d(TAG, "Fetching new data from backend : failed");
+        }
+
+        addMarkers();
+    }
+
+
     //Cannot access to android.R.id.home through AndroidAnnotations.
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case android.R.id.home:
-                if(mDrawerLayout.isDrawerOpen(GravityCompat.START)){
+                if (mDrawerLayout.isDrawerOpen(GravityCompat.START)) {
                     mDrawerLayout.closeDrawers();
-                }else{
+                } else {
                     mDrawerLayout.openDrawer(GravityCompat.START);
                 }
 
@@ -163,44 +279,40 @@ public class MapsActivity extends AppCompatActivity implements
     //endregion
 
     @Click(R.id.fab_add_new_incident)
-    protected void clickNewIncident(){
+    protected void clickNewIncident() {
         Location location = locMan.getLastKnownLocation(locMan.getBestProvider(new Criteria(), false));
-        if (location!=null) {
+        if (location != null) {
             LatLng latLng = new LatLng(location.getLatitude(), location.getLongitude());
             AddNewIncidentActivity_.intent(this).location(latLng).start();
-        }
-        else
-        {
+        } else {
             Log.d("clickNewIncident", "Last known location is null");
         }
     }
 
     @Click(R.id.fab_add_new_gas_station)
-    protected void clickNewGasStation(){
+    protected void clickNewGasStation() {
         Location location = locMan.getLastKnownLocation(locMan.getBestProvider(new Criteria(), false));
-        if (location!=null) {
+        if (location != null) {
             LatLng latLng = new LatLng(location.getLatitude(), location.getLongitude());
             AddNewGasStationActivity_.intent(this).location(latLng).start();
-        }
-        else
-        {
+        } else {
             Log.d("clickNewGasStation", "Last known location is null");
         }
     }
 
     @OptionsItem(R.id.settings)
-    void settings(){
+    void settings() {
         SettingsActivity_.intent(this).start();
     }
 
-    private void launchPhoneActivity(String url){
+    private void launchPhoneActivity(String url) {
         Intent intent = new Intent(Intent.ACTION_DIAL);
         intent.setData(Uri.parse("tel:" + url));
         startActivity(intent);
     }
 
     @OptionsItem(R.id.about)
-    void about(){
+    void about() {
         AboutActivity_.intent(this).start();
     }
 
@@ -214,7 +326,7 @@ public class MapsActivity extends AppCompatActivity implements
     }
 
     @OptionsItem(R.id.exit)
-    void exit(){
+    void exit() {
         Intent intent = new Intent(Intent.ACTION_MAIN);
         intent.addCategory(Intent.CATEGORY_HOME);
         intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
@@ -222,7 +334,7 @@ public class MapsActivity extends AppCompatActivity implements
     }
 
     @AfterViews
-    protected void init(){
+    protected void init() {
         markers = new HashMap<>();
         mapFragment.getMapAsync(this);
         loginPreferences = getSharedPreferences("loginPrefs", MODE_PRIVATE);
@@ -237,13 +349,12 @@ public class MapsActivity extends AppCompatActivity implements
         navigationView.setNavigationItemSelectedListener(this);
 
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
-        View header=navigationView.getHeaderView(0);
-        TextView usernameTextView= (TextView)header.findViewById(R.id.menu_drawer_name);
+        View header = navigationView.getHeaderView(0);
+        TextView usernameTextView = (TextView) header.findViewById(R.id.menu_drawer_name);
 
         usernameTextView.setText(loginPreferences.getString("username", "Username"));
 
     }
-
 
 
     /**
@@ -285,10 +396,10 @@ public class MapsActivity extends AppCompatActivity implements
         Criteria crit = new Criteria();
         Location loc = locMan.getLastKnownLocation(locMan.getBestProvider(crit, false));
 
-        if(loc != null) {
+        if (loc != null) {
 
             String email = loginPreferences.getString("username", "");
-            User user = User.find(User.class, "email = ?",email).get(0);
+            User user = User.find(User.class, "email = ?", email).get(0);
 
             user.setLattitude(loc.getLatitude());
             user.setLongitude(loc.getLongitude());
@@ -313,15 +424,15 @@ public class MapsActivity extends AppCompatActivity implements
     protected void onResume() {
         super.onResume();
         int showEntity = loginPreferences.getInt("showEntity", 0);
-        if(showEntity == 1){
+        if (showEntity == 1) {
             navigationView.setCheckedItem(R.id.show_just_incident_menu_drawer);
-        }else if (showEntity == 2){
+        } else if (showEntity == 2) {
             navigationView.setCheckedItem(R.id.show_just_gasstation_menu_drawer);
-        }else if(showEntity == 0) {
+        } else if (showEntity == 0) {
             navigationView.setCheckedItem(R.id.show_gasstation_and_incident_menu_drawer);
         }
 
-        if(googleMap != null) {
+        if (googleMap != null) {
             addMarkers();
         }
     }
@@ -329,7 +440,7 @@ public class MapsActivity extends AppCompatActivity implements
     @Override
     public void onMapClick(LatLng latLng) {
         // Creating a marker
-        if(addNewMarker != null){
+        if (addNewMarker != null) {
             addNewMarker.remove();
         }
 
@@ -354,21 +465,22 @@ public class MapsActivity extends AppCompatActivity implements
         addNewMarker.showInfoWindow();
     }
 
-    private void addMarkers(){
+    @UiThread
+    void addMarkers() {
         int showEntity = loginPreferences.getInt("showEntity", 0);
-        if(showEntity == 1){
+        if (showEntity == 1) {
             addIncidentMarkers();
-        }else if (showEntity == 2){
+        } else if (showEntity == 2) {
             addGasStationMarkers();
-        }else if(showEntity == 0) {
+        } else if (showEntity == 0) {
             addGasStationMarkers();
             addIncidentMarkers();
         }
     }
 
-    private void addGasStationMarkers(){
+    private void addGasStationMarkers() {
         Iterator<GasStation> gasStationIterator = User.findAll(GasStation.class);
-        while (gasStationIterator.hasNext()){
+        while (gasStationIterator.hasNext()) {
             GasStation gs = gasStationIterator.next();
 
             Marker gasstation = googleMap.addMarker(new MarkerOptions()
@@ -382,9 +494,9 @@ public class MapsActivity extends AppCompatActivity implements
         }
     }
 
-    private void addIncidentMarkers(){
+    private void addIncidentMarkers() {
         Iterator<Incident> incidentIterator = User.findAll(Incident.class);
-        while (incidentIterator.hasNext()){
+        while (incidentIterator.hasNext()) {
             Incident incident = incidentIterator.next();
 
             Marker incidentMarker = googleMap.addMarker(new MarkerOptions()
@@ -400,7 +512,7 @@ public class MapsActivity extends AppCompatActivity implements
 
     @Override
     public boolean onMarkerClick(Marker marker) {
-        if(addNewMarker != null) {
+        if (addNewMarker != null) {
             addNewMarker.remove();
         }
         googleMap.setInfoWindowAdapter(new ViewInfoWindowAdapter(getLayoutInflater(), markers.get(marker.getId())));
@@ -416,19 +528,18 @@ public class MapsActivity extends AppCompatActivity implements
 
     @Override
     public void onInfoWindowClick(Marker marker) {
-        if(addNewMarker != null){
+        if (addNewMarker != null) {
             addNewMarker.remove();
         }
 
         Entity entity = markers.get(marker.getId());
-        if(entity != null){
-            if(entity instanceof GasStation){
+        if (entity != null) {
+            if (entity instanceof GasStation) {
                 ViewGasStationActivity_.intent(this).chosenGasStation((GasStation) entity).start();
-            }
-            else if(entity instanceof Incident){
+            } else if (entity instanceof Incident) {
                 ViewIncidentActivity_.intent(this).chosenIncident((Incident) entity).start();
             }
-        }else {
+        } else {
 
             final int ADD_NEW_GAS_STATION = 0;
             final int ADD_NEW_INCIDENT = 1;

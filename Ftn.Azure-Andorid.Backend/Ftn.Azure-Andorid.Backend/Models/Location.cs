@@ -13,7 +13,7 @@ namespace Ftn.Azure_Andorid.Backend.Models
         public DateTime StartDate { get; set; }
         public DateTime EndDate { get; set; }
         public bool Type { get; set; }
-
+        public string AdditionalInfo { get; set; }
         public string UID { get; set; }
         public byte[] ImageData { get; set; }
     }

@@ -151,7 +151,7 @@ public class AddNewIncidentActivity extends AppCompatActivity {
                 incidentType,
                 userName,
                 "",
-                false,
+                true,
                 java.util.UUID.randomUUID().toString());
 
         try {
@@ -190,6 +190,7 @@ public class AddNewIncidentActivity extends AppCompatActivity {
                 incident.getDate(),
                 formattedEndDate,
                 true,
+                incident.getType(),
                 incident.getImage(),
                 incident.getUID());
         try {

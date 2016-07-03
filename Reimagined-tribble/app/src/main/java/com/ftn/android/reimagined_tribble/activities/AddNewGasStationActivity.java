@@ -160,6 +160,7 @@ public class AddNewGasStationActivity extends AppCompatActivity {
                 gasStation.getDate(),
                 "2020-01-01",
                 false,
+                "",
                 gasStation.getImage(),
                 gasStation.getUID());
         try {
