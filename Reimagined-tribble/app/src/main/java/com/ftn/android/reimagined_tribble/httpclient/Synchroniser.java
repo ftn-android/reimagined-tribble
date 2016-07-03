@@ -79,19 +79,7 @@ public class Synchroniser {
             incident.save();
             Log.d(TAG, "+1 Incident");
         } else {
-            Incident incident = incidentListDB.get(0);
-            incident.setLongitude(loc.getLongitude());
-            incident.setLatitude(loc.getLatitude());
-            incident.setSynchronised(true);
-            incident.setName(loc.getName());
-            incident.setDescription(loc.getDescription());
-            incident.setType(loc.getIncidentType());
-            incident.setAuthor(loc.getAuthor());
-            incident.setConfirmedFrom(loc.getConfirmedFrom());
-            incident.setStartDate(loc.getStartDate());
-            incident.setImage(loc.getImageData());
-            incident.setEndDate(new Date(loc.getEndDate()).getTime());
-            incident.save();
+            LocationToIncident(loc,incidentListDB);
             Log.d(TAG, "updated Incident");
         }
     }
@@ -220,5 +208,24 @@ public class Synchroniser {
                 incident.getAuthor(),
                 incident.getConfirmedFrom(),
                 incident.getUID());
+    }
+
+    public static Incident LocationToIncident(Location loc, List<Incident> incidentListDB)
+    {
+        Incident incident = incidentListDB.get(0);
+        incident.setLongitude(loc.getLongitude());
+        incident.setLatitude(loc.getLatitude());
+        incident.setSynchronised(true);
+        incident.setName(loc.getName());
+        incident.setDescription(loc.getDescription());
+        incident.setType(loc.getIncidentType());
+        incident.setAuthor(loc.getAuthor());
+        incident.setConfirmedFrom(loc.getConfirmedFrom());
+        incident.setStartDate(loc.getStartDate());
+        incident.setImage(loc.getImageData());
+        incident.setEndDate(new Date(loc.getEndDate()).getTime());
+        incident.save();
+
+        return incident;
     }
 }

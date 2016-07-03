@@ -24,6 +24,7 @@ import org.androidannotations.annotations.Background;
 import org.androidannotations.annotations.Click;
 import org.androidannotations.annotations.EActivity;
 import org.androidannotations.annotations.Extra;
+import org.androidannotations.annotations.UiThread;
 import org.androidannotations.annotations.ViewById;
 import org.androidannotations.rest.spring.annotations.RestService;
 
@@ -91,6 +92,27 @@ public class ViewIncidentActivity extends AppCompatActivity {
         final ImageView imageView = (ImageView) findViewById(R.id.backdrop);
         Glide.with(this).load(chosenIncident.getImage()).error(R.drawable.ic_photo_placeholder).into(imageView);
 
+        updateChosenIncident(false);
+    }
+
+    @Click(R.id.fab_view_gas_station)
+    protected void clickRefresh() {
+
+        updateIncident(chosenIncident);
+        Snackbar.make(container, "Incident is still there..", Snackbar.LENGTH_SHORT).show();
+    }
+
+    @UiThread
+    void updateChosenIncident(boolean fetchFromDB)
+    {
+        if (fetchFromDB)
+        {
+            List<Incident> incidentListDB = Incident.find(Incident.class, "uid = ?", chosenIncident.getUID());
+            if (incidentListDB.size() > 0) {
+                chosenIncident = incidentListDB.get(0);
+            }
+        }
+
         Geocoder geocoder;
         List<Address> addresses = new ArrayList<>();
         geocoder = new Geocoder(this, Locale.getDefault());
@@ -116,13 +138,6 @@ public class ViewIncidentActivity extends AppCompatActivity {
         incidentValidUntil.setText(df.format(new Date(chosenIncident.getEndDate())));
     }
 
-    @Click(R.id.fab_view_gas_station)
-    protected void clickRefresh() {
-
-        updateIncident(chosenIncident);
-        Snackbar.make(container, "Incident is still there..", Snackbar.LENGTH_SHORT).show();
-    }
-
     @Background
     void updateIncident(Incident incident) {
         try {
@@ -136,9 +151,16 @@ public class ViewIncidentActivity extends AppCompatActivity {
             incident.setImage(new byte[] {0});
             Location location = Synchroniser.IncidentToLocation(incident);
             Log.d("View Incident",location.toString());
-            serviceClient.updateLocation(incident.getUID(), location);
+            Location location1 = serviceClient.updateLocation(incident.getUID(), location);
 
+            if (location1 != null) {
+                List<Incident> incidentListDB = Incident.find(Incident.class, "uid = ?", location1.getUid());
 
+                // TODO picture will be downloaded anyways if we refresh like this but thats fine for now
+                chosenIncident = Synchroniser.LocationToIncident(location1, incidentListDB);
+
+                updateChosenIncident(true);
+            }
         } catch (Exception e) {
             e.printStackTrace();
         }
