@@ -32,8 +32,8 @@ public interface IBackEnd {
     @Post("/api/Locations")
     Location addNewLocation(@Body Location location);
 
-    @Put("/api/Locations/{id}")
-    Location updateLocation(@Path int id, @Body Location location);
+    @Put("/api/Locations?uid={uid}")
+    void updateLocation(@Path String uid, @Body Location location);
 
     @Get("/api/Locations?typeFilter={typeFilter}")
     Location[] getLocations(@Path TypeFilter typeFilter);

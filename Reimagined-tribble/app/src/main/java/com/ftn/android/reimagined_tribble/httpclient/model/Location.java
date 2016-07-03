@@ -2,6 +2,8 @@ package com.ftn.android.reimagined_tribble.httpclient.model;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 
+import java.util.Arrays;
+
 /**
  * Created by Jozef on 7/2/2016.
  */
@@ -169,4 +171,22 @@ public class Location {
         this.type = type;
     }
 
+    @Override
+    public String toString() {
+        return "Location{" +
+                "id=" + id +
+                ", latitude=" + latitude +
+                ", longitude=" + longitude +
+                ", name='" + name + '\'' +
+                ", description='" + description + '\'' +
+                ", startDate='" + startDate + '\'' +
+                ", endDate=" + endDate +
+                ", type=" + type +
+                ", incidentType='" + incidentType + '\'' +
+                ", imageData=" + Arrays.toString(imageData) +
+                ", author='" + author + '\'' +
+                ", confirmedFrom='" + confirmedFrom + '\'' +
+                ", uid='" + uid + '\'' +
+                '}';
+    }
 }
