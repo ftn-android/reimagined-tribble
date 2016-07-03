@@ -421,7 +421,7 @@ public class MapsActivity extends AppCompatActivity implements
     }
 
     private void addIncidentMarkers() {
-        List<Incident> incidentList = Incident.find(Incident.class,"enddate > ?", (new Date().getTime())+"");
+        List<Incident> incidentList = Incident.find(Incident.class, "end_date >= ?", (new Date().getTime()) + "");
         for (Incident incident : incidentList){
 
             Bitmap incidentBitmap = ColorChangesUtil.changeColor(getResources(), "#cc0000", R.drawable.ic_sms_failed_black_36dp);
