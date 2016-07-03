@@ -1,2 +1,2 @@
 # reimagined-tribble
-try to commit from another machine
+Get informed about incidents and gas stations all over the world.
