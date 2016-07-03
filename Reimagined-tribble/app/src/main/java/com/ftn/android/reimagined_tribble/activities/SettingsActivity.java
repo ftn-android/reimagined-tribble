@@ -62,6 +62,7 @@ public class SettingsActivity extends AppCompatPreferenceActivity {
     @PreferenceChange(R.string.pref_key_radius)
     protected void radius(String radius){
         preferencesEditor.putFloat("radius", Float.parseFloat(radius));
+        preferencesEditor.commit();
     }
 
     @PreferenceClick(R.string.pref_key_purge_data_on_phone)
