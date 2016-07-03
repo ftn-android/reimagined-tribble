@@ -1,18 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
 <PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
 
-    <SwitchPreference
-        android:key="@string/pref_key_start_gps_with_app"
-        android:title="@string/pref_title_start_gps_with_app"
-        android:summary="@string/pref_summary_start_gps_with_app"
-        android:defaultValue="true"
-        />
-
-    <SwitchPreference
-        android:key="@string/pref_key_keep_data_on_phone"
-        android:title="@string/pref_title_keep_data_on_phone"
-        android:summary="@string/pref_summary_keep_data_on_phone"
-        android:defaultValue="true"
+    <ListPreference
+        android:key="@string/pref_key_radius"
+        android:title="@string/pref_title_radius"
+        android:summary="@string/pref_summary_radius"
+        android:entries="@array/radius_entry_aliases"
+        android:entryValues="@array/radius_entry_values"
+        android:defaultValue="50"
+        android:positiveButtonText="OK"
         />
 
     <Preference
@@ -22,17 +18,12 @@
         />
 
     <SwitchPreference
-        android:key="@string/pref_key_auto_sync"
-        android:title="@string/pref_title_auto_sync"
-        android:summary="@string/pref_summary_auto_sync"
-        android:defaultValue="true"
-        />
-
-    <SwitchPreference
         android:key="@string/pref_key_auto_download_pictures"
         android:title="@string/pref_summary_auto_download_pictures"
         android:defaultValue="true"
         />
+
+
 
 
 </PreferenceScreen>

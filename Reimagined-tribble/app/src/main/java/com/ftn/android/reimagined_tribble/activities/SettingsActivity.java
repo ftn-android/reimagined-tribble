@@ -2,6 +2,7 @@ package com.ftn.android.reimagined_tribble.activities;
 
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.preference.ListPreference;
 import android.preference.Preference;
 import android.preference.SwitchPreference;
 import android.support.annotation.NonNull;
@@ -44,17 +45,11 @@ public class SettingsActivity extends AppCompatPreferenceActivity {
 
     }
 
-    @PreferenceByKey(R.string.pref_key_start_gps_with_app)
-    SwitchPreference startGpsWithApp;
-
-    @PreferenceByKey(R.string.pref_key_keep_data_on_phone)
-    SwitchPreference keepDataOnPhone;
+    @PreferenceByKey(R.string.pref_key_radius)
+    ListPreference radius;
 
     @PreferenceByKey(R.string.pref_key_purge_data_on_phone)
     Preference purgeDataOnPhone;
-
-    @PreferenceByKey(R.string.pref_key_auto_sync)
-    SwitchPreference autoSync;
 
     @PreferenceByKey(R.string.pref_key_auto_download_pictures)
     SwitchPreference autoDownloadPictures;
@@ -62,6 +57,11 @@ public class SettingsActivity extends AppCompatPreferenceActivity {
     @PreferenceChange(R.string.pref_key_auto_download_pictures)
     protected void autoDownloadPictures(boolean newValue){
         preferencesEditor.putBoolean("autoDownloadPictures", newValue);
+    }
+
+    @PreferenceChange(R.string.pref_key_radius)
+    protected void radius(String radius){
+        preferencesEditor.putFloat("radius", Float.parseFloat(radius));
     }
 
     @PreferenceClick(R.string.pref_key_purge_data_on_phone)

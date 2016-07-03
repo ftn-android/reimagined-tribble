@@ -74,6 +74,9 @@
     <string name="pref_key_purge_data_on_phone">pref_purge_data_on_phone</string>
     <string name="pref_key_auto_sync">pref_auto-sync</string>
     <string name="pref_key_auto_download_pictures">pref_auto-download_pictures</string>
+    <string name="pref_summary_radius">Select area beam for gas stations and incidents</string>
+    <string name="pref_title_radius">Radius</string>
+    <string name="pref_key_radius">pref_radius</string>
 
 
     <string-array name="incident_types">
@@ -84,5 +87,6 @@
         <item>Firefighter block</item>
         <item>Bridge repair</item>
     </string-array>
+
 
 </resources>
