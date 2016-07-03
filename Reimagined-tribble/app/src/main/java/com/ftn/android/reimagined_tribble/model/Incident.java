@@ -13,7 +13,8 @@ public class Incident extends SugarRecord implements Entity, Serializable {
     private String name;
     private String description;
     private boolean active;
-    private String date;
+    private String startDate;
+    private long endDate;
     private byte[] image;
     private double longitude;
     private double latitude;
@@ -22,6 +23,14 @@ public class Incident extends SugarRecord implements Entity, Serializable {
     private String confirmedFrom;
     private boolean synchronised;
     private String UID;
+
+    public long getEndDate() {
+        return endDate;
+    }
+
+    public void setEndDate(long endDate) {
+        this.endDate = endDate;
+    }
 
     public String getUID() {
         return UID;
@@ -35,11 +44,12 @@ public class Incident extends SugarRecord implements Entity, Serializable {
         //this.confirmedFrom = new ArrayList<>();
     }
 
-    public Incident(String name, String description, boolean active, String date, byte[] image, double longitude, double latitude, String type, String author, String confirmedFrom, boolean synchronised, String UID) {
+    public Incident(String name, String description, boolean active, String startDate, long endDate, byte[] image, double longitude, double latitude, String type, String author, String confirmedFrom, boolean synchronised, String UID) {
         this.name = name;
         this.description = description;
         this.active = active;
-        this.date = date;
+        this.startDate = startDate;
+        this.endDate = endDate;
         this.image = image;
         this.longitude = longitude;
         this.latitude = latitude;
@@ -88,12 +98,12 @@ public class Incident extends SugarRecord implements Entity, Serializable {
         this.active = active;
     }
 
-    public String getDate() {
-        return date;
+    public String getStartDate() {
+        return startDate;
     }
 
-    public void setDate(String date) {
-        this.date = date;
+    public void setStartDate(String startDate) {
+        this.startDate = startDate;
     }
 
     @Override
@@ -151,14 +161,16 @@ public class Incident extends SugarRecord implements Entity, Serializable {
                 "name='" + name + '\'' +
                 ", description='" + description + '\'' +
                 ", active=" + active +
-                ", date='" + date + '\'' +
+                ", startDate='" + startDate + '\'' +
+                ", endDate=" + endDate +
                 ", image=" + Arrays.toString(image) +
                 ", longitude=" + longitude +
                 ", latitude=" + latitude +
                 ", type='" + type + '\'' +
                 ", author='" + author + '\'' +
-                ", confirmedFrom=" + confirmedFrom +
+                ", confirmedFrom='" + confirmedFrom + '\'' +
                 ", synchronised=" + synchronised +
+                ", UID='" + UID + '\'' +
                 '}';
     }
 }

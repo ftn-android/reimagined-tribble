@@ -10,7 +10,6 @@ import com.google.android.gms.maps.model.LatLng;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
-import java.util.concurrent.TimeUnit;
 
 /**
  * Created by Jozef on 7/3/2016.
@@ -18,8 +17,8 @@ import java.util.concurrent.TimeUnit;
 public class Synchroniser {
 
     IBackEnd serviceClient;
-    private final String TAG = "Synchroniser";
-    private final long PLUSHOUR = (long)6;
+    private static final String TAG = "Synchroniser";
+    public static final long PLUSHOUR = (long)6;
 
     public Synchroniser(IBackEnd serviceClient) {
         this.serviceClient = serviceClient;
@@ -33,7 +32,7 @@ public class Synchroniser {
                     loc.getDescription(),
                     loc.getStartDate(),
                     loc.getImageData(),
-                    "author ?",
+                    loc.getAuthor(),
                     loc.getLatitude(),
                     loc.getLongitude(),
                     true,
@@ -49,6 +48,7 @@ public class Synchroniser {
             gasStation.setDescription(loc.getDescription());
             gasStation.setDate(loc.getStartDate());
             gasStation.setImage(loc.getImageData());
+            gasStation.setUser(loc.getAuthor());
 
             gasStation.save();
             Log.d(TAG, "updated GasStation");
@@ -64,12 +64,13 @@ public class Synchroniser {
                     loc.getDescription(),
                     true,
                     loc.getStartDate(),
+                    new Date(loc.getEndDate()).getTime(),
                     loc.getImageData(),
                     loc.getLongitude(),
                     loc.getLatitude(),
-                    loc.getAdditionalInfo(),
-                    "author ?",
-                    "confirmed ?",
+                    loc.getIncidentType(),
+                    loc.getAuthor(),
+                    loc.getConfirmedFrom(),
                     true
                     , loc.getUid());
             incident.save();
@@ -81,12 +82,12 @@ public class Synchroniser {
             incident.setSynchronised(true);
             incident.setName(loc.getName());
             incident.setDescription(loc.getDescription());
-            incident.setType(loc.getAdditionalInfo());
-            incident.setAuthor("author ??");
-            incident.setConfirmedFrom("list of user ?");
-            incident.setDate(loc.getStartDate());
+            incident.setType(loc.getIncidentType());
+            incident.setAuthor(loc.getAuthor());
+            incident.setConfirmedFrom(loc.getConfirmedFrom());
+            incident.setStartDate(loc.getStartDate());
             incident.setImage(loc.getImageData());
-
+            incident.setEndDate(new Date(loc.getEndDate()).getTime());
             incident.save();
             Log.d(TAG, "updated Incident");
         }
@@ -145,6 +146,8 @@ public class Synchroniser {
                 false,
                 "",
                 gasStation.getImage(),
+                gasStation.getUser(),
+                "",
                 gasStation.getUID());
         try {
             if (saveFrist) {
@@ -166,22 +169,22 @@ public class Synchroniser {
 
     public void AddNewIncident(Incident incident, boolean saveFrist) {
 
-        Date oldDate = new Date(); // oldDate == current time
-        Date endDate = new Date(oldDate.getTime() + TimeUnit.HOURS.toMillis(PLUSHOUR));
+        Date endDate = new Date(incident.getEndDate());
 
         SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss");
         String formattedEndDate = df.format(endDate.getTime());
-
         Location location = new Location(0,
                 incident.getLatitude(),
                 incident.getLongitude(),
                 incident.getName(),
                 incident.getDescription(),
-                incident.getDate(),
+                incident.getStartDate(),
                 formattedEndDate,
                 true,
                 incident.getType(),
                 incident.getImage(),
+                incident.getAuthor(),
+                incident.getConfirmedFrom(),
                 incident.getUID());
         try {
             if (saveFrist) {

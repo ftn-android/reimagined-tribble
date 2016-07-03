@@ -37,6 +37,8 @@ import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
+import java.util.Date;
+import java.util.concurrent.TimeUnit;
 
 import pl.aprilapps.easyphotopicker.DefaultCallback;
 import pl.aprilapps.easyphotopicker.EasyImage;
@@ -144,6 +146,7 @@ public class AddNewIncidentActivity extends AppCompatActivity {
                 incidentDescription,
                 true,
                 formattedDate,
+                new Date().getTime() + TimeUnit.HOURS.toMillis(Synchroniser.PLUSHOUR),
                 new byte[]{0},
                 location.longitude,
                 location.latitude,

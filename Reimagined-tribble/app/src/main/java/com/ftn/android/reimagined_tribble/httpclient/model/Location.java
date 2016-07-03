@@ -2,8 +2,6 @@ package com.ftn.android.reimagined_tribble.httpclient.model;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 
-import java.util.Arrays;
-
 /**
  * Created by Jozef on 7/2/2016.
  */
@@ -25,23 +23,58 @@ public class Location {
     private String endDate;
     @JsonProperty("Type")
     private boolean type;
-    @JsonProperty("AdditionalInfo")
-    private String additionalInfo;
+    @JsonProperty("IncidentType")
+    private String incidentType;
     @JsonProperty("ImageData")
     private byte[] imageData;
-
+    @JsonProperty("Author")
+    private String author;
+    @JsonProperty("ConfirmedFrom")
+    private String confirmedFrom;
     @JsonProperty("UID")
     private String uid;
 
+    public Location(int id, double latitude, double longitude, String name, String description, String startDate, String endDate, boolean type, String incidentType, byte[] imageData, String author, String confirmedFrom, String uid) {
+        this.id = id;
+        this.latitude = latitude;
+        this.longitude = longitude;
+        this.name = name;
+        this.description = description;
+        this.startDate = startDate;
+        this.endDate = endDate;
+        this.type = type;
+        this.incidentType = incidentType;
+        this.imageData = imageData;
+        this.author = author;
+        this.confirmedFrom = confirmedFrom;
+        this.uid = uid;
+    }
+
+    public String getIncidentType() {
+        return incidentType;
+    }
+
+    public void setIncidentType(String incidentType) {
+        this.incidentType = incidentType;
+    }
+
+    public String getAuthor() {
+        return author;
+    }
+
+    public void setAuthor(String author) {
+        this.author = author;
+    }
+
+    public String getConfirmedFrom() {
+        return confirmedFrom;
+    }
+
+    public void setConfirmedFrom(String confirmedFrom) {
+        this.confirmedFrom = confirmedFrom;
+    }
+
     public Location() {
-    }
-
-    public String getAdditionalInfo() {
-        return additionalInfo;
-    }
-
-    public void setAdditionalInfo(String additionalInfo) {
-        this.additionalInfo = additionalInfo;
     }
 
     public String getUid() {
@@ -70,20 +103,6 @@ public class Location {
 
     public void setImageData(byte[] imageData) {
         this.imageData = imageData;
-    }
-
-    public Location(int id, double latitude, double longitude, String name, String description, String startDate, String endDate, boolean type, String additionalInfo, byte[] imageData, String uid) {
-        this.id = id;
-        this.latitude = latitude;
-        this.longitude = longitude;
-        this.name = name;
-        this.description = description;
-        this.startDate = startDate;
-        this.endDate = endDate;
-        this.type = type;
-        this.additionalInfo = additionalInfo;
-        this.imageData = imageData;
-        this.uid = uid;
     }
 
     public int getId() {
@@ -150,18 +169,4 @@ public class Location {
         this.type = type;
     }
 
-    @Override
-    public String toString() {
-        return "Location{" +
-                "id=" + id +
-                ", latitude=" + latitude +
-                ", longitude=" + longitude +
-                ", name='" + name + '\'' +
-                ", description='" + description + '\'' +
-                ", startDate='" + startDate + '\'' +
-                ", endDate='" + endDate + '\'' +
-                ", type=" + type +
-                ", imageData=" + Arrays.toString(imageData) +
-                '}';
-    }
 }

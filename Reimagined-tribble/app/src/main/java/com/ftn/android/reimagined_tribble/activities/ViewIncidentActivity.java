@@ -84,7 +84,7 @@ public class ViewIncidentActivity extends AppCompatActivity {
         incidentName.setText(chosenIncident.getName());
         incidentCity.setText(cityCountry);
         incidentStreet.setText(address);
-        incidentCreatedOn.setText(chosenIncident.getDate());
+        incidentCreatedOn.setText(chosenIncident.getStartDate());
         incidentDescription.setText(chosenIncident.getDescription());
         incidentType.setText(chosenIncident.getType());
     }

@@ -57,8 +57,10 @@ import org.androidannotations.annotations.ViewById;
 import org.androidannotations.annotations.res.StringRes;
 import org.androidannotations.rest.spring.annotations.RestService;
 
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Iterator;
+import java.util.List;
 
 /**
  * Created by ftn/tim
@@ -419,9 +421,8 @@ public class MapsActivity extends AppCompatActivity implements
     }
 
     private void addIncidentMarkers() {
-        Iterator<Incident> incidentIterator = User.findAll(Incident.class);
-        while (incidentIterator.hasNext()) {
-            Incident incident = incidentIterator.next();
+        List<Incident> incidentList = Incident.find(Incident.class,"enddate > ?", (new Date().getTime())+"");
+        for (Incident incident : incidentList){
 
             Bitmap incidentBitmap = ColorChangesUtil.changeColor(getResources(), "#cc0000", R.drawable.ic_sms_failed_black_36dp);
             Marker incidentMarker = googleMap.addMarker(new MarkerOptions()
