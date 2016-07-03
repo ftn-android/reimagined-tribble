@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
+import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.location.Criteria;
 import android.location.Location;
@@ -32,6 +33,7 @@ import com.ftn.android.reimagined_tribble.model.Entity;
 import com.ftn.android.reimagined_tribble.model.GasStation;
 import com.ftn.android.reimagined_tribble.model.Incident;
 import com.ftn.android.reimagined_tribble.model.User;
+import com.ftn.android.reimagined_tribble.utils.ColorChangesUtil;
 import com.google.android.gms.maps.CameraUpdate;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
@@ -483,11 +485,12 @@ public class MapsActivity extends AppCompatActivity implements
         while (gasStationIterator.hasNext()) {
             GasStation gs = gasStationIterator.next();
 
+            Bitmap gasStationBitmap = ColorChangesUtil.changeColor(getResources(), "#33cc33", R.drawable.ic_local_gas_station_black_36dp);
             Marker gasstation = googleMap.addMarker(new MarkerOptions()
                     .position(new LatLng(gs.getLattitude(), gs.getLongittude()))
                     .title(gs.getName())
                     .snippet(gs.getDescription())
-                    .icon(BitmapDescriptorFactory.fromResource(R.drawable.ic_local_gas_station_black_36dp))
+                    .icon(BitmapDescriptorFactory.fromBitmap(gasStationBitmap))
             );
 
             markers.put(gasstation.getId(), gs);
@@ -499,11 +502,12 @@ public class MapsActivity extends AppCompatActivity implements
         while (incidentIterator.hasNext()) {
             Incident incident = incidentIterator.next();
 
+            Bitmap incidentBitmap = ColorChangesUtil.changeColor(getResources(), "#cc0000", R.drawable.ic_sms_failed_black_36dp);
             Marker incidentMarker = googleMap.addMarker(new MarkerOptions()
                     .position(new LatLng(incident.getLatitude(), incident.getLongitude()))
                     .title(incident.getName())
                     .snippet(incident.getDescription())
-                    .icon(BitmapDescriptorFactory.fromResource(R.drawable.ic_sms_failed_black_36dp))
+                    .icon(BitmapDescriptorFactory.fromBitmap(incidentBitmap))
             );
 
             markers.put(incidentMarker.getId(), incident);
