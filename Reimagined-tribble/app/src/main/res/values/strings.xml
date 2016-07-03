@@ -77,6 +77,8 @@
     <string name="pref_summary_radius">Select area beam for gas stations and incidents</string>
     <string name="pref_title_radius">Radius</string>
     <string name="pref_key_radius">pref_radius</string>
+    <string name="view_incident_confirmed_by">Confirmed By:</string>
+    <string name="view_incident_valid_until">Valid until:</string>
 
 
     <string-array name="incident_types">

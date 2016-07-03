@@ -21,7 +21,9 @@ import org.androidannotations.annotations.Extra;
 import org.androidannotations.annotations.ViewById;
 
 import java.io.IOException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 
@@ -55,6 +57,12 @@ public class ViewIncidentActivity extends AppCompatActivity {
     @ViewById(R.id.view_incident_description)
     TextView incidentDescription;
 
+    @ViewById(R.id.view_confirmed_by)
+    TextView incidentConfirmedBy;
+
+    @ViewById(R.id.view_valid_until)
+    TextView incidentValidUntil;
+
     @AfterViews
     protected void init(){
         final Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
@@ -81,12 +89,16 @@ public class ViewIncidentActivity extends AppCompatActivity {
         String address = addresses.get(0).getAddressLine(0);
         String cityCountry = addresses.get(0).getLocality() + ", " + addresses.get(0).getCountryName();
 
+        SimpleDateFormat df = new SimpleDateFormat("dd-MMM-yyyy, HH:mm");
+
         incidentName.setText(chosenIncident.getName());
         incidentCity.setText(cityCountry);
         incidentStreet.setText(address);
         incidentCreatedOn.setText(chosenIncident.getStartDate());
         incidentDescription.setText(chosenIncident.getDescription());
         incidentType.setText(chosenIncident.getType());
+        incidentConfirmedBy.setText(chosenIncident.getConfirmedFrom());
+        incidentValidUntil.setText(df.format(new Date(chosenIncident.getEndDate())));
     }
 
     @Click(R.id.fab_view_gas_station)
