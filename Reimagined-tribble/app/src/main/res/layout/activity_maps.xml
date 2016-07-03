@@ -32,7 +32,7 @@
         fab:fab_addButtonPlusIconColor="@color/white"
         fab:fab_addButtonStrokeVisible="false"
         fab:fab_expandDirection="down"
-        android:layout_marginTop="16dp"
+        android:layout_marginTop="32dp"
         android:layout_marginRight="16dp"
         android:layout_marginEnd="16dp"
         fab:fab_labelsPosition="right"
