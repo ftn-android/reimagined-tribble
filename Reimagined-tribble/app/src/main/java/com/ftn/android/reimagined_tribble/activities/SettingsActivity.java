@@ -16,6 +16,7 @@ import com.ftn.android.reimagined_tribble.model.User;
 import org.androidannotations.annotations.AfterPreferences;
 import org.androidannotations.annotations.EActivity;
 import org.androidannotations.annotations.PreferenceByKey;
+import org.androidannotations.annotations.PreferenceChange;
 import org.androidannotations.annotations.PreferenceClick;
 import org.androidannotations.annotations.PreferenceScreen;
 
@@ -31,11 +32,16 @@ public class SettingsActivity extends AppCompatPreferenceActivity {
 
     private SharedPreferences loginPreferences;
     private SharedPreferences.Editor loginPrefsEditor;
+    private SharedPreferences preferences;
+    private SharedPreferences.Editor preferencesEditor;
 
     @AfterPreferences
     protected void init(){
         loginPreferences = getSharedPreferences("loginPrefs", MODE_PRIVATE);
         loginPrefsEditor = loginPreferences.edit();
+        preferences = getSharedPreferences("preferences", MODE_PRIVATE);
+        preferencesEditor = preferences.edit();
+
     }
 
     @PreferenceByKey(R.string.pref_key_start_gps_with_app)
@@ -52,6 +58,11 @@ public class SettingsActivity extends AppCompatPreferenceActivity {
 
     @PreferenceByKey(R.string.pref_key_auto_download_pictures)
     SwitchPreference autoDownloadPictures;
+
+    @PreferenceChange(R.string.pref_key_auto_download_pictures)
+    protected void autoDownloadPictures(boolean newValue){
+        preferencesEditor.putBoolean("autoDownloadPictures", newValue);
+    }
 
     @PreferenceClick(R.string.pref_key_purge_data_on_phone)
     protected void purgeDataOnPhone(){
