@@ -176,6 +176,7 @@ public class MapsActivity extends AppCompatActivity implements
 
         Synchroniser sync = new Synchroniser(serviceClient);
         sync.FetchAllLocation(latLng,RADIUS);
+        sync.UploadAllLocation();
 
         addMarkers();
     }

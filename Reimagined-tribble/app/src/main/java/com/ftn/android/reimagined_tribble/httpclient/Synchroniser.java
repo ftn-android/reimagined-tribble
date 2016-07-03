@@ -116,8 +116,17 @@ public class Synchroniser {
     }
 
     public void UploadAllLocation() {
+        for (Incident incident :
+                Incident.find(Incident.class, "synchronised = ?", "0")) {
+            Log.d(TAG, incident.getName() + " Incident uploading...");
+            AddNewIncident(incident, false);
+        }
 
-
+        for (GasStation gasStation :
+                GasStation.find(GasStation.class, "synchronised = ?", "0")) {
+            Log.d(TAG, gasStation.getName() + " GasStation uploading...");
+            AddNewGasStation(gasStation, false);
+        }
     }
 
     public void AddNewGasStation(GasStation gasStation) {
