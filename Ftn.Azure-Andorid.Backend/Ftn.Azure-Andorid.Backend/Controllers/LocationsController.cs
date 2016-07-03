@@ -7,6 +7,7 @@ using System.Net;
 using System.Web.Http;
 using System.Web.Http.Description;
 using Ftn.Azure_Andorid.Backend.Models;
+using Ftn.Azure_Andorid.Backend.Helpers;
 
 namespace Ftn.Azure_Andorid.Backend.Controllers
 {
@@ -17,7 +18,7 @@ namespace Ftn.Azure_Andorid.Backend.Controllers
         // GET: api/Locations/{typeFilter}
         public IQueryable<Location> GetLocations(string typeFilter, double? longitude = null, double? latitude = null, double? radius = null)
         {
-            long longDateNow = DateTime.UtcNow.ToFileTimeUtc();
+            var longDateNow = DateTimeHelper.ToUnixTime(DateTime.Now);
             var temp = db.Locations.Where(l => l.EndDate > longDateNow);
 
             switch (typeFilter.ToLower())

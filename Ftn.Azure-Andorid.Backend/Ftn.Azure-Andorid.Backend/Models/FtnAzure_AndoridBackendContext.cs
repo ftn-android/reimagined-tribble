@@ -18,5 +18,6 @@ namespace Ftn.Azure_Andorid.Backend.Models
         public System.Data.Entity.DbSet<Ftn.Azure_Andorid.Backend.Models.User> Users { get; set; }
 
         public System.Data.Entity.DbSet<Ftn.Azure_Andorid.Backend.Models.Location> Locations { get; set; }
+
     }
 }

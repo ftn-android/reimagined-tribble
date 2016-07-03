@@ -207,6 +207,7 @@
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
+    <Compile Include="Helpers\DateTimeHelper.cs" />
     <Compile Include="Models\FtnAzure_AndoridBackendContext.cs" />
     <Compile Include="Models\Location.cs" />
     <Compile Include="Models\User.cs" />
