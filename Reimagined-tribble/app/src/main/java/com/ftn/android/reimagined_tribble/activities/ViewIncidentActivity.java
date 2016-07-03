@@ -1,29 +1,37 @@
 package com.ftn.android.reimagined_tribble.activities;
 
+import android.content.SharedPreferences;
 import android.location.Address;
 import android.location.Geocoder;
 import android.support.design.widget.CollapsingToolbarLayout;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 import com.ftn.android.reimagined_tribble.R;
+import com.ftn.android.reimagined_tribble.httpclient.IBackEnd;
+import com.ftn.android.reimagined_tribble.httpclient.Synchroniser;
+import com.ftn.android.reimagined_tribble.httpclient.model.Location;
 import com.ftn.android.reimagined_tribble.model.Incident;
 
 import org.androidannotations.annotations.AfterViews;
+import org.androidannotations.annotations.Background;
 import org.androidannotations.annotations.Click;
 import org.androidannotations.annotations.EActivity;
 import org.androidannotations.annotations.Extra;
 import org.androidannotations.annotations.ViewById;
+import org.androidannotations.rest.spring.annotations.RestService;
 
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
+import java.util.concurrent.TimeUnit;
 
 /**
  * Created by ftn/tim
@@ -33,6 +41,9 @@ public class ViewIncidentActivity extends AppCompatActivity {
 
     @Extra
     Incident chosenIncident;
+
+    @RestService
+    IBackEnd serviceClient;
 
     @ViewById(R.id.view_incident_container)
     LinearLayout container;
@@ -55,11 +66,15 @@ public class ViewIncidentActivity extends AppCompatActivity {
     @ViewById(R.id.view_incident_description)
     TextView incidentDescription;
 
+    private SharedPreferences loginPreferences;
+
     @AfterViews
-    protected void init(){
+    protected void init() {
         final Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+
+        loginPreferences = getSharedPreferences("loginPrefs", MODE_PRIVATE);
 
         CollapsingToolbarLayout collapsingToolbar =
                 (CollapsingToolbarLayout) findViewById(R.id.collapsing_toolbar);
@@ -90,8 +105,25 @@ public class ViewIncidentActivity extends AppCompatActivity {
     }
 
     @Click(R.id.fab_view_gas_station)
-    protected void clickRefresh(){
-        //TODO Need to implement business logic here
-        Snackbar.make(container, "snackbar", Snackbar.LENGTH_SHORT).show();
+    protected void clickRefresh() {
+
+        updateIncident(chosenIncident);
+        Snackbar.make(container, "Incident is still there..", Snackbar.LENGTH_SHORT).show();
+    }
+
+    @Background
+    void updateIncident(Incident incident) {
+        try {
+            incident.setEndDate(incident.getEndDate() + TimeUnit.HOURS.toMillis(Synchroniser.PLUSHOUR));
+            String userName = loginPreferences.getString("username", "");
+            incident.setConfirmedFrom(userName);
+
+            Location location = Synchroniser.IncidentToLocation(incident);
+            Log.d("View Incident",location.toString());
+            serviceClient.updateLocation(incident.getUID(), location);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
     }
 }

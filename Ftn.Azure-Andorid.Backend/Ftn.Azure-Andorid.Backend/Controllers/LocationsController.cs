@@ -33,12 +33,12 @@ namespace Ftn.Azure_Andorid.Backend.Controllers
             if (!returnPictureData)
             {
                 listLocation.ForEach(l => l.ImageData = new byte[] { 0 });
-            }           
+            }
 
             if (longitude.HasValue && latitude.HasValue && radius.HasValue)
             {
                 var center = new LatLng(latitude.Value, longitude.Value);
-                
+
                 return listLocation.Where(l => DistanceHelper.HaversineDistance(center, new LatLng(l.Latitude, l.Longitude), DistanceHelper.DistanceUnit.Kilometers) < radius.Value).ToList();
             }
 
@@ -61,27 +61,28 @@ namespace Ftn.Azure_Andorid.Backend.Controllers
 
         // PUT: api/Locations/5
         [ResponseType(typeof(void))]
-        public IHttpActionResult PutLocation(int id, Location location)
+        public IHttpActionResult PutLocation(string uid, Location location)
         {
-            if (!ModelState.IsValid)
-            {
-                return BadRequest(ModelState);
-            }
-
-            if (id != location.Id)
+            if (uid != location.UID)
             {
                 return BadRequest();
             }
 
-            db.Entry(location).State = EntityState.Modified;
-
             try
             {
+                var locationDB = db.Locations.First(e => e.UID == uid);
+                db.Entry(locationDB).State = EntityState.Modified;
+                locationDB.EndDate = location.EndDate;
+                if (string.IsNullOrWhiteSpace(locationDB.ConfirmedFrom))
+                { locationDB.ConfirmedFrom = location.ConfirmedFrom; }
+                else
+                { locationDB.ConfirmedFrom += "," + location.ConfirmedFrom; }
+
                 db.SaveChanges();
             }
             catch (DbUpdateConcurrencyException)
             {
-                if (!LocationExists(id))
+                if (!LocationExists(uid))
                 {
                     return NotFound();
                 }
@@ -135,9 +136,9 @@ namespace Ftn.Azure_Andorid.Backend.Controllers
             base.Dispose(disposing);
         }
 
-        private bool LocationExists(int id)
+        private bool LocationExists(string uid)
         {
-            return db.Locations.Count(e => e.Id == id) > 0;
+            return db.Locations.Count(e => e.UID == uid) > 0;
         }
     }
 }

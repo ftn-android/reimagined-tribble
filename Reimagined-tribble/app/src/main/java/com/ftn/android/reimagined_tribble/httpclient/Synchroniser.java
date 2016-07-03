@@ -27,7 +27,7 @@ public class Synchroniser {
         this.preferences = preferences;
     }
 
-    void ConvertToGasStation(com.ftn.android.reimagined_tribble.httpclient.model.Location loc) {
+    void NewOrUpdateGasStation(com.ftn.android.reimagined_tribble.httpclient.model.Location loc) {
         List<GasStation> gasStationListDB = GasStation.find(GasStation.class, "uid = ?", loc.getUid());
         if (gasStationListDB.size() == 0) {
             GasStation gasStation = new GasStation(
@@ -59,7 +59,7 @@ public class Synchroniser {
 
     }
 
-    void ConvertToIncident(com.ftn.android.reimagined_tribble.httpclient.model.Location loc) {
+    void NewOrUpdateIncident(com.ftn.android.reimagined_tribble.httpclient.model.Location loc) {
         List<Incident> incidentListDB = Incident.find(Incident.class, "uid = ?", loc.getUid());
         if (incidentListDB.size() == 0) {
             Incident incident = new Incident(
@@ -108,9 +108,9 @@ public class Synchroniser {
             for (com.ftn.android.reimagined_tribble.httpclient.model.Location loc :
                     locations) {
                 if (loc.isType()) { // Incident
-                    ConvertToIncident(loc);
+                    NewOrUpdateIncident(loc);
                 } else { // GasStation
-                    ConvertToGasStation(loc);
+                    NewOrUpdateGasStation(loc);
                 }
             }
 
@@ -186,19 +186,7 @@ public class Synchroniser {
 
     public void AddNewIncident(Incident incident, boolean saveFrist) {
 
-        Location location = new Location(0,
-                incident.getLatitude(),
-                incident.getLongitude(),
-                incident.getName(),
-                incident.getDescription(),
-                incident.getStartDate(),
-                incident.getEndDate(),
-                true,
-                incident.getType(),
-                incident.getImage(),
-                incident.getAuthor(),
-                incident.getConfirmedFrom(),
-                incident.getUID());
+        Location location = IncidentToLocation(incident);
         try {
             if (saveFrist) {
                 incident.save();
@@ -212,5 +200,25 @@ public class Synchroniser {
         } catch (Exception e) {
             e.printStackTrace();
         }
+    }
+
+    public static Location IncidentToLocation(Incident incident)
+    {
+        if (incident == null)
+            return null;
+
+        return new Location(0,
+                incident.getLatitude(),
+                incident.getLongitude(),
+                incident.getName(),
+                incident.getDescription(),
+                incident.getStartDate(),
+                incident.getEndDate(),
+                true,
+                incident.getType(),
+                incident.getImage(),
+                incident.getAuthor(),
+                incident.getConfirmedFrom(),
+                incident.getUID());
     }
 }
