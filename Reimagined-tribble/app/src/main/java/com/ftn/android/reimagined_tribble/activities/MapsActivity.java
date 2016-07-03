@@ -182,6 +182,7 @@ public class MapsActivity extends AppCompatActivity implements
         Synchroniser sync = new Synchroniser(serviceClient, loginPreferences);
         sync.FetchAllLocation(latLng, RADIUS);
         sync.UploadAllLocation();
+        sync.DeleteExcessDataInDB();
 
         addMarkers();
     }

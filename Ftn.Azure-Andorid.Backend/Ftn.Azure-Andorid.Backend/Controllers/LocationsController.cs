@@ -8,6 +8,7 @@ using System.Web.Http;
 using System.Web.Http.Description;
 using Ftn.Azure_Andorid.Backend.Models;
 using Ftn.Azure_Andorid.Backend.Helpers;
+using System.Collections.Generic;
 
 namespace Ftn.Azure_Andorid.Backend.Controllers
 {
@@ -16,7 +17,7 @@ namespace Ftn.Azure_Andorid.Backend.Controllers
         private FtnAzure_AndoridBackendContext db = new FtnAzure_AndoridBackendContext();
 
         // GET: api/Locations/{typeFilter}
-        public IQueryable<Location> GetLocations(string typeFilter, double? longitude = null, double? latitude = null, double? radius = null)
+        public List<Location> GetLocations(string typeFilter, bool returnPictureData, double? longitude = null, double? latitude = null, double? radius = null)
         {
             var longDateNow = DateTimeHelper.ToUnixTime(DateTime.Now);
             var temp = db.Locations.Where(l => l.EndDate > longDateNow);
@@ -27,13 +28,21 @@ namespace Ftn.Azure_Andorid.Backend.Controllers
                 case "incident": temp = temp.Where(l => l.Type == true); break;
                 default: temp = temp.Where(l => l.Type == false); break;
             }
+            var listLocation = temp.ToList();
+
+            if (!returnPictureData)
+            {
+                listLocation.ForEach(l => l.ImageData = new byte[] { 0 });
+            }           
 
             if (longitude.HasValue && latitude.HasValue && radius.HasValue)
             {
-                //temp = temp.Where()
+                var center = new LatLng(latitude.Value, longitude.Value);
+                
+                return listLocation.Where(l => DistanceHelper.HaversineDistance(center, new LatLng(l.Latitude, l.Longitude), DistanceHelper.DistanceUnit.Kilometers) < radius.Value).ToList();
             }
 
-            return temp;
+            return listLocation;
         }
 
 

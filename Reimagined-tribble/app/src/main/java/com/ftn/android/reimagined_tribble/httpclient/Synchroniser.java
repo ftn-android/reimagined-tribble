@@ -135,6 +135,18 @@ public class Synchroniser {
         }
     }
 
+    public void DeleteExcessDataInDB() {
+        try {
+            List<Incident> incidentList = Incident.find(Incident.class, "end_date < ?", (new Date().getTime()) + "");
+            for (Incident incident : incidentList) {
+                incident.delete();
+                incident.save();
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
     public void AddNewGasStation(GasStation gasStation) {
         AddNewGasStation(gasStation, true);
     }
