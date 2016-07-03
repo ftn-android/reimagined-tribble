@@ -150,7 +150,7 @@ public class AddNewIncidentActivity extends AppCompatActivity {
                 incidentType,
                 userName,
                 "",
-                true,
+                false,
                 java.util.UUID.randomUUID().toString());
 
         try {

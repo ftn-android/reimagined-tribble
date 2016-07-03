@@ -168,7 +168,7 @@ public class Synchroniser {
         Date endDate = new Date();
 
         endDate.setTime(endDate.getTime() + PLUSHOUR);
-        SimpleDateFormat df = new SimpleDateFormat("dd-MMM-yyyy");
+        SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd'T'hh:mm:ss");
         String formattedEndDate = df.format(endDate.getTime());
 
         Location location = new Location(0,
