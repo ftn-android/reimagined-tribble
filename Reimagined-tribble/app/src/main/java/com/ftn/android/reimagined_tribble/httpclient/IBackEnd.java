@@ -33,7 +33,7 @@ public interface IBackEnd {
     Location addNewLocation(@Body Location location);
 
     @Put("/api/Locations?uid={uid}")
-    void updateLocation(@Path String uid, @Body Location location);
+    Location updateLocation(@Path String uid, @Body Location location);
 
     @Get("/api/Locations?typeFilter={typeFilter}")
     Location[] getLocations(@Path TypeFilter typeFilter);

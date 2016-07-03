@@ -80,7 +80,6 @@ public class MapsActivity extends AppCompatActivity implements
     private SharedPreferences preferences;
     private SharedPreferences.Editor preferencesEditor;
     private static final String TAG = "MapsActivity";
-    private static final double RADIUS = 20;
     private Marker addNewMarker;
     private HashMap<String, Entity> markers;
     private MaterialDialog addNewDialog;
@@ -181,8 +180,10 @@ public class MapsActivity extends AppCompatActivity implements
             Log.d("FetchNewInfoFromBackend", "Last known location is null");
         }
 
+        double radius = loginPreferences.getFloat("radius", 55);
+        Log.d("radius km: ",radius+"");
         Synchroniser sync = new Synchroniser(serviceClient, loginPreferences);
-        sync.FetchAllLocation(latLng, RADIUS);
+        sync.FetchAllLocation(latLng, radius);
         sync.UploadAllLocation();
         sync.DeleteExcessDataInDB();
 

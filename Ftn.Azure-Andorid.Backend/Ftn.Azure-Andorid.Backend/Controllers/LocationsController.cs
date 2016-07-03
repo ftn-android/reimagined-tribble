@@ -74,11 +74,16 @@ namespace Ftn.Azure_Andorid.Backend.Controllers
                 db.Entry(locationDB).State = EntityState.Modified;
                 locationDB.EndDate = location.EndDate;
                 if (string.IsNullOrWhiteSpace(locationDB.ConfirmedFrom))
-                { locationDB.ConfirmedFrom = location.ConfirmedFrom; }
+                {
+                    locationDB.ConfirmedFrom = location.ConfirmedFrom;
+                }
                 else
-                { locationDB.ConfirmedFrom += "," + location.ConfirmedFrom; }
+                {
+                    locationDB.ConfirmedFrom += "," + location.ConfirmedFrom;
+                }
 
                 db.SaveChanges();
+                return Ok(locationDB);
             }
             catch (DbUpdateConcurrencyException)
             {
@@ -91,8 +96,7 @@ namespace Ftn.Azure_Andorid.Backend.Controllers
                     throw;
                 }
             }
-
-            return StatusCode(HttpStatusCode.NoContent);
+           
         }
 
         // POST: api/Locations
