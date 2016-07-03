@@ -20,7 +20,7 @@ public class Location {
     @JsonProperty("StartDate")
     private String startDate;
     @JsonProperty("EndDate")
-    private String endDate;
+    private long endDate;
     @JsonProperty("Type")
     private boolean type;
     @JsonProperty("IncidentType")
@@ -34,7 +34,7 @@ public class Location {
     @JsonProperty("UID")
     private String uid;
 
-    public Location(int id, double latitude, double longitude, String name, String description, String startDate, String endDate, boolean type, String incidentType, byte[] imageData, String author, String confirmedFrom, String uid) {
+    public Location(int id, double latitude, double longitude, String name, String description, String startDate, long endDate, boolean type, String incidentType, byte[] imageData, String author, String confirmedFrom, String uid) {
         this.id = id;
         this.latitude = latitude;
         this.longitude = longitude;
@@ -153,11 +153,11 @@ public class Location {
         this.startDate = startDate;
     }
 
-    public String getEndDate() {
+    public long getEndDate() {
         return endDate;
     }
 
-    public void setEndDate(String endDate) {
+    public void setEndDate(long endDate) {
         this.endDate = endDate;
     }
 

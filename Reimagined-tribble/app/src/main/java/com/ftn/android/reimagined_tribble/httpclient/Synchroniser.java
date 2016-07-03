@@ -7,7 +7,6 @@ import com.ftn.android.reimagined_tribble.model.GasStation;
 import com.ftn.android.reimagined_tribble.model.Incident;
 import com.google.android.gms.maps.model.LatLng;
 
-import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
 
@@ -64,7 +63,7 @@ public class Synchroniser {
                     loc.getDescription(),
                     true,
                     loc.getStartDate(),
-                    new Date(loc.getEndDate()).getTime(),
+                    loc.getEndDate(),
                     loc.getImageData(),
                     loc.getLongitude(),
                     loc.getLatitude(),
@@ -136,13 +135,14 @@ public class Synchroniser {
     }
 
     public void AddNewGasStation(GasStation gasStation, boolean saveFrist) {
+        Date endDateInFuture  = new Date(2020,01,01);
         Location location = new Location(0,
                 gasStation.getLattitude(),
                 gasStation.getLongittude(),
                 gasStation.getName(),
                 gasStation.getDescription(),
                 gasStation.getDate(),
-                "2020-01-01",
+                endDateInFuture.getTime(),
                 false,
                 "",
                 gasStation.getImage(),
@@ -169,17 +169,13 @@ public class Synchroniser {
 
     public void AddNewIncident(Incident incident, boolean saveFrist) {
 
-        Date endDate = new Date(incident.getEndDate());
-
-        SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss");
-        String formattedEndDate = df.format(endDate.getTime());
         Location location = new Location(0,
                 incident.getLatitude(),
                 incident.getLongitude(),
                 incident.getName(),
                 incident.getDescription(),
                 incident.getStartDate(),
-                formattedEndDate,
+                incident.getEndDate(),
                 true,
                 incident.getType(),
                 incident.getImage(),

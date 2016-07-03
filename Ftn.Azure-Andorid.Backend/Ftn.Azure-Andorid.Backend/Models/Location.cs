@@ -11,7 +11,7 @@ namespace Ftn.Azure_Andorid.Backend.Models
         public string Name { get; set; }
         public string Description { get; set; }
         public DateTime StartDate { get; set; }
-        public DateTime EndDate { get; set; }
+        public long EndDate { get; set; }
         public bool Type { get; set; }
         public string IncidentType { get; set; }
         public string Author { get; set; }
