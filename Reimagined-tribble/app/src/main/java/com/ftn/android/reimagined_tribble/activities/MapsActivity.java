@@ -415,7 +415,13 @@ public class MapsActivity extends AppCompatActivity implements
         while (gasStationIterator.hasNext()) {
             GasStation gs = gasStationIterator.next();
 
-            Bitmap gasStationBitmap = ColorChangesUtil.changeColor(getResources(), "#33cc33", R.drawable.ic_local_gas_station_black_36dp);
+            String color = preferences.getString("gasStationColor", "NoDesiredColor");
+            Bitmap gasStationBitmap = null;
+            if(color.equals("NoDesiredColor")){
+                gasStationBitmap = ColorChangesUtil.changeColor(getResources(), "#33cc33", R.drawable.ic_local_gas_station_black_36dp);
+            }else{
+                gasStationBitmap = ColorChangesUtil.changeColor(getResources(), Integer.parseInt(color), R.drawable.ic_local_gas_station_black_36dp);
+            }
             Marker gasstation = googleMap.addMarker(new MarkerOptions()
                     .position(new LatLng(gs.getLattitude(), gs.getLongittude()))
                     .title(gs.getName())
@@ -431,7 +437,13 @@ public class MapsActivity extends AppCompatActivity implements
         List<Incident> incidentList = Incident.find(Incident.class, "end_date >= ?", (new Date().getTime()) + "");
         for (Incident incident : incidentList) {
 
-            Bitmap incidentBitmap = ColorChangesUtil.changeColor(getResources(), "#cc0000", R.drawable.ic_sms_failed_black_36dp);
+            String color = preferences.getString("incidentStationColor", "NoDesiredColor");
+            Bitmap incidentBitmap = null;
+            if(color.equals("NoDesiredColor")){
+                incidentBitmap = ColorChangesUtil.changeColor(getResources(), "#cc0000", R.drawable.ic_sms_failed_black_36dp);
+            }else{
+                incidentBitmap = ColorChangesUtil.changeColor(getResources(), Integer.parseInt(color), R.drawable.ic_sms_failed_black_36dp);
+            }
             Marker incidentMarker = googleMap.addMarker(new MarkerOptions()
                     .position(new LatLng(incident.getLatitude(), incident.getLongitude()))
                     .title(incident.getName())

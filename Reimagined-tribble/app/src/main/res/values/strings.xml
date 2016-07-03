@@ -79,6 +79,14 @@
     <string name="pref_key_radius">pref_radius</string>
     <string name="view_incident_confirmed_by">Confirmed By:</string>
     <string name="view_incident_valid_until">Valid until:</string>
+    <string name="pref_title_colorize_gas_station">Colorize gas stations</string>
+    <string name="pref_summary_colorize_gas_station">Choose display color for the gas stations</string>
+    <string name="pref_key_colorize_gas_station">pref_gas_station_color_picker</string>
+    <string name="pref_summary_colorize_incidents">Choose display color for the incidents</string>
+    <string name="pref_title_colorize_incidents">Colorize incidents</string>
+    <string name="pref_key_colorize_incidents">pref_incident_color_picker</string>
+    <string name="dialog_choose_gas_station_color">Choose gas station color:</string>
+    <string name="dialog_colors">Colors:</string>
 
 
     <string-array name="incident_types">

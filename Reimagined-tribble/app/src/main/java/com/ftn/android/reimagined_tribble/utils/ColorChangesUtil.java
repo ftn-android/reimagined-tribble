@@ -23,4 +23,14 @@ public class ColorChangesUtil {
         canvas.drawBitmap(ob, 0f, 0f, paint);
         return obm;
     }
+
+    public static Bitmap changeColor(Resources res, int color, int resourceId){
+        Bitmap ob = BitmapFactory.decodeResource(res, resourceId);
+        Bitmap obm = Bitmap.createBitmap(ob.getWidth(), ob.getHeight(), ob.getConfig());
+        Canvas canvas = new Canvas(obm);
+        Paint paint = new Paint();
+        paint.setColorFilter(new PorterDuffColorFilter(color, PorterDuff.Mode.SRC_ATOP));
+        canvas.drawBitmap(ob, 0f, 0f, paint);
+        return obm;
+    }
 }

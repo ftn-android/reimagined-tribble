@@ -23,7 +23,16 @@
         android:defaultValue="true"
         />
 
+    <Preference
+        android:key="@string/pref_key_colorize_gas_station"
+        android:title="@string/pref_title_colorize_gas_station"
+        android:summary="@string/pref_summary_colorize_gas_station"
+        />
 
-
+    <Preference
+        android:key="@string/pref_key_colorize_incidents"
+        android:title="@string/pref_title_colorize_incidents"
+        android:summary="@string/pref_summary_colorize_incidents"
+        />
 
 </PreferenceScreen>
