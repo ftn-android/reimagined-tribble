@@ -2,12 +2,14 @@ package com.ftn.android.reimagined_tribble.model;
 
 import com.orm.SugarRecord;
 
+import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
  * Created by FilipF on 14.6.2016.
  */
-public class Incident extends SugarRecord implements Entity {
+public class Incident extends SugarRecord implements Entity, Serializable {
 
     private String name;
     private String description;
@@ -20,7 +22,9 @@ public class Incident extends SugarRecord implements Entity {
     private String author;
     private List<String> confirmedFrom;
 
-    public Incident() {}
+    public Incident() {
+        this.confirmedFrom = new ArrayList<>();
+    }
 
     public Incident(String name, String description, boolean active, String date, byte[] image, double longitude, double lattitude, String type, String author, List<String> confirmedFrom) {
         this.name = name;
@@ -114,8 +118,8 @@ public class Incident extends SugarRecord implements Entity {
         return confirmedFrom;
     }
 
-    public void setConfirmedFrom(List<String> confirmedFrom) {
-        this.confirmedFrom = confirmedFrom;
+    public void addConfirmedFrom(String confirmFrom){
+        this.confirmedFrom.add(confirmFrom);
     }
 
     @Override

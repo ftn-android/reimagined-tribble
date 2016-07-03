@@ -5,8 +5,6 @@ import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.drawable.Drawable;
-import android.location.Address;
-import android.location.Geocoder;
 import android.support.design.widget.CollapsingToolbarLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
@@ -20,12 +18,13 @@ import com.ftn.android.reimagined_tribble.R;
 import com.ftn.android.reimagined_tribble.httpclient.IBackEnd;
 import com.ftn.android.reimagined_tribble.httpclient.model.Location;
 import com.ftn.android.reimagined_tribble.model.GasStation;
-import com.ftn.android.reimagined_tribble.model.User;
+import com.google.android.gms.maps.model.LatLng;
 
 import org.androidannotations.annotations.AfterViews;
 import org.androidannotations.annotations.Background;
 import org.androidannotations.annotations.Click;
 import org.androidannotations.annotations.EActivity;
+import org.androidannotations.annotations.Extra;
 import org.androidannotations.annotations.OptionsItem;
 import org.androidannotations.annotations.OptionsMenu;
 import org.androidannotations.annotations.ViewById;
@@ -34,11 +33,8 @@ import org.androidannotations.rest.spring.annotations.RestService;
 
 import java.io.ByteArrayOutputStream;
 import java.io.File;
-import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
-import java.util.List;
-import java.util.Locale;
 
 import pl.aprilapps.easyphotopicker.DefaultCallback;
 import pl.aprilapps.easyphotopicker.EasyImage;
@@ -57,14 +53,18 @@ public class AddNewGasStationActivity extends AppCompatActivity {
     IBackEnd serviceClient;
 
     private SharedPreferences loginPreferences;
-    private SharedPreferences.Editor loginPrefsEditor;
 
     @ViewById(R.id.input_name_of_gas_station)
     EditText _name;
+
     @ViewById(R.id.input_description_of_gas_station)
     EditText _description;
+
     @ViewById(R.id.backdrop)
     ImageView image;
+
+    @Extra
+    LatLng location;
 
 
     @AfterViews
@@ -74,7 +74,6 @@ public class AddNewGasStationActivity extends AppCompatActivity {
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         loginPreferences = getSharedPreferences("loginPrefs", MODE_PRIVATE);
-        loginPrefsEditor = loginPreferences.edit();
 
         CollapsingToolbarLayout collapsingToolbar =
                 (CollapsingToolbarLayout) findViewById(R.id.collapsing_toolbar);
@@ -82,40 +81,6 @@ public class AddNewGasStationActivity extends AppCompatActivity {
 
         final ImageView imageView = (ImageView) findViewById(R.id.backdrop);
         Glide.with(this).load("").error(R.drawable.ic_photo_placeholder).into(imageView);
-        Double l1;
-        Double l2;
-        if (!loginPreferences.getString("lat", "").equals("")) {
-            l1 = Double.parseDouble(loginPreferences.getString("lat", ""));
-            l2 = Double.parseDouble(loginPreferences.getString("long", ""));
-        } else {
-            String email = loginPreferences.getString("username", "");
-            User user = User.find(User.class, "email = ?", email).get(0);
-            l1 = user.getLattitude();
-            l2 = user.getLongitude();
-        }
-
-        Geocoder geocoder;
-        List<Address> addresses;
-        geocoder = new Geocoder(this, Locale.getDefault());
-        try {
-            addresses = geocoder.getFromLocation(l1, l2, 1); // Here 1 represent max location result to returned, by documents it recommended 1 to 5
-            String address = "";
-            if (addresses.get(0).getSubThoroughfare() != null) {
-                address = addresses.get(0).getThoroughfare() + addresses.get(0).getSubThoroughfare();// If any additional address line present than only, check with max available address lines by getMaxAddressLineIndex()
-            } else {
-                address = addresses.get(0).getThoroughfare();
-            }
-            String city = addresses.get(0).getLocality();
-            String state = addresses.get(0).getAdminArea();
-            String country = addresses.get(0).getCountryName();
-            String postalCode = addresses.get(0).getPostalCode();
-            String knownName = addresses.get(0).getFeatureName();
-
-        } catch (IOException e) {
-            e.printStackTrace();
-
-        }
-
     }
 
     @Click(R.id.fab_add_new_gas_station_details)
@@ -185,28 +150,11 @@ public class AddNewGasStationActivity extends AppCompatActivity {
 
 
         finish();
-
-
-
-       /*
-
-/*private void loadImageFromStorage(String path)
-{
-
-    try {
-        File f=new File(path, "profile.jpg");
-        Bitmap b = BitmapFactory.decodeStream(new FileInputStream(f));
-            ImageView img=(ImageView)findViewById(R.id.imgPicker);
-        img.setImageBitmap(b);
-    }
-    catch (FileNotFoundException e)
-    {
-        e.printStackTrace();
     }
 
-}*/
 
-    }
+
+
 
     @Background
     void SaveGasStation(GasStation gasStation) {
