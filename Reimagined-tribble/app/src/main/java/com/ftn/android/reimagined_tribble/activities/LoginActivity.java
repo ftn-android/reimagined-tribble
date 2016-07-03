@@ -71,8 +71,8 @@ public class LoginActivity extends AppCompatActivity {
                 .build();
 
         //TODO delete this hardcoded values
-        _emailText.setText("a@a.com");
-        _passwordText.setText("1234");
+        _emailText.setText("admin@admin.com");
+        _passwordText.setText("admin");
     }
 
 
