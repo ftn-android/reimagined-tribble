@@ -3,8 +3,7 @@ package com.ftn.android.reimagined_tribble.model;
 import com.orm.SugarRecord;
 
 import java.io.Serializable;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.Arrays;
 
 /**
  * Created by FilipF on 14.6.2016.
@@ -17,26 +16,50 @@ public class Incident extends SugarRecord implements Entity, Serializable {
     private String date;
     private byte[] image;
     private double longitude;
-    private double lattitude;
+    private double latitude;
     private String type;
     private String author;
-    private List<String> confirmedFrom;
+    private String confirmedFrom;
+    private boolean synchronised;
+    private String UID;
 
-    public Incident() {
-        this.confirmedFrom = new ArrayList<>();
+    public String getUID() {
+        return UID;
     }
 
-    public Incident(String name, String description, boolean active, String date, byte[] image, double longitude, double lattitude, String type, String author, List<String> confirmedFrom) {
+    public void setUID(String UID) {
+        this.UID = UID;
+    }
+
+    public Incident() {
+        //this.confirmedFrom = new ArrayList<>();
+    }
+
+    public Incident(String name, String description, boolean active, String date, byte[] image, double longitude, double latitude, String type, String author, String confirmedFrom, boolean synchronised, String UID) {
         this.name = name;
         this.description = description;
         this.active = active;
         this.date = date;
         this.image = image;
         this.longitude = longitude;
-        this.lattitude = lattitude;
+        this.latitude = latitude;
         this.type = type;
         this.author = author;
         this.confirmedFrom = confirmedFrom;
+        this.synchronised = synchronised;
+        this.UID = UID;
+    }
+
+    public void setConfirmedFrom(String confirmedFrom) {
+        this.confirmedFrom = confirmedFrom;
+    }
+
+    public boolean isSynchronised() {
+        return synchronised;
+    }
+
+    public void setSynchronised(boolean synchronised) {
+        this.synchronised = synchronised;
     }
 
     @Override
@@ -90,12 +113,12 @@ public class Incident extends SugarRecord implements Entity, Serializable {
         this.longitude = longitude;
     }
 
-    public double getLattitude() {
-        return lattitude;
+    public double getLatitude() {
+        return latitude;
     }
 
-    public void setLattitude(double lattitude) {
-        this.lattitude = lattitude;
+    public void setLatitude(double latitude) {
+        this.latitude = latitude;
     }
 
     public String getType() {
@@ -114,13 +137,13 @@ public class Incident extends SugarRecord implements Entity, Serializable {
         this.author = author;
     }
 
-    public List<String> getConfirmedFrom() {
+    public String getConfirmedFrom() {
         return confirmedFrom;
     }
 
-    public void addConfirmedFrom(String confirmFrom){
+    /*public void addConfirmedFrom(String confirmFrom){
         this.confirmedFrom.add(confirmFrom);
-    }
+    }*/
 
     @Override
     public String toString() {
@@ -128,12 +151,14 @@ public class Incident extends SugarRecord implements Entity, Serializable {
                 "name='" + name + '\'' +
                 ", description='" + description + '\'' +
                 ", active=" + active +
-                ", date=" + date +
+                ", date='" + date + '\'' +
+                ", image=" + Arrays.toString(image) +
                 ", longitude=" + longitude +
-                ", lattitude=" + lattitude +
+                ", latitude=" + latitude +
                 ", type='" + type + '\'' +
                 ", author='" + author + '\'' +
                 ", confirmedFrom=" + confirmedFrom +
+                ", synchronised=" + synchronised +
                 '}';
     }
 }

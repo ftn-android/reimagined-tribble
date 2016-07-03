@@ -91,7 +91,7 @@ public class LoginActivity extends AppCompatActivity {
         }
         // no match? search backend for it
         try {
-            User[] usersService = serviceClient.getUserswithEmailAndPassword(email, password);
+            User[] usersService = serviceClient.getUsersWithEmailAndPassword(email, password);
             int serviceDB = usersService.length;
 
             if (serviceDB != 0) {

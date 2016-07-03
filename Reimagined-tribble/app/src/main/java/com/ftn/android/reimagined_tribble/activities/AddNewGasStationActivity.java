@@ -3,6 +3,7 @@ package com.ftn.android.reimagined_tribble.activities;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.drawable.Drawable;
 import android.support.design.widget.CollapsingToolbarLayout;
 import android.support.v7.app.AppCompatActivity;
@@ -14,10 +15,13 @@ import android.widget.ImageView;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.resource.bitmap.GlideBitmapDrawable;
 import com.ftn.android.reimagined_tribble.R;
+import com.ftn.android.reimagined_tribble.httpclient.IBackEnd;
+import com.ftn.android.reimagined_tribble.httpclient.model.Location;
 import com.ftn.android.reimagined_tribble.model.GasStation;
 import com.google.android.gms.maps.model.LatLng;
 
 import org.androidannotations.annotations.AfterViews;
+import org.androidannotations.annotations.Background;
 import org.androidannotations.annotations.Click;
 import org.androidannotations.annotations.EActivity;
 import org.androidannotations.annotations.Extra;
@@ -25,6 +29,7 @@ import org.androidannotations.annotations.OptionsItem;
 import org.androidannotations.annotations.OptionsMenu;
 import org.androidannotations.annotations.ViewById;
 import org.androidannotations.annotations.res.StringRes;
+import org.androidannotations.rest.spring.annotations.RestService;
 
 import java.io.ByteArrayOutputStream;
 import java.io.File;
@@ -36,13 +41,16 @@ import pl.aprilapps.easyphotopicker.EasyImage;
 
 /**
  * Created by ftn/tim
-*/
+ */
 @EActivity(R.layout.activity_add_new_gasstation)
 @OptionsMenu(R.menu.add_new_menu)
-public class AddNewGasStationActivity extends AppCompatActivity{
+public class AddNewGasStationActivity extends AppCompatActivity {
 
     @StringRes(R.string.title_add_new_gas_station)
     String activityTitle;
+
+    @RestService
+    IBackEnd serviceClient;
 
     private SharedPreferences loginPreferences;
 
@@ -60,7 +68,7 @@ public class AddNewGasStationActivity extends AppCompatActivity{
 
 
     @AfterViews
-    protected void init(){
+    protected void init() {
         final Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
@@ -76,7 +84,7 @@ public class AddNewGasStationActivity extends AppCompatActivity{
     }
 
     @Click(R.id.fab_add_new_gas_station_details)
-    protected void startTheCamera(){
+    protected void startTheCamera() {
         EasyImage.openCamera(AddNewGasStationActivity.this, 1);
     }
 
@@ -114,19 +122,15 @@ public class AddNewGasStationActivity extends AppCompatActivity{
         String stationDesc = _description.getText().toString();
         String userName = loginPreferences.getString("username", "");
 
+
+
         Calendar c = Calendar.getInstance();
 
         SimpleDateFormat df = new SimpleDateFormat("dd-MMM-yyyy");
         String formattedDate = df.format(c.getTime());
 
-        GasStation gasStation = new GasStation();
-        gasStation.setUser(userName);
-        gasStation.setDate(formattedDate);
-        gasStation.setLattitude(location.latitude);
-        gasStation.setLongittude(location.longitude);
-        gasStation.setDescription(stationDesc);
-        gasStation.setName(stationName);
-
+        GasStation gasStation = new GasStation(stationName, stationDesc, formattedDate, new byte[]{0},
+                userName, location.latitude, location.longitude, false, java.util.UUID.randomUUID().toString());
 
         try {
             Drawable d = image.getDrawable();
@@ -136,15 +140,45 @@ public class AddNewGasStationActivity extends AppCompatActivity{
             byte[] img = bos.toByteArray();
             gasStation.setImage(img);
             Log.d("GasStation", img.toString());
-        }catch (Exception e)
-        {
+        } catch (Exception e) {
             e.printStackTrace();
-            gasStation.setImage(new byte[] {0});
         }
-        gasStation.save();
+        SaveGasStation(gasStation);
 
 
         finish();
     }
 
+
+    @Background
+    void SaveGasStation(GasStation gasStation) {
+        Location location = new Location(0,
+                gasStation.getLattitude(),
+                gasStation.getLongittude(),
+                gasStation.getName(),
+                gasStation.getDescription(),
+                gasStation.getDate(),
+                "2020-01-01",
+                false,
+                "",
+                gasStation.getImage(),
+                gasStation.getUID());
+        try {
+            gasStation.save();
+            Log.d("GasStation", location.toString());
+
+            Location locationService = serviceClient.addNewLocation(location);
+
+            gasStation.setSynchronised(true);
+            gasStation.save();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    //function for showing image from byte array
+    public static void setImageViewWithByteArray(ImageView view, byte[] data) {
+        Bitmap bitmap = BitmapFactory.decodeByteArray(data, 0, data.length);
+        view.setImageBitmap(bitmap);
+    }
 }
