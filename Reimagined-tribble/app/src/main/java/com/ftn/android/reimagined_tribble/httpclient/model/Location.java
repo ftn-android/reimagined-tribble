@@ -29,7 +29,18 @@ public class Location {
     @JsonProperty("ImageData")
     private byte[] imageData;
 
+    @JsonProperty("UID")
+    private boolean uid;
+
     public Location() {
+    }
+
+    public boolean isUid() {
+        return uid;
+    }
+
+    public void setUid(boolean uid) {
+        this.uid = uid;
     }
 
     public double getLatitude() {

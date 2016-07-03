@@ -5,6 +5,7 @@ package com.ftn.android.reimagined_tribble.model;
 import com.orm.SugarRecord;
 
 import java.io.Serializable;
+import java.util.Arrays;
 
 /**
  * Created by FilipF on 14.6.2016.
@@ -19,11 +20,22 @@ public class GasStation extends SugarRecord implements Entity, Serializable{
     private double latitude;
     private double longitude;
 
+    private boolean synchronised;
+    private String UID;
+
+    public String getUID() {
+        return UID;
+    }
+
+    public void setUID(String UID) {
+        this.UID = UID;
+    }
+
     public GasStation(){
 
     }
 
-    public GasStation(String name, String description, String date, byte[] image, String user, double latitude, double longitude) {
+    public GasStation(String name, String description, String date, byte[] image, String user, double latitude, double longitude, boolean synchronised, String UID) {
         this.name = name;
         this.description = description;
         this.date = date;
@@ -31,6 +43,32 @@ public class GasStation extends SugarRecord implements Entity, Serializable{
         this.user = user;
         this.latitude = latitude;
         this.longitude = longitude;
+        this.synchronised = synchronised;
+        this.UID = UID;
+    }
+
+    public double getLatitude() {
+        return latitude;
+    }
+
+    public void setLatitude(double latitude) {
+        this.latitude = latitude;
+    }
+
+    public double getLongitude() {
+        return longitude;
+    }
+
+    public void setLongitude(double longitude) {
+        this.longitude = longitude;
+    }
+
+    public boolean isSynchronised() {
+        return synchronised;
+    }
+
+    public void setSynchronised(boolean synchronised) {
+        this.synchronised = synchronised;
     }
 
     @Override
@@ -97,11 +135,12 @@ public class GasStation extends SugarRecord implements Entity, Serializable{
         return "GasStation{" +
                 "name='" + name + '\'' +
                 ", description='" + description + '\'' +
-                ", date=" + date +
-                ", image='" + image + '\'' +
+                ", date='" + date + '\'' +
+                ", image=" + Arrays.toString(image) +
                 ", user='" + user + '\'' +
-                ", lattitude=" + latitude +
-                ", longittude=" + longitude +
+                ", latitude=" + latitude +
+                ", longitude=" + longitude +
+                ", synchronised=" + synchronised +
                 '}';
     }
 }

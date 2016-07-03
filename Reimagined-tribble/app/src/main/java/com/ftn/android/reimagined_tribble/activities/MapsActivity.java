@@ -15,6 +15,7 @@ import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.TextView;
@@ -164,15 +165,27 @@ public class MapsActivity extends AppCompatActivity implements
     @Click(R.id.fab_add_new_incident)
     protected void clickNewIncident(){
         Location location = locMan.getLastKnownLocation(locMan.getBestProvider(new Criteria(), false));
-        LatLng latLng = new LatLng(location.getLatitude(), location.getLongitude());
-        AddNewIncidentActivity_.intent(this).location(latLng).start();
+        if (location!=null) {
+            LatLng latLng = new LatLng(location.getLatitude(), location.getLongitude());
+            AddNewIncidentActivity_.intent(this).location(latLng).start();
+        }
+        else
+        {
+            Log.d("clickNewIncident", "Last known location is null");
+        }
     }
 
     @Click(R.id.fab_add_new_gas_station)
     protected void clickNewGasStation(){
         Location location = locMan.getLastKnownLocation(locMan.getBestProvider(new Criteria(), false));
-        LatLng latLng = new LatLng(location.getLatitude(), location.getLongitude());
-        AddNewGasStationActivity_.intent(this).location(latLng).start();
+        if (location!=null) {
+            LatLng latLng = new LatLng(location.getLatitude(), location.getLongitude());
+            AddNewGasStationActivity_.intent(this).location(latLng).start();
+        }
+        else
+        {
+            Log.d("clickNewGasStation", "Last known location is null");
+        }
     }
 
     @OptionsItem(R.id.settings)
@@ -375,7 +388,7 @@ public class MapsActivity extends AppCompatActivity implements
             Incident incident = incidentIterator.next();
 
             Marker incidentMarker = googleMap.addMarker(new MarkerOptions()
-                    .position(new LatLng(incident.getLattitude(), incident.getLongitude()))
+                    .position(new LatLng(incident.getLatitude(), incident.getLongitude()))
                     .title(incident.getName())
                     .snippet(incident.getDescription())
                     .icon(BitmapDescriptorFactory.fromResource(R.drawable.ic_sms_failed_black_36dp))

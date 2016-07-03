@@ -73,7 +73,7 @@ public class ViewIncidentActivity extends AppCompatActivity {
         geocoder = new Geocoder(this, Locale.getDefault());
 
         try {
-            addresses = geocoder.getFromLocation(chosenIncident.getLattitude(), chosenIncident.getLongitude(), 1); // Here 1 represent max location result to returned, by documents it recommended 1 to 5
+            addresses = geocoder.getFromLocation(chosenIncident.getLatitude(), chosenIncident.getLongitude(), 1); // Here 1 represent max location result to returned, by documents it recommended 1 to 5
         } catch (IOException e) {
             e.printStackTrace();
         }

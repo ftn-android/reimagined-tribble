@@ -17,10 +17,13 @@ import android.widget.Toast;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.resource.bitmap.GlideBitmapDrawable;
 import com.ftn.android.reimagined_tribble.R;
+import com.ftn.android.reimagined_tribble.httpclient.IBackEnd;
+import com.ftn.android.reimagined_tribble.httpclient.model.Location;
 import com.ftn.android.reimagined_tribble.model.Incident;
 import com.google.android.gms.maps.model.LatLng;
 
 import org.androidannotations.annotations.AfterViews;
+import org.androidannotations.annotations.Background;
 import org.androidannotations.annotations.Click;
 import org.androidannotations.annotations.EActivity;
 import org.androidannotations.annotations.Extra;
@@ -28,11 +31,13 @@ import org.androidannotations.annotations.OptionsItem;
 import org.androidannotations.annotations.OptionsMenu;
 import org.androidannotations.annotations.ViewById;
 import org.androidannotations.annotations.res.StringRes;
+import org.androidannotations.rest.spring.annotations.RestService;
 
 import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
+import java.util.Date;
 
 import pl.aprilapps.easyphotopicker.DefaultCallback;
 import pl.aprilapps.easyphotopicker.EasyImage;
@@ -59,6 +64,9 @@ public class AddNewIncidentActivity extends AppCompatActivity{
 
     @ViewById(R.id.backdrop)
     ImageView image;
+
+    @RestService
+    IBackEnd serviceClient;
 
     @Extra
     LatLng location;
@@ -133,16 +141,18 @@ public class AddNewIncidentActivity extends AppCompatActivity{
         SimpleDateFormat df = new SimpleDateFormat("dd-MMM-yyyy");
         String formattedDate = df.format(c.getTime());
 
-        Incident incident = new Incident();
-        incident.setName(incidentName);
-        incident.setActive(true);
-        incident.setAuthor(userName);
-        incident.setDate(formattedDate);
-        incident.setDescription(incidentDescription);
-        incident.setLattitude(location.latitude);
-        incident.setLongitude(location.longitude);
-        incident.setType(incidentType);
-        incident.addConfirmedFrom(userName);
+        Incident incident = new Incident(incidentName,
+                incidentDescription,
+                true,
+                formattedDate,
+                new byte[] {0},
+                location.longitude,
+                location.latitude,
+                incidentType,
+                userName,
+                "",
+                false,
+                java.util.UUID.randomUUID().toString());
 
         try {
             Drawable d = image.getDrawable();
@@ -155,11 +165,43 @@ public class AddNewIncidentActivity extends AppCompatActivity{
         }catch (Exception e)
         {
             e.printStackTrace();
-            incident.setImage(new byte[] {0});
         }
 
-        incident.save();
+        SaveIncident(incident);
 
         finish();
+    }
+
+    @Background
+    void SaveIncident(Incident incident) {
+
+        Date endDate = new Date();
+
+        // according to google this is 6 h : (2.16 * 10000000)
+        // todo move this somewhere else :D some constant anything
+        endDate.setTime((long) (endDate.getTime() + (2.16 * 10000000)));
+        SimpleDateFormat df = new SimpleDateFormat("dd-MMM-yyyy");
+        String formattedEndDate = df.format(endDate.getTime());
+
+        Location location = new Location(0,
+                incident.getLatitude(),
+                incident.getLongitude(),
+                incident.getName(),
+                incident.getDescription(),
+                incident.getDate(),
+                formattedEndDate,
+                true,
+                incident.getImage());
+        try {
+            incident.save();
+            Log.d("SaveIncident", location.toString());
+
+            Location locationService = serviceClient.addNewLocation(location);
+
+            incident.setSynchronised(true);
+            incident.save();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 }

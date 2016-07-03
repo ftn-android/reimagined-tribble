@@ -122,8 +122,7 @@ public class AddNewGasStationActivity extends AppCompatActivity {
         String stationDesc = _description.getText().toString();
         String userName = loginPreferences.getString("username", "");
 
-        Double latitude = Double.parseDouble(loginPreferences.getString("lat", ""));
-        Double longitude = Double.parseDouble(loginPreferences.getString("long", ""));
+
 
         Calendar c = Calendar.getInstance();
 
@@ -131,9 +130,7 @@ public class AddNewGasStationActivity extends AppCompatActivity {
         String formattedDate = df.format(c.getTime());
 
         GasStation gasStation = new GasStation(stationName, stationDesc, formattedDate, new byte[]{0},
-                userName, latitude, longitude);
-        gasStation.setUser(userName);
-
+                userName, location.latitude, location.longitude, false, java.util.UUID.randomUUID().toString());
 
         try {
             Drawable d = image.getDrawable();
@@ -153,13 +150,8 @@ public class AddNewGasStationActivity extends AppCompatActivity {
     }
 
 
-
-
-
     @Background
     void SaveGasStation(GasStation gasStation) {
-
-
         Location location = new Location(0,
                 gasStation.getLattitude(),
                 gasStation.getLongittude(),
@@ -174,6 +166,9 @@ public class AddNewGasStationActivity extends AppCompatActivity {
             Log.d("GasStation", location.toString());
 
             Location locationService = serviceClient.addNewLocation(location);
+
+            gasStation.setSynchronised(true);
+            gasStation.save();
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -184,6 +179,4 @@ public class AddNewGasStationActivity extends AppCompatActivity {
         Bitmap bitmap = BitmapFactory.decodeByteArray(data, 0, data.length);
         view.setImageBitmap(bitmap);
     }
-
-
 }
