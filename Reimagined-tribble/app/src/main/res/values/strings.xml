@@ -65,6 +65,15 @@
     <string name="view_created_on">Created on:</string>
     <string name="view_description">Description:</string>
     <string name="view_incident_type">Type of incident:</string>
+    <string name="questions_purge_data">Do you want to purge application data on your phone?</string>
+    <string name="details_purge_data">You will be logged out and all downloaded incidents and gas stations will be deleted. Do you want to proceed?</string>
+    <string name="positive_purge_data_answer">Yes</string>
+    <string name="negative_purge_data_answer">No</string>
+    <string name="pref_key_start_gps_with_app">pref_start_gps_with_app</string>
+    <string name="pref_key_keep_data_on_phone">pref_keep_data_on_phone</string>
+    <string name="pref_key_purge_data_on_phone">pref_purge_data_on_phone</string>
+    <string name="pref_key_auto_sync">pref_auto-sync</string>
+    <string name="pref_key_auto_download_pictures">pref_auto-download_pictures</string>
 
 
     <string-array name="incident_types">
