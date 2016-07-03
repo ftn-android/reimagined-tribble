@@ -187,6 +187,7 @@ public class MapsActivity extends AppCompatActivity implements
         sync.UploadAllLocation();
         sync.DeleteExcessDataInDB();
 
+        clearGooleMaps();
         addMarkers();
     }
 
@@ -395,6 +396,11 @@ public class MapsActivity extends AppCompatActivity implements
 
         tappedLocation = latLng;
         addNewMarker.showInfoWindow();
+    }
+
+    @UiThread
+    void clearGooleMaps(){
+        googleMap.clear();
     }
 
     @UiThread
