@@ -126,13 +126,19 @@ public class ViewIncidentActivity extends AppCompatActivity {
     @Background
     void updateIncident(Incident incident) {
         try {
-            incident.setEndDate(incident.getEndDate() + TimeUnit.HOURS.toMillis(Synchroniser.PLUSHOUR));
+            incident.setEndDate(new Date().getTime() + TimeUnit.HOURS.toMillis(Synchroniser.PLUSHOUR));
             String userName = loginPreferences.getString("username", "");
             incident.setConfirmedFrom(userName);
+            //save changes locally
+            incident.save();
 
+            // service wont look into this, saving bandwidth
+            incident.setImage(new byte[] {0});
             Location location = Synchroniser.IncidentToLocation(incident);
             Log.d("View Incident",location.toString());
             serviceClient.updateLocation(incident.getUID(), location);
+
+
         } catch (Exception e) {
             e.printStackTrace();
         }
