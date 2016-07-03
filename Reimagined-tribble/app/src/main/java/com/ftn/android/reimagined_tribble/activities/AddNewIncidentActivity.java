@@ -48,7 +48,7 @@ import pl.aprilapps.easyphotopicker.EasyImage;
 
 @EActivity(R.layout.add_new_incident_activity)
 @OptionsMenu(R.menu.add_new_menu)
-public class AddNewIncidentActivity extends AppCompatActivity{
+public class AddNewIncidentActivity extends AppCompatActivity {
 
     @ViewById(R.id.incident_type)
     Spinner spinner;
@@ -74,7 +74,7 @@ public class AddNewIncidentActivity extends AppCompatActivity{
     private SharedPreferences loginPreferences;
 
     @AfterViews
-    protected void init(){
+    protected void init() {
         //Toolbar and back button setup
         final Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
@@ -96,7 +96,7 @@ public class AddNewIncidentActivity extends AppCompatActivity{
     }
 
     @Click(R.id.fab_add_new_incident_details)
-    protected void startTheCamera(){
+    protected void startTheCamera() {
         EasyImage.openCamera(AddNewIncidentActivity.this, 1);
     }
 
@@ -129,7 +129,7 @@ public class AddNewIncidentActivity extends AppCompatActivity{
     }
 
     @OptionsItem(R.id.add)
-    protected void clickOnAddIncident(){
+    protected void clickOnAddIncident() {
         Toast.makeText(this, "Add button", Toast.LENGTH_LONG).show();
         String incidentName = _name.getText().toString();
         String incidentDescription = _description.getText().toString();
@@ -145,7 +145,7 @@ public class AddNewIncidentActivity extends AppCompatActivity{
                 incidentDescription,
                 true,
                 formattedDate,
-                new byte[] {0},
+                new byte[]{0},
                 location.longitude,
                 location.latitude,
                 incidentType,
@@ -162,8 +162,7 @@ public class AddNewIncidentActivity extends AppCompatActivity{
             byte[] img = bos.toByteArray();
             incident.setImage(img);
             Log.d("Incident", img.toString());
-        }catch (Exception e)
-        {
+        } catch (Exception e) {
             e.printStackTrace();
         }
 
@@ -191,7 +190,8 @@ public class AddNewIncidentActivity extends AppCompatActivity{
                 incident.getDate(),
                 formattedEndDate,
                 true,
-                incident.getImage());
+                incident.getImage(),
+                incident.getUID());
         try {
             incident.save();
             Log.d("SaveIncident", location.toString());

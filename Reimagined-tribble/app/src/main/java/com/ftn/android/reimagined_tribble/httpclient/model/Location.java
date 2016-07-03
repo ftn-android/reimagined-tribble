@@ -30,16 +30,16 @@ public class Location {
     private byte[] imageData;
 
     @JsonProperty("UID")
-    private boolean uid;
+    private String uid;
 
     public Location() {
     }
 
-    public boolean isUid() {
+    public String isUid() {
         return uid;
     }
 
-    public void setUid(boolean uid) {
+    public void setUid(String uid) {
         this.uid = uid;
     }
 
@@ -59,7 +59,7 @@ public class Location {
         this.imageData = imageData;
     }
 
-    public Location(int id, double latitude, double longitude, String name, String description, String startDate, String endDate, boolean type,  byte[] image) {
+    public Location(int id, double latitude, double longitude, String name, String description, String startDate, String endDate, boolean type, byte[] imageData, String uid) {
         this.id = id;
         this.latitude = latitude;
         this.longitude = longitude;
@@ -68,7 +68,8 @@ public class Location {
         this.startDate = startDate;
         this.endDate = endDate;
         this.type = type;
-        this.imageData = image;
+        this.imageData = imageData;
+        this.uid = uid;
     }
 
     public int getId() {
