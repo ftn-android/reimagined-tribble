@@ -1,5 +1,6 @@
 package com.ftn.android.reimagined_tribble.httpclient;
 
+import android.content.SharedPreferences;
 import android.util.Log;
 
 import com.ftn.android.reimagined_tribble.httpclient.model.Location;
@@ -17,10 +18,13 @@ public class Synchroniser {
 
     IBackEnd serviceClient;
     private static final String TAG = "Synchroniser";
-    public static final long PLUSHOUR = (long)6;
+    public static final long PLUSHOUR = (long) 6;
 
-    public Synchroniser(IBackEnd serviceClient) {
+    private SharedPreferences preferences;
+
+    public Synchroniser(IBackEnd serviceClient, SharedPreferences preferences) {
         this.serviceClient = serviceClient;
+        this.preferences = preferences;
     }
 
     void ConvertToGasStation(com.ftn.android.reimagined_tribble.httpclient.model.Location loc) {
@@ -97,6 +101,7 @@ public class Synchroniser {
             com.ftn.android.reimagined_tribble.httpclient.model.Location[] locations =
                     serviceClient.getLocationsByRadius(
                             TypeFilter.ALL,
+                            preferences.getBoolean("autoDownloadPictures", true),
                             latLng.longitude,
                             latLng.latitude,
                             radius);
@@ -135,7 +140,7 @@ public class Synchroniser {
     }
 
     public void AddNewGasStation(GasStation gasStation, boolean saveFrist) {
-        Date endDateInFuture  = new Date(2020,01,01);
+        Date endDateInFuture = new Date(2020, 01, 01);
         Location location = new Location(0,
                 gasStation.getLattitude(),
                 gasStation.getLongittude(),

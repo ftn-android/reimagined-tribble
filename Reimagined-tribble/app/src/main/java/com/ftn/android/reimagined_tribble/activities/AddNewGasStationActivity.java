@@ -148,7 +148,7 @@ public class AddNewGasStationActivity extends AppCompatActivity {
 
     @Background
     void SaveGasStation(GasStation gasStation) {
-        Synchroniser synchroniser = new Synchroniser(serviceClient);
+        Synchroniser synchroniser = new Synchroniser(serviceClient, loginPreferences);
         synchroniser.AddNewGasStation(gasStation);
     }
 

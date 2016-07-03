@@ -78,7 +78,7 @@ public class MapsActivity extends AppCompatActivity implements
     private SharedPreferences loginPreferences;
     private SharedPreferences.Editor loginPrefsEditor;
     private static final String TAG = "MapsActivity";
-    private static final double RADIUS = 50;
+    private static final double RADIUS = 20;
     private Marker addNewMarker;
     private HashMap<String, Entity> markers;
     private MaterialDialog addNewDialog;
@@ -174,12 +174,13 @@ public class MapsActivity extends AppCompatActivity implements
         if (location != null) {
             latLng = new LatLng(location.getLatitude(), location.getLongitude());
         } else {
-            latLng = new LatLng(0, 0);
+            //TODO hard coded, until we find a solution how to force location
+            latLng = new LatLng(45.23, 19.83);
             Log.d("FetchNewInfoFromBackend", "Last known location is null");
         }
 
-        Synchroniser sync = new Synchroniser(serviceClient);
-        sync.FetchAllLocation(latLng,RADIUS);
+        Synchroniser sync = new Synchroniser(serviceClient, loginPreferences);
+        sync.FetchAllLocation(latLng, RADIUS);
         sync.UploadAllLocation();
 
         addMarkers();
@@ -422,7 +423,7 @@ public class MapsActivity extends AppCompatActivity implements
 
     private void addIncidentMarkers() {
         List<Incident> incidentList = Incident.find(Incident.class, "end_date >= ?", (new Date().getTime()) + "");
-        for (Incident incident : incidentList){
+        for (Incident incident : incidentList) {
 
             Bitmap incidentBitmap = ColorChangesUtil.changeColor(getResources(), "#cc0000", R.drawable.ic_sms_failed_black_36dp);
             Marker incidentMarker = googleMap.addMarker(new MarkerOptions()

@@ -208,6 +208,9 @@
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
     <Compile Include="Helpers\DateTimeHelper.cs" />
+    <Compile Include="Helpers\DistanceHelper.cs" />
+    <Compile Include="Helpers\LatLng.cs" />
+    <Compile Include="Helpers\NumericExtensions.cs" />
     <Compile Include="Models\FtnAzure_AndoridBackendContext.cs" />
     <Compile Include="Models\Location.cs" />
     <Compile Include="Models\User.cs" />

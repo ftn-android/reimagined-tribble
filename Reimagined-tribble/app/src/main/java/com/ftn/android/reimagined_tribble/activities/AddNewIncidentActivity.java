@@ -174,7 +174,7 @@ public class AddNewIncidentActivity extends AppCompatActivity {
 
     @Background
     void SaveIncident(Incident incident) {
-        Synchroniser synchroniser = new Synchroniser(serviceClient);
+        Synchroniser synchroniser = new Synchroniser(serviceClient, loginPreferences);
         synchroniser.AddNewIncident(incident);
     }
 }
