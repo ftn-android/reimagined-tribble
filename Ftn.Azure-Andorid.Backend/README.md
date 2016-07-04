@@ -11,11 +11,11 @@ if username and password is empty, return all users
 
 AddIncident or AddGasStation => PostLocation(Location)
 
-GetLocations(string filterByType, boolean sendPicturesBack, double? longitude = null, double? latidude = null, double? radius = null)
-filterByType == 'incident' => incident
-filterByType == 'all' => both
-else => gas station
-if all 3 coordinate param is present, it will filter the objects by location
+GetLocations(string filterByType, boolean sendPicturesBack, double? longitude = null, double? latidude = null, double? radius = null) <br>
+filterByType == 'incident' => incident<br>
+filterByType == 'all' => both<br>
+else => gas station<br>
+if all 3 coordinate param is present, it will filter the objects by location<br>
 
 see other CRUD operations of needed.
 
