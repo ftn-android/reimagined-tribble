@@ -84,7 +84,7 @@ public class Synchroniser {
         }
     }
 
-    public void FetchAllLocation(LatLng latLng, double radius) {
+    public boolean FetchAllLocation(LatLng latLng, double radius) {
         try {
             com.ftn.android.reimagined_tribble.httpclient.model.Location[] locations =
                     serviceClient.getLocationsByRadius(
@@ -103,9 +103,11 @@ public class Synchroniser {
             }
 
             Log.d(TAG, "Fetching new data from backend : succeeded");
+            return true;
         } catch (Exception e) {
             e.printStackTrace();
             Log.d(TAG, "Fetching new data from backend : failed");
+            return false;
         }
     }
 

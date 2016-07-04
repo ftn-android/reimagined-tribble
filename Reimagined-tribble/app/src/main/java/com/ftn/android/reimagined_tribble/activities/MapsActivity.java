@@ -11,6 +11,7 @@ import android.location.Location;
 import android.location.LocationManager;
 import android.net.Uri;
 import android.support.design.widget.NavigationView;
+import android.support.design.widget.Snackbar;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
@@ -85,6 +86,9 @@ public class MapsActivity extends AppCompatActivity implements
     private MaterialDialog addNewDialog;
     private LatLng tappedLocation;
     private LocationManager locMan;
+
+    @ViewById(R.id.drawer_layout)
+    DrawerLayout activityContainer;
 
     @RestService
     IBackEnd serviceClient;
@@ -183,14 +187,22 @@ public class MapsActivity extends AppCompatActivity implements
         double radius = preferences.getFloat("radius", 55);
         Log.d("radius km: ",radius+"");
         Synchroniser sync = new Synchroniser(serviceClient, preferences);
-        sync.FetchAllLocation(latLng, radius);
+        boolean success = sync.FetchAllLocation(latLng, radius);
         sync.UploadAllLocation();
         sync.DeleteExcessDataInDB();
 
-        clearGooleMaps();
+        clearGoogleMaps();
         addMarkers();
+        if(success)
+            snackBarNotification("Your map is up to date!");
+        else
+            snackBarNotification("Something went wrong! Please check your network connections!");
     }
 
+    @UiThread
+    protected void snackBarNotification(String message){
+        Snackbar.make(activityContainer, message, Snackbar.LENGTH_LONG).show();
+    }
 
     //Cannot access to android.R.id.home through AndroidAnnotations.
     @Override
@@ -399,7 +411,7 @@ public class MapsActivity extends AppCompatActivity implements
     }
 
     @UiThread
-    void clearGooleMaps(){
+    void clearGoogleMaps(){
         googleMap.clear();
     }
 
