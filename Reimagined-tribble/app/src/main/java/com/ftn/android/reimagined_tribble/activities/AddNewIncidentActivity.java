@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.graphics.drawable.Drawable;
+import android.os.Bundle;
 import android.support.design.widget.CollapsingToolbarLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
@@ -12,7 +13,6 @@ import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.Spinner;
-import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.resource.bitmap.GlideBitmapDrawable;
@@ -72,6 +72,8 @@ public class AddNewIncidentActivity extends AppCompatActivity {
     @Extra
     LatLng location;
 
+    Bundle bundle;
+
     private SharedPreferences loginPreferences;
 
     @AfterViews
@@ -85,6 +87,7 @@ public class AddNewIncidentActivity extends AppCompatActivity {
         collapsingToolbar.setTitle(activityTitle);
 
         loginPreferences = getSharedPreferences("loginPrefs", MODE_PRIVATE);
+        bundle = new Bundle();
 
         //Spinner setup
         ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(this,
@@ -114,8 +117,8 @@ public class AddNewIncidentActivity extends AppCompatActivity {
             @Override
             public void onImagePicked(File imageFile, EasyImage.ImageSource source, int type) {
                 //Handle the image
-                ImageView headerPhoto = (ImageView) findViewById(R.id.backdrop);
-                Glide.with(AddNewIncidentActivity.this).load(imageFile).centerCrop().into(headerPhoto);
+                bundle.putSerializable("picture", imageFile);
+                Glide.with(AddNewIncidentActivity.this).load(imageFile).centerCrop().into(image);
             }
 
             @Override
@@ -131,7 +134,6 @@ public class AddNewIncidentActivity extends AppCompatActivity {
 
     @OptionsItem(R.id.add)
     protected void clickOnAddIncident() {
-        Toast.makeText(this, "Add button", Toast.LENGTH_LONG).show();
         String incidentName = _name.getText().toString();
         String incidentDescription = _description.getText().toString();
         String incidentType = spinner.getSelectedItem().toString();
@@ -177,4 +179,17 @@ public class AddNewIncidentActivity extends AppCompatActivity {
         Synchroniser synchroniser = new Synchroniser(serviceClient, loginPreferences);
         synchroniser.AddNewIncident(incident);
     }
+
+    @Override
+    protected void onSaveInstanceState(Bundle outState) {
+        outState.putAll(bundle);
+    }
+
+    @Override
+    protected void onRestoreInstanceState(Bundle savedInstanceState) {
+        File picture = (File) savedInstanceState.getSerializable("picture");
+        bundle.putSerializable("picture", picture);
+        Glide.with(AddNewIncidentActivity.this).load(picture).centerCrop().into(image);
+    }
+
 }

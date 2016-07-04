@@ -5,6 +5,7 @@ import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.drawable.Drawable;
+import android.os.Bundle;
 import android.support.design.widget.CollapsingToolbarLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
@@ -66,6 +67,8 @@ public class AddNewGasStationActivity extends AppCompatActivity {
     @Extra
     LatLng location;
 
+    Bundle bundle;
+
 
     @AfterViews
     protected void init() {
@@ -74,6 +77,7 @@ public class AddNewGasStationActivity extends AppCompatActivity {
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         loginPreferences = getSharedPreferences("loginPrefs", MODE_PRIVATE);
+        bundle = new Bundle();
 
         CollapsingToolbarLayout collapsingToolbar =
                 (CollapsingToolbarLayout) findViewById(R.id.collapsing_toolbar);
@@ -101,8 +105,8 @@ public class AddNewGasStationActivity extends AppCompatActivity {
             @Override
             public void onImagePicked(File imageFile, EasyImage.ImageSource source, int type) {
                 //Handle the image
-                ImageView headerPhoto = (ImageView) findViewById(R.id.backdrop);
-                Glide.with(AddNewGasStationActivity.this).load(imageFile).centerCrop().into(headerPhoto);
+                bundle.putSerializable("picture", imageFile);
+                Glide.with(AddNewGasStationActivity.this).load(imageFile).centerCrop().into(image);
             }
 
             @Override
@@ -157,4 +161,17 @@ public class AddNewGasStationActivity extends AppCompatActivity {
         Bitmap bitmap = BitmapFactory.decodeByteArray(data, 0, data.length);
         view.setImageBitmap(bitmap);
     }
+
+    @Override
+    protected void onSaveInstanceState(Bundle outState) {
+        outState.putAll(bundle);
+    }
+
+    @Override
+    protected void onRestoreInstanceState(Bundle savedInstanceState) {
+        File picture = (File) savedInstanceState.getSerializable("picture");
+        bundle.putSerializable("picture", picture);
+        Glide.with(AddNewGasStationActivity.this).load(picture).centerCrop().into(image);
+    }
+
 }
