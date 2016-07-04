@@ -22,3 +22,15 @@ see other CRUD operations of needed.
 
 You'll need **Visual Studio 2015** with **Azure Developer kit**.
 You don't need to have an Azure account set up, you may start the service locally.
+
+The service has a dummy webpage and swagger web page.<br>
+Currently hosted on the following link:<br>
+http://ftnazure-andoridbackend20160628103944.azurewebsites.net/
+
+Swagger json can be reached from here: <br>
+http://ftnazure-andoridbackend20160628103944.azurewebsites.net/swagger/docs/v1<br>
+
+Swagger 2.0 UI can be reached from here:<br>
+http://ftnazure-andoridbackend20160628103944.azurewebsites.net/swagger/ui/index<br>
+
+
