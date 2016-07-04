@@ -223,22 +223,26 @@ public class MapsActivity extends AppCompatActivity implements
 
     @Click(R.id.fab_add_new_incident)
     protected void clickNewIncident() {
+        locMan = (LocationManager) this.getSystemService(Context.LOCATION_SERVICE);
         Location location = locMan.getLastKnownLocation(locMan.getBestProvider(new Criteria(), false));
         if (location != null) {
             LatLng latLng = new LatLng(location.getLatitude(), location.getLongitude());
             AddNewIncidentActivity_.intent(this).location(latLng).start();
         } else {
+            snackBarNotification("Last known location is unknown!");
             Log.d("clickNewIncident", "Last known location is null");
         }
     }
 
     @Click(R.id.fab_add_new_gas_station)
     protected void clickNewGasStation() {
+        locMan = (LocationManager) this.getSystemService(Context.LOCATION_SERVICE);
         Location location = locMan.getLastKnownLocation(locMan.getBestProvider(new Criteria(), false));
         if (location != null) {
             LatLng latLng = new LatLng(location.getLatitude(), location.getLongitude());
             AddNewGasStationActivity_.intent(this).location(latLng).start();
         } else {
+            snackBarNotification("Last known location is unknown!");
             Log.d("clickNewGasStation", "Last known location is null");
         }
     }
