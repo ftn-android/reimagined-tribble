@@ -1,17 +1,16 @@
 #Interface Document - Rest flavour
 
 User
-Post User - Signup
-returns User
+**Post User** - Signup, returns User
 
-GetUsers(string username, string password) - Login
+**GetUsers**(string username, string password) - Login
 returns list of users, if empty client handles as login failed...
 if username and password is empty, return all users
 
 
-AddIncident or AddGasStation => PostLocation(Location)
+**AddIncident** or **AddGasStation** => **PostLocation**(Location)
 
-GetLocations(string filterByType, boolean sendPicturesBack, double? longitude = null, double? latidude = null, double? radius = null) <br>
+**GetLocations**(string filterByType, boolean sendPicturesBack, double? longitude = null, double? latidude = null, double? radius = null) <br>
 filterByType == 'incident' => incident<br>
 filterByType == 'all' => both<br>
 else => gas station<br>
@@ -21,5 +20,5 @@ see other CRUD operations of needed.
 
 #Install service
 
-You'll need Visual Studio 2015 with Azure Developer kit.
+You'll need **Visual Studio 2015** with **Azure Developer kit**.
 You don't need to have an Azure account set up, you may start the service locally.
